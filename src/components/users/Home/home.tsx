@@ -1,13 +1,17 @@
 import React from 'react'
+import Hero from "./hero"
+import About from './about'
+import Specialities from './specialities'
+import Event from './event'
 
 function Home() {
   return (
-    <div>
-
-
-      this is home Page
-      
-    </div>
+    <>
+      <Hero />
+      <About />
+      <Specialities />
+      <Event />
+    </>
   )
 }
 
