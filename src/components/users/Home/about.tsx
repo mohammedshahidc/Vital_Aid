@@ -1,9 +1,21 @@
-import React from 'react';
+"use client"
+
+import React, { useEffect } from 'react';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 function About() {
+
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,  
+    });
+  }, []);
+
+
   return (
     <div className="bg-sky-50 h-auto md:h-[520px] w-full relative pt-6">
-      <div className="flex items-center justify-center bg-white w-full md:h-60 shadow-md sm: h-36">
+      <div className="flex items-center justify-center bg-white w-full md:h-60 shadow-md sm: h-36" data-aos="fade-up" >
         <div className="flex flex-row gap-8 md:flex-row md:gap-60 ">
           <div className="flex flex-col items-center text-center">
             <span className="text-2xl md:text-5xl font-bold text-lime-500">50+</span>
@@ -24,7 +36,7 @@ function About() {
         </div>
       </div>
       <div className='flex items-center justify-center mx-14 my-14 pb-4'>
-        <div className='text-lime-600 md:text-3xl font-serif'>
+        <div className='text-lime-600 md:text-3xl font-serif' data-aos="fade-up">
         it is charitable health organization dedicated to bridging the gap between those in need and those
         who can help. Our mission is to provide timely medical support, connect patients with blood donors,
         supply essential medical equipment, and offer expert guidance from qualified doctors. With the compassionate

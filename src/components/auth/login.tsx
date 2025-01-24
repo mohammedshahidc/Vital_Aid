@@ -2,11 +2,13 @@
 import { Button } from "@mui/material";
 import React, { useState } from "react";
 import Link from "next/link";
-import { useAppDispatch,useAppSelector } from "@/lib/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useRouter } from "next/navigation";
 import { loginUser } from "@/lib/store/features/userSlice";
-const Login: React.FC = () => { 
-   const dispatch = useAppDispatch();
+
+
+const Login: React.FC = () => {
+  const dispatch = useAppDispatch();
   const { isLoading, error } = useAppSelector((state) => state.auth);
   const router = useRouter();
 
@@ -14,12 +16,12 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState<string>("");
 
   const handleSubmit = async (e: React.FormEvent) => {
-    
+
     e.preventDefault();
     const result = await dispatch(loginUser({ email, password }));
 
     if (loginUser.fulfilled.match(result)) {
-      router.push("/home"); 
+      router.push("/home");
     }
   };
 
@@ -69,21 +71,21 @@ const Login: React.FC = () => {
             </div>
 
             <Button
-            type="submit"
+              type="submit"
               variant="contained"
               className="w-3/4 !bg-custom-green-200"
               sx={{
                 backgroundColor: "transparent",
               }}
             >
-    {isLoading ? "Loading..." : "Sign In"}        
-     </Button>
+              {isLoading ? "Loading..." : "Sign In"}
+            </Button>
           </form>
           {error && <p className="text-red-500 text-sm mt-4">{error}</p>}
 
           <div className="sm:hidden mt-2 flex flex-col items-center justify-center space-y-4">
             <p className="text-gray-700 mt-3 text-base font-medium">
-              Don't have an account yet?
+              Dont have an account yet?
             </p>
             <Link href="/create-account" passHref>
               <p className="px-5 py-3 text-sm font-semibold text-white bg-green-500 rounded-md shadow hover:bg-green-600 focus:ring-2 focus:ring-green-300 focus:outline-none">
@@ -96,7 +98,7 @@ const Login: React.FC = () => {
         <div className="hidden sm:flex w-full sm:w-1/2 p-8 bg-gradient-to-b from-custom-green-100 via-custom-green-200 to-custom-green-300 items-center justify-center h-full sm:h-auto">
           <div className="text-center">
             <p className="text-white text-2xl sm:text-xl font-medium mb-4">
-              Don't have an account?
+              Dont have an account?
             </p>
             <Link href="/create-account" passHref>
               <p className="px-5 py-2.5 font-medium bg-blue-50 hover:bg-blue-100 hover:text-green-600 text-green-500 rounded-lg text-sm inline-block w-[150px] text-center">
