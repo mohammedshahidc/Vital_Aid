@@ -1,9 +1,6 @@
-import Login from "@/components/auth/login";
 
-
-export default function Page() {
+export default function Home() {
   return (
-    
     <div>
     </div>
   );
