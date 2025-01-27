@@ -1,7 +1,7 @@
 
 "use client"
 import { Button } from "@mui/material";
-import React, { useState } from "react";
+import React, {useState } from "react";
 import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
 import { signOut } from "next-auth/react";
@@ -10,11 +10,16 @@ import { useRouter } from "next/navigation";
 import { loginUser } from "@/lib/store/features/userSlice";
 
 
+
+
+
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { isLoading, error,user } = useAppSelector((state) => state.auth);
+  const { isLoading, error} = useAppSelector((state) => state.auth);
+
+
   const router = useRouter();
-  console.log(user);
+ 
   
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -24,15 +29,15 @@ const Login: React.FC = () => {
 
     e.preventDefault();
     const result = await dispatch(loginUser({ email, password }));
-
+    const role=localStorage.getItem('user')
     if (loginUser.fulfilled.match(result)) {
-      if(user &&user.role=='User'){
-        router.push("/home");
+      if(role&&role=='User'){
+        router.push("/user");
       }
-      if(user &&user.role=='Doctor'){
+      if(role&&role=='Doctor'){
         router.push("/docter");
       }
-      if(user &&user.role=='Admin'){
+      if(role&&role=='Admin'){
         router.push("/admin");
       }
     }

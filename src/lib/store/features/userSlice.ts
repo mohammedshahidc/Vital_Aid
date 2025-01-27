@@ -10,6 +10,11 @@ interface UserState {
     id: string | null;
     token: string | null;
     role:string |null
+    profileImage:{
+      originalProfile:string,
+      thumbnail:string
+    }|null
+    phone:string|null
   } | null;
   isLoading: boolean;
   error: string | null|undefined;
@@ -20,9 +25,10 @@ interface userRegistrationdata{
   email:string |null
   phone:string |null
   password:string |null
+ 
 }
 
-type LoginFulfilledType = { email: string; id: string; token: string,role:string };
+type LoginFulfilledType = { email: string; id: string; token: string,role:string,profileImage:{originalProfile:string,thumbnail:string},phone:string};
 type LoginArgumentType = { email: string; password: string };
 type LoginRejectValueType = string;
 
@@ -48,7 +54,7 @@ export const userRegistration = createAsyncThunk<void, userRegistrationdata, { r
 export const loginUser = createAsyncThunk<LoginFulfilledType,LoginArgumentType,{rejectValue:LoginRejectValueType}>("user/login", async (credentials, { rejectWithValue }) => {
   try {
     console.log('hi2');
-    const response = await axiosInstance.post("/api/auth/login", credentials);
+    const response = await axiosInstance.post("/api/auth/login", credentials,{withCredentials:true});
     console.log(response);
     
     const { data } = response;
@@ -67,7 +73,9 @@ export const loginUser = createAsyncThunk<LoginFulfilledType,LoginArgumentType,{
       email: data.user.email,
       id: data.user.id,
       token: data.accessToken,
-      role:data.user.role
+      role:data.user.role,
+      profileImage: data.user.profileImage, 
+      phone: data.user.phone,
     };
   } catch (error) {
     return rejectWithValue(
@@ -96,11 +104,12 @@ const userSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action: PayloadAction<LoginFulfilledType>) => {
         state.isLoading = false;
         state.user = action.payload;
+        localStorage.setItem('user',action.payload.role)
         state.error = null;
       })
       .addCase(loginUser.rejected, (state, action: PayloadAction<LoginRejectValueType | undefined>) => {
         state.isLoading = false;
-        state.error = action.payload;
+        state.error = action.payload ;
       }
     )
     .addCase(userRegistration.pending, (state) => {
