@@ -5,9 +5,9 @@ import React from 'react'
 function Page() {
   return (
     <div className='flex'>
-                <Sidebar/>
-        
-<Home/>
+      <Sidebar />
+
+      <Home />
     </div>
   )
 }

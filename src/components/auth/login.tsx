@@ -14,10 +14,9 @@ import { loginUser } from "@/lib/store/features/userSlice";
 
 
 const Login: React.FC = () => {
+
   const dispatch = useAppDispatch();
-  const { isLoading, error} = useAppSelector((state) => state.auth);
-
-
+  const { isLoading, error } = useAppSelector((state) => state.auth);
   const router = useRouter();
  
   
@@ -25,7 +24,6 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState<string>("");
 
   const handleSubmit = async (e: React.FormEvent) => {
-
 
     e.preventDefault();
     const result = await dispatch(loginUser({ email, password }));
@@ -45,8 +43,8 @@ const Login: React.FC = () => {
 
   return (
     <div className="flex h-screen items-center justify-center bg-gray-100">
-      <div className="flex w-full max-w-2xl sm:h-4/6 bg-gray-50 shadow-lg flex-col sm:flex-row">
-        <div className="w-full sm:w-1/2 px-8 py-12 sm:p-8">
+      <div className="flex w-full max-w-4xl sm:h-4/6 bg-gray-50 shadow-lg flex-col sm:flex-row rounded-lg">
+        <div className="w-full md:pt-20 sm:w-1/2 px-8 py-12 sm:p-8">
           {/* <button
             type="button"
             className="w-full bg-white border border-gray-300 text-black py-2 rounded-full hover:bg-gray-100 mb-2 text-sm"
@@ -117,7 +115,7 @@ const Login: React.FC = () => {
             <p className="text-gray-700 mt-3 text-base font-medium">
               Dont have an account yet?
             </p>
-            <Link href="/create-account" passHref>
+            <Link href="/register" passHref>
               <p className="px-5 py-3 text-sm font-semibold text-white bg-green-500 rounded-md shadow hover:bg-green-600 focus:ring-2 focus:ring-green-300 focus:outline-none">
                 Create Account
               </p>
@@ -125,13 +123,13 @@ const Login: React.FC = () => {
           </div>
         </div>
 
-        <div className="hidden sm:flex w-full sm:w-1/2 p-8 bg-gradient-to-b from-custom-green-100 via-custom-green-200 to-custom-green-300 items-center justify-center h-full sm:h-auto">
+        <div className="hidden rounded-lg sm:flex w-full sm:w-1/2 p-8 bg-gradient-to-b from-custom-green-100 via-custom-green-200 to-custom-green-300 items-center justify-center h-full sm:h-auto ">
           <div className="text-center">
-            <p className="text-white text-2xl sm:text-xl font-medium mb-4">
+            <p className="text-white text-2xl sm:text-xl font-medium font-serif mb-4">
               Dont have an account?
             </p>
-            <Link href="/create-account" passHref>
-              <p className="px-5 py-2.5 font-medium bg-blue-50 hover:bg-blue-100 hover:text-green-600 text-green-500 rounded-lg text-sm inline-block w-[150px] text-center">
+            <Link href="/register" passHref>
+              <p className="px-5 py-2.5 font-bold  bg-blue-50 hover:bg-blue-100 hover:text-green-600 text-green-500 rounded-lg text-sm inline-block w-[100px] text-center">
                 Create it
               </p>
             </Link>

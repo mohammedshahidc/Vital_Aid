@@ -9,6 +9,7 @@ import { userSchema } from "@/schema/userSchema";
 import { userRegistration } from "@/lib/store/features/userSlice";
 import { useAppDispatch } from "@/lib/store/hooks";
 import { useRouter } from "next/navigation";
+
 interface FormValues {
   name: string;
   email: string;
@@ -57,7 +58,7 @@ const router=useRouter()
     <div className="flex justify-center items-center h-screen bg-white w-screen">
       <div className=" w-5/6 shadow-xl rounded-lg overflow-hidden sm:w-4/6 md:w-3/5 flex">
         {/* Left Panel */}
-        <div className="hidden sm:block bg-gradient-to-tr from-emerald-700 to-green-400 w-1/2 h-auto">
+        <div className="hidden sm:block bg-gradient-to-tr from-emerald-700 to-green-400  w-1/2 h-auto">
           <p className="text-white font-serif mt-16 ml-14 font-bold text-xl">
             Create an Account
           </p>
@@ -77,15 +78,16 @@ const router=useRouter()
           <div className="w-full text-black">
             <form className="space-y-3 sm:space-y-2" onSubmit={handleSubmit}>
               <div>
-                <label>Full Name</label>
+                <label >Full Name</label>
                 <br />
                 <input
                   id="name"
                   value={values.name}
                   onBlur={handleBlur}
                   onChange={handleChange}
+                  placeholder="enter your name"
                   type="text"
-                  className="border border-gray-500 w-full h-10 pl-2"
+                  className="border border-gray-400 w-full h-10 pl-2 rounded-md"
                 />
                 <br />
                 {errors?.name && touched.name && (
@@ -100,8 +102,9 @@ const router=useRouter()
                   value={values.email}
                   onBlur={handleBlur}
                   onChange={handleChange}
+                   placeholder="enter email address"
                   type="text"
-                  className="border border-gray-500 w-full h-10 pl-2"
+                  className="border border-gray-400 w-full h-10 pl-2 rounded-md"
                 />
                 <br />
                 {errors?.email && touched.email && (
@@ -116,8 +119,9 @@ const router=useRouter()
                   value={values.phone}
                   onBlur={handleBlur}
                   onChange={handleChange}
+                   placeholder="phone number"
                   type="text"
-                  className="border border-gray-500 w-full h-10 pl-2"
+                  className="border border-gray-400 w-full h-10 pl-2 rounded-md"
                 />
                 <br />
                 {errors?.phone && touched.phone && (
@@ -133,8 +137,9 @@ const router=useRouter()
                     value={values.password}
                     onBlur={handleBlur}
                     onChange={handleChange}
+                     placeholder="Type a password"
                     type="password"
-                    className="border border-gray-500 w-full h-10 pl-2"
+                    className="border border-gray-400 w-full h-10 pl-2 rounded-md"
                   />
                   {errors?.password && touched.password && (
                     <p className="text-red-500 text-sm mt-1">{errors.password}</p>
@@ -146,10 +151,11 @@ const router=useRouter()
                   <input
                     id="conformPassword"
                     value={values.conformPassword}
+                     placeholder="Confirm thepassword"
                     onBlur={handleBlur}
                     onChange={handleChange}
                     type="password"
-                    className="border border-gray-500 w-full h-10 pl-2"
+                    className="border border-gray-400 w-full h-10 pl-2 rounded-md"
                   />
                   {errors?.conformPassword && touched.conformPassword && (
                     <p className="text-red-500 text-sm mt-1">{errors.conformPassword}</p>

@@ -1,8 +1,5 @@
 import axios from 'axios';
 
-
-
-
 interface AxiosErrorManager {
     (err: unknown): string;
 }
