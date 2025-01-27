@@ -3,8 +3,8 @@
 import { Button } from "@mui/material";
 import React, {useState } from "react";
 import Link from "next/link";
-import { FcGoogle } from "react-icons/fc";
-import { signOut } from "next-auth/react";
+// import { FcGoogle } from "react-icons/fc";
+// import { signOut } from "next-auth/react";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useRouter } from "next/navigation";
 import { loginUser } from "@/lib/store/features/userSlice";
@@ -47,7 +47,7 @@ const Login: React.FC = () => {
     <div className="flex h-screen items-center justify-center bg-gray-100">
       <div className="flex w-full max-w-2xl sm:h-4/6 bg-gray-50 shadow-lg flex-col sm:flex-row">
         <div className="w-full sm:w-1/2 px-8 py-12 sm:p-8">
-          <button
+          {/* <button
             type="button"
             className="w-full bg-white border border-gray-300 text-black py-2 rounded-full hover:bg-gray-100 mb-2 text-sm"
             onClick={() => {
@@ -57,7 +57,7 @@ const Login: React.FC = () => {
           >
             <FcGoogle size={25} className="mr-2 float-end" />
             logout
-          </button>
+          </button> */}
           <h2 className="text-xl font-bold text-center text-gray-700 mb-2">
             WELCOME BACK
           </h2>

@@ -3,6 +3,7 @@ import React from 'react';
 import Doctor from "../../../../public/Doctor.png";
 
 function Hero() {
+  
   return (
     <div className="bg-white h-screen w-screen flex items-center justify-center shadow-md">
       <div className="flex flex-col md:flex-row items-center justify-center gap-16 md:gap-72">
