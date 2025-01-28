@@ -6,6 +6,7 @@ import axiosErrorManager from "@/utils/axiosErrormanager";
 
 interface UserState {
   user: {
+    
     email: string | null;
     id: string | null;
     token: string | null;
@@ -57,20 +58,63 @@ export const userRegistration = createAsyncThunk<void, userRegistrationdata, { r
 export const loginUser = createAsyncThunk<LoginFulfilledType,LoginArgumentType,{rejectValue:LoginRejectValueType}>("user/login", async (credentials, { rejectWithValue }) => {
   try {
     console.log('hi2');
-    const response = await axiosInstance.post("/api/auth/login", credentials,{withCredentials:true});
+    const response = await axiosInstance.post("/auth/userlogin", credentials,{withCredentials:true});
     console.log(response);
     
     const { data } = response;
 
-    // Cookies.set(
-    //   "user",
-    //   JSON.stringify({
-    //     email: data.user.email,
-    //     token: data.token,
-    //     id: data.user.id,
-    //   }),
-    //   { expires: 7 } 
-    // );
+    return {
+      name:data.user.name,
+      email: data.user.email,
+      id: data.user.id,
+      token: data.accessToken,
+      role:data.user.role,
+      profileImage: data.user.profileImage, 
+      phone: data.user.phone,
+    };
+  } catch (error) {
+    return rejectWithValue(
+      axiosErrorManager(error)
+    )
+  }
+}
+);
+
+export const loginDoctor = createAsyncThunk<LoginFulfilledType,LoginArgumentType,{rejectValue:LoginRejectValueType}>("Doctor/login", async (credentials, { rejectWithValue }) => {
+  try {
+    console.log('hi2');
+    const response = await axiosInstance.post("/auth/doctorlogin", credentials,{withCredentials:true});
+    console.log(response);
+    
+    const { data } = response;
+
+    return {
+      name:data.user.name,
+      email: data.user.email,
+      id: data.user.id,
+      token: data.accessToken,
+      role:data.user.role,
+      profileImage: data.user.profileImage, 
+      phone: data.user.phone,
+    };
+  } catch (error) {
+    return rejectWithValue(
+      axiosErrorManager(error)
+    )
+  }
+}
+);
+
+
+//login admin
+export const loginadmin = createAsyncThunk<LoginFulfilledType,LoginArgumentType,{rejectValue:LoginRejectValueType}>("Admin/login", async (credentials, { rejectWithValue }) => {
+  try {
+    console.log('hi2');
+    const response = await axiosInstance.post("/auth/adminlogin", credentials,{withCredentials:true});
+    console.log(response);
+    
+    const { data } = response;
+console.log('role',data.user);
 
     return {
       name:data.user.name,
@@ -124,6 +168,48 @@ const userSlice = createSlice({
       state.isLoading = true;
       state.error = null;
     })
+
+    // logindoctor
+
+    .addCase(loginDoctor.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    })
+    .addCase(loginDoctor.fulfilled, (state, action: PayloadAction<LoginFulfilledType>) => {
+      state.isLoading = false;
+      state.user = action.payload;
+      localStorage.setItem('user',action.payload.role)
+      localStorage.setItem('username',action.payload.name)
+      state.error = null;
+    })
+    .addCase(loginDoctor.rejected, (state, action: PayloadAction<LoginRejectValueType | undefined>) => {
+      state.isLoading = false;
+      state.error = action.payload ;
+    }
+  )
+
+  //admin login
+  .addCase(loginadmin.pending, (state) => {
+    state.isLoading = true;
+    state.error = null;
+  })
+  .addCase(loginadmin.fulfilled, (state, action: PayloadAction<LoginFulfilledType>) => {
+    state.isLoading = false;
+    state.user = action.payload;
+    localStorage.setItem('user',action.payload.role)
+    localStorage.setItem('username',action.payload.name)
+    state.error = null;
+  })
+  .addCase(loginadmin.rejected, (state, action: PayloadAction<LoginRejectValueType | undefined>) => {
+    state.isLoading = false;
+    state.error = action.payload ;
+  }
+)
+ 
+
+
+
+    //user registration
     .addCase(userRegistration.fulfilled, (state) => {
       state.isLoading = false;
       state.error = null;

@@ -29,9 +29,9 @@ const Register = () => {
   const dispatch = useAppDispatch()
   const { data } = useSession();
   const [loading, setloading] = useState(false)
-const router=useRouter()
+  const router = useRouter()
   if (data) {
-    console.log(data);
+    console.log('rh',data);
   }
   const { errors, handleChange, handleSubmit, values, touched, resetForm, handleBlur } = useFormik({
     initialValues,
@@ -43,7 +43,7 @@ const router=useRouter()
         if (result.meta.requestStatus === 'fulfilled') {
           router.push('/login');
         }
-        
+
         await console.log('user:', values);
         resetForm()
       } catch (error) {

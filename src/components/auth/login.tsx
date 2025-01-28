@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useRouter } from "next/navigation";
-import { loginUser } from "@/lib/store/features/userSlice";
+import { loginUser,loginadmin,loginDoctor } from "@/lib/store/features/userSlice";
 import LoginModal from "../ui/loginModal";
 import Image from "next/image";
 import DRpng from "../../../public/Doctor.png"
@@ -21,18 +21,31 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const result = await dispatch(loginUser({ email, password }));
+    const result =userType=="User"? await dispatch(loginUser({ email, password })):userType=="Admin"?await dispatch(loginadmin({ email, password })):await dispatch(loginDoctor({ email, password }));
+    console.log("result:",result);
+    
     const role = localStorage.getItem("user");
-    if (loginUser.fulfilled.match(result)) {
+    // if (loginUser.fulfilled.match(result)) {
+    //   if (role && role === "User") {
+    //     router.push("/user");
+    //   }
+    //   if (role && role === "Doctor") {
+    //     router.push("/doctor");
+    //   }
+    //   if (role && role === "Admin") {
+    //     router.push("/admin");
+    //   }
+    // }
+    if(result.meta.requestStatus=='fulfilled'){
       if (role && role === "User") {
-        router.push("/user");
-      }
-      if (role && role === "Doctor") {
-        router.push("/doctor");
-      }
-      if (role && role === "Admin") {
-        router.push("/admin");
-      }
+            router.push("/user");
+          }
+          if (role && role === "Doctor") {
+            router.push("/doctor");
+          }
+          if (role && role === "Admin") {
+            router.push("/admin");
+          }
     }
   };
 
