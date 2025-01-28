@@ -95,7 +95,7 @@ export default function Navbar() {
 
     
       {menuOpen && (
-        <div className="lg:hidden bg-sky-50 dark:bg-gray-900 py-4 px-6 space-y-4 float-right ">
+        <div className="lg:hidden bg-sky-50 dark:bg-gray-900 py-4 px-6 absolute z-50 right-1  space-y-4 float-right ">
           <Link
             href="/home"
             className="block text-gray-700 font-serif font-semibold dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition"

@@ -1,69 +1,84 @@
-
-"use client"
+"use client";
 import { Button } from "@mui/material";
-import React, {useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-// import { FcGoogle } from "react-icons/fc";
-// import { signOut } from "next-auth/react";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useRouter } from "next/navigation";
 import { loginUser } from "@/lib/store/features/userSlice";
-
-
-
-
+import LoginModal from "../ui/loginModal";
+import Image from "next/image";
+import DRpng from "../../../public/Doctor.png"
 
 const Login: React.FC = () => {
-
   const dispatch = useAppDispatch();
-  const { isLoading, error } = useAppSelector((state) => state.auth);
+  const { isLoading, error, userType } = useAppSelector((state) => state.auth);
   const router = useRouter();
- 
-  
+
+  console.log(userType);
+
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   const handleSubmit = async (e: React.FormEvent) => {
-
     e.preventDefault();
     const result = await dispatch(loginUser({ email, password }));
-    const role=localStorage.getItem('user')
+    const role = localStorage.getItem("user");
     if (loginUser.fulfilled.match(result)) {
-      if(role&&role=='User'){
+      if (role && role === "User") {
         router.push("/user");
       }
-      if(role&&role=='Doctor'){
-        router.push("/docter");
+      if (role && role === "Doctor") {
+        router.push("/doctor");
       }
-      if(role&&role=='Admin'){
+      if (role && role === "Admin") {
         router.push("/admin");
       }
     }
   };
 
-  return (
-    <div className="flex h-screen items-center justify-center bg-gray-100">
-      <div className="flex w-full max-w-4xl sm:h-4/6 bg-gray-50 shadow-lg flex-col sm:flex-row rounded-lg">
-        <div className="w-full md:pt-20 sm:w-1/2 px-8 py-12 sm:p-8">
-          {/* <button
-            type="button"
-            className="w-full bg-white border border-gray-300 text-black py-2 rounded-full hover:bg-gray-100 mb-2 text-sm"
-            onClick={() => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-              signOut();
-            }}
-          >
-            <FcGoogle size={25} className="mr-2 float-end" />
-            logout
-          </button> */}
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
+
+
+  const btnColor =
+    userType === "Admin"
+      ? "bg-purple-500"
+      : userType === "Doctor"
+        ? "bg-blue-500"
+        : "bg-green-500";
+
+  const gradientColor =
+    userType === "Admin"
+      ? "from-purple-300 via-purple-400 to-purple-500"
+      : userType === "Doctor"
+        ? "from-blue-300 via-blue-400 to-blue-500"
+        : " from-custom-green-100 via-custom-green-200 to-custom-green-300";
+
+  return (
+    <div
+      className={`relative flex h-screen items-center justify-center bg-gray-100`}
+    >
+      <div className="absolute top-36 md:top-6 space-x-4 mt-7  ">
+        <Button onClick={handleOpenModal} variant="text" color="success">
+          Login as
+        </Button>
+      </div>
+
+      <div className="flex w-full  max-w-4xl sm:h-4/6 bg-gray-50 shadow-lg flex-col sm:flex-row rounded-lg">
+        <div className="w-full md:pt-20 sm:w-1/2 px-8 py-12 sm:p-8">
           <h2 className="text-xl font-bold text-center text-gray-700 mb-2">
             WELCOME BACK
           </h2>
 
-          <p className="text-center text-xs  text-gray-400 mb-6">
+          <p className="text-center text-xs text-gray-400 mb-6">
             Please enter your credentials to log in.
           </p>
-          <form className="space-y-6 flex flex-col items-center" onSubmit={handleSubmit}>
+          <form
+            className="space-y-6 flex flex-col items-center"
+            onSubmit={handleSubmit}
+          >
             <div className="flex flex-col items-center w-full">
               <label
                 className="flex flex-col items-start ml-24 text-gray-600 text-sm mb-2 w-full"
@@ -101,43 +116,69 @@ const Login: React.FC = () => {
             <Button
               type="submit"
               variant="contained"
-              className="w-3/4 !bg-custom-green-200"
+              className={`w-3/4 ${btnColor}`}
               sx={{
                 backgroundColor: "transparent",
               }}
             >
-              {isLoading ? "Loading..." : "Sign In"}
+              {isLoading ? "Loading..." : `Login as ${userType}`}
             </Button>
           </form>
           {error && <p className="text-red-500 text-sm mt-4">{error}</p>}
-
-          <div className="sm:hidden mt-2 flex flex-col items-center justify-center space-y-4">
+          {userType === "User" &&(
+          <div className="sm:hidden mt-2 flex  items-center justify-center space-y-4">
             <p className="text-gray-700 mt-3 text-base font-medium">
               Dont have an account yet?
             </p>
             <Link href="/register" passHref>
-              <p className="px-5 py-3 text-sm font-semibold text-white bg-green-500 rounded-md shadow hover:bg-green-600 focus:ring-2 focus:ring-green-300 focus:outline-none">
-                Create Account
-              </p>
+              <Button  variant="text" color="success">
+                Create it
+              </Button>
             </Link>
-          </div>
+            
+          </div>)}
         </div>
 
-        <div className="hidden rounded-lg sm:flex w-full sm:w-1/2 p-8 bg-gradient-to-b from-custom-green-100 via-custom-green-200 to-custom-green-300 items-center justify-center h-full sm:h-auto ">
+        <div
+          className={`hidden rounded-lg sm:flex w-full sm:w-1/2 p-8 bg-gradient-to-b ${gradientColor} items-center justify-center h-full sm:h-auto`}
+        >
           <div className="text-center">
-            <p className="text-white text-2xl sm:text-xl font-medium font-serif mb-4">
-              Dont have an account?
-            </p>
-            <Link href="/register" passHref>
-              <p className="px-5 py-2.5 font-bold  bg-blue-50 hover:bg-blue-100 hover:text-green-600 text-green-500 rounded-lg text-sm inline-block w-[100px] text-center">
-                Create it
-              </p>
-            </Link>
+            {userType === "Admin" ? (
+              <div>
+                <p className="text-white text-2xl sm:text-xl font-medium font-serif mb-4">Welcome Admin</p>
+                <p className="text-white text-2xl sm:text-xl font-medium font-serif mb-4">Manage, Monitor, and Optimize with Ease</p>
+
+              </div>
+
+            ) : userType === "Doctor" ? (
+              <div className=" justify-center">
+                <p className="text-white text-2xl sm:text-xl font-medium font-serif">Welcome Doctor</p>
+                <Image
+                  src={DRpng}
+                  alt="drimg"
+                />
+
+
+              </div>
+
+
+            ) : (
+              <p className="text-white text-2xl sm:text-xl font-medium font-serif mb-4">Dont have an account yet?</p>
+            )}
+            {userType === "User" && (
+              <Link href="/register" passHref>
+                <p className="px-5 py-2.5 font-bold bg-blue-50 hover:bg-blue-100 hover:text-green-600 text-green-700 rounded-lg text-sm inline-block w-[100px] text-center">
+                  Create it
+                </p>
+              </Link>
+            )}
+
           </div>
         </div>
       </div>
+      <LoginModal open={isModalOpen} onClose={handleCloseModal} />
     </div>
   );
-}
+};
 
 export default Login;

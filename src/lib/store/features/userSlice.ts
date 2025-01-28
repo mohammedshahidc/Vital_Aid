@@ -19,6 +19,7 @@ interface UserState {
   } | null;
   isLoading: boolean;
   error: string | null|undefined;
+  userType:string| null
 }
 
 interface userRegistrationdata{
@@ -37,6 +38,7 @@ const initialState: UserState = {
   user: null,
   isLoading: false,
   error: null,
+  userType:"User"
 };
 
 export const userRegistration = createAsyncThunk<void, userRegistrationdata, { rejectValue: string }>(
@@ -96,6 +98,9 @@ const userSlice = createSlice({
       state.error = null;
       Cookies.remove("user");
     },
+    setType: (state, action) => {
+      state.userType = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -131,5 +136,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { logout } = userSlice.actions;
+export const { logout,setType } = userSlice.actions;
 export default userSlice.reducer;

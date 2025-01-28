@@ -12,7 +12,7 @@ export function middleware(req: NextRequest) {
   const token = req.cookies.get("refreshmentToken")?.value || req.cookies.get("accessToken")?.value;
   const url = req.nextUrl.clone();
   const pathName = url.pathname;
-
+  
   if (userType !== "Admin" && isAdminRoute(pathName)) {
     url.pathname = pathName;
     return NextResponse.redirect(url);

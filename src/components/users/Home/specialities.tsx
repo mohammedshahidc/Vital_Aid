@@ -9,9 +9,8 @@ import volunteer from "../../../../public/volunteer.jpg"
 import Link from "next/link";
 import Aos from "aos";
 
-
 function Specialities() {
-
+  
   useEffect(() => {
     Aos.init({
       duration: 1000,
@@ -29,7 +28,7 @@ function Specialities() {
         <div
           className="bg-sky-50 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300" data-aos="fade-right"
         >
-          <Link href={"/Doctors"}>
+          <div>
             <Image
               src={Doctorimg}
               alt={"Meet Our Doctors"}
@@ -37,12 +36,12 @@ function Specialities() {
               className="rounded-t-lg w-full h-72 object-cover"
             />
 
-            <div className="p-4">
-              <h3 className="text-lg font-semibold text-center text-lime-500">
+            <div className="p-4" >
+              <h3 className="text-lg font-semibold text-center text-lime-500" >
                 Meet Our Doctors
               </h3>
             </div>
-          </Link>
+          </div>
         </div>
 
         <div
@@ -100,7 +99,7 @@ function Specialities() {
           </Link>
 
         </div>
-
+        
       </div>
     </div>
 
