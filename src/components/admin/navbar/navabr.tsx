@@ -7,7 +7,7 @@ import { HiMenu, HiX } from "react-icons/hi";
 
 function Navbar() {
   return (
-    <nav className="bg-sky-50 border-b border-gray-200 dark:bg-gray-900 w-full shadow-md">
+    <nav className="bg-sky-50 border-b border-gray-200 dark:bg-gray-900 w-full shadow-md ">
       <div className="container mx-auto flex items-center justify-between py-4 px-6">
         <div className="text-xl font-bold text-gray-900 dark:text-white  ml-12 sm:ml-0">
           Vital Aid
