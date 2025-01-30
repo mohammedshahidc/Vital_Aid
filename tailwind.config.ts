@@ -19,5 +19,6 @@ export default {
       },
     },
   },
-  plugins: [heroui()],
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  plugins: [require("tailwind-scrollbar")],
 } satisfies Config;

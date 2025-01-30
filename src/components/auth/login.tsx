@@ -25,17 +25,7 @@ const Login: React.FC = () => {
     console.log("result:",result);
     
     const role = localStorage.getItem("user");
-    // if (loginUser.fulfilled.match(result)) {
-    //   if (role && role === "User") {
-    //     router.push("/user");
-    //   }
-    //   if (role && role === "Doctor") {
-    //     router.push("/doctor");
-    //   }
-    //   if (role && role === "Admin") {
-    //     router.push("/admin");
-    //   }
-    // }
+   
     if(result.meta.requestStatus=='fulfilled'){
       if (role && role === "User") {
             router.push("/user");

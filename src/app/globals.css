@@ -19,3 +19,9 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@media (min-width: 768px) {
+    .md\:w-1050 {
+        width: 1050px;
+    }
+}
