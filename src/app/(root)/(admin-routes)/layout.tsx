@@ -9,15 +9,12 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="flex flex-col h-screen">
-      {/* Navbar at the top */}
       <Navbar />
 
       <div className="flex flex-1">
-        {/* Sidebar on the left */}
         <Sidebar />
 
-        {/* Main content */}
-        <main className="flex-1 p-4 overflow-auto">{children}</main>
+        <main className="flex-1 p-4 overflow-auto  md:ml-60 ">{children}</main>
       </div>
     </div>
   );

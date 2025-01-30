@@ -5,7 +5,7 @@ import { FaUserMd, FaBed, FaCalendarAlt, FaStethoscope, FaLaptopMedical, FaTint,
 function Dashboard() {
   return (
     <div className="flex w-full flex-row p-8 dark:bg-gray-800 overflow-auto">
-      <main className="mt-6 w-full md:ml-60  ">
+      <main className="mt-6 w-full ">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-8">
           <div className="bg-green-100 dark:bg-green-800 shadow-lg rounded-lg p-6 flex flex-col items-center relative">
             <FaUserMd className="absolute top-2 right-2 text-4xl text-green-600 opacity-30" />
