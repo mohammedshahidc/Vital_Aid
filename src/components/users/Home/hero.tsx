@@ -10,26 +10,32 @@ import heroimg from '../../../../public/heroimg.jpg';
 function Hero() {
   useEffect(() => {
     AOS.init({
-      duration: 1000, 
-      once: true, 
+      duration: 1000,
+      once: true,
     });
   }, []);
 
   return (
-    <div className="bg-white sm:h-[700px] md:h-screen w-full flex items-center justify-center shadow-md">
+    <div className="mt-20 bg-white sm:h-[700px] md:h-screen w-full flex items-center justify-center shadow-md">
       <div className="flex flex-col md:flex-row items-center justify-center md:gap-72 sm:gap-16">
-        
+
         <div
-          className="text-center md:text-left"
-          data-aos="fade-right" 
+          className="text-center md:text-left mb-14"
+          data-aos="fade-right"
+
         >
-          <h1 className="text-1xl md:text-3xl sm:text-3xl font-thin font-serif text-green-500">
-            Your trusted partner for <br /> life-saving support <br /> when it
-            matters most
-          </h1>
+          <div className='space-y-7'>
+            <h1 className="text-6xl md:text-8xl font-extrabold bg-gradient-to-r from-green-400 to-blue-300 bg-clip-text text-transparent tracking-wide">
+              VitalAid
+            </h1>
+            <h1 className="text-1xl md:text-2xl sm:text-3xl font-thin font-serif text-green-500 ">
+              Your trusted partner for life-saving support
+            </h1>
+          </div>
+
         </div>
 
-        <div data-aos="fade-left"> 
+        <div data-aos="fade-left">
           <Image
             src={heroimg}
             alt="Description of the image"
