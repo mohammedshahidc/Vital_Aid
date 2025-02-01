@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./features/userSlice"; 
 import userReducer from "./features/userlistSlice"; 
 import EquipmentSlice from "./features/EquipmentSlice";
+import  volunteerSlice  from './features/volunteers'
 import eventsReducer from "./features/eventSlice"
 
 export const makeStore = () => {
@@ -10,6 +11,7 @@ export const makeStore = () => {
       auth: authReducer,  
       users: userReducer,
      equipments:EquipmentSlice,
+     volunteers:volunteerSlice,
      events: eventsReducer
 
     },

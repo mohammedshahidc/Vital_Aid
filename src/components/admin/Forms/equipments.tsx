@@ -67,7 +67,8 @@ const Equipments = () => {
                 setImagePreview(null);
 
                 if (!equipmentid) {
-                    console.log('Form values:', values);
+                    console.log('formdata:',formData);
+                    
                     await dispatch(addnewEquipment(formData));
                     router.push('/admin/equipments/list')
                     await handleReset(e);
