@@ -82,7 +82,6 @@ export const loginUser = createAsyncThunk<LoginFulfilledType,LoginArgumentType,{
 
 export const loginDoctor = createAsyncThunk<LoginFulfilledType,LoginArgumentType,{rejectValue:LoginRejectValueType}>("Doctor/login", async (credentials, { rejectWithValue }) => {
   try {
-    console.log('hi2');
     const response = await axiosInstance.post("/auth/doctorlogin", credentials,{withCredentials:true});
     console.log(response);
     

@@ -1,41 +1,42 @@
 "use client";
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { fetchEvents, deleteEvent } from "@/lib/store/features/eventSlice";
+import { deleteDonor, fetchDonors } from "@/lib/store/features/donorsSlice";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { MdDelete, MdEdit } from "react-icons/md";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
-function AllEvents() {
-  const { events, loading, error } = useAppSelector((state) => state.events);
+function AllDonors() {
+  const { donors, loading, error } = useAppSelector((state) => state.donors);
+  console.log(donors, "donors");
+
   const dispatch = useAppDispatch();
   const router = useRouter();
 
   useEffect(() => {
-    dispatch(fetchEvents());
+    dispatch(fetchDonors());
   }, [dispatch]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
   const handleEdit = (id: string) => {
-    router.push(`/admin/editEvents/${id}`);
+    router.push(`/admin/editDonors/${id}`);
   };
-
   const handleDelete = async (id: string) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this event?"
     );
     if (confirmDelete) {
-      await dispatch(deleteEvent(id));
-      dispatch(fetchEvents());
+      await dispatch(deleteDonor(id));
+      dispatch(fetchDonors());
     }
   };
 
   return (
     <div className="p-6 max-w-5xl mx-auto bg-white dark:bg-gray-800 rounded-lg">
       <h2 className="text-2xl font-bold text-gray-700 dark:text-white mb-4 text-center">
-        All Events
+        All Donors
       </h2>
       <div className="overflow-x-auto">
         <table className="w-full border-collapse border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden text-center">
@@ -44,15 +45,19 @@ function AllEvents() {
               <th className="border p-3 text-gray-700 dark:text-white">
                 Image
               </th>
+              <th className="border p-3 text-gray-700 dark:text-white">Name</th>
               <th className="border p-3 text-gray-700 dark:text-white">
-                Title
-              </th>
-              <th className="border p-3 text-gray-700 dark:text-white">Date</th>
-              <th className="border p-3 text-gray-700 dark:text-white">
-                Location
+                Blood Group
               </th>
               <th className="border p-3 text-gray-700 dark:text-white">
-                Organization
+                Phone
+              </th>
+              <th className="border p-3 text-gray-700 dark:text-white">
+                Gender
+              </th>
+              <th className="border p-3 text-gray-700 dark:text-white">Age</th>
+              <th className="border p-3 text-gray-700 dark:text-white">
+                Address
               </th>
               <th className="border p-3 text-gray-700 dark:text-white">
                 Actions
@@ -60,20 +65,16 @@ function AllEvents() {
             </tr>
           </thead>
           <tbody>
-            {events.map((event) => (
+            {donors.map((donor) => (
               <tr
-                key={event._id}
+                key={donor._id}
                 className="hover:bg-gray-50 transition-colors"
               >
                 <td className="border p-3">
-                  {event.image ? (
+                  {donor.image && donor.image.length > 0 ? (
                     <Image
-                      src={
-                        Array.isArray(event.image)
-                          ? event.image[0]
-                          : event.image
-                      }
-                      alt={event.title}
+                      src={donor.image[0]}
+                      alt={donor.name}
                       width={64}
                       height={64}
                       className="object-cover rounded-lg"
@@ -83,30 +84,36 @@ function AllEvents() {
                   )}
                 </td>
                 <td className="border p-3 text-gray-700 dark:text-gray-300">
-                  {event.title}
+                  {donor.name}
                 </td>
                 <td className="border p-3 text-gray-700 dark:text-gray-300">
-                  {event.date}
+                  {donor.BloodGroup}
                 </td>
                 <td className="border p-3 text-gray-700 dark:text-gray-300">
-                  {event.location}
+                  {donor.Phone}
                 </td>
                 <td className="border p-3 text-gray-700 dark:text-gray-300">
-                  {event.organization}
+                  {donor.Gender}
+                </td>
+                <td className="border p-3 text-gray-700 dark:text-gray-300">
+                  {donor.Age}
+                </td>
+                <td className="border p-3 text-gray-700 dark:text-gray-300">
+                  {donor.Address}
                 </td>
                 <td className=" p-3 flex justify-center space-x-2">
                   <button
-                    onClick={() => handleEdit(event._id)}
-                    className="p-2 bg-blue-600 mt-5 text-white  rounded-md  hover:bg-blue-700 transition shadow-md"
+                    onClick={() => handleEdit(donor._id)}
+                    className="p-2 mt-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
                   >
-                    <MdEdit size={20} />
+                    <FaEdit />
                   </button>
 
                   <button
-                    onClick={() => handleDelete(event._id)}
-                    className="p-2 mt-5 bg-red-600 text-white  rounded-md hover:bg-red-700 transition shadow-md"
+                    onClick={() => handleDelete(donor._id)}
+                    className="p-2 bg-red-600 mt-4 text-white rounded-md hover:bg-red-700 transition"
                   >
-                    <MdDelete size={20} />
+                    <FaTrash />
                   </button>
                 </td>
               </tr>
@@ -118,4 +125,4 @@ function AllEvents() {
   );
 }
 
-export default AllEvents;
+export default AllDonors;

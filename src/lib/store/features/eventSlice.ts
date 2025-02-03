@@ -39,6 +39,19 @@ export const fetchEvents = createAsyncThunk<Event[], void, { rejectValue: string
   }
 );
 
+
+export const deleteEvent = createAsyncThunk<string, string, { rejectValue: string }>(
+  "events/deleteEvent",
+  async (eventId, { rejectWithValue }) => {
+    try {
+      await axiosInstance.post(`/events/deleteEvent/${eventId}`);
+      return eventId; 
+    } catch (error) {
+      return rejectWithValue(axiosErrorManager(error));
+    }
+  }
+);
+
 // Create the slice
 const eventsSlice = createSlice({
   name: "events",
@@ -52,13 +65,25 @@ const eventsSlice = createSlice({
       })
       .addCase(fetchEvents.fulfilled, (state, action: PayloadAction<Event[]>) => {
         state.loading = false;
-        state.events = action.payload; // Update the events array
+        state.events = action.payload;
       })
       .addCase(fetchEvents.rejected, (state, action: PayloadAction<string | undefined>) => {
         state.loading = false;
         state.error = action.payload || "Failed to fetch events";
+      })
+      .addCase(deleteEvent.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteEvent.fulfilled, (state, action: PayloadAction<string>) => {
+        state.loading = false;
+        state.events = state.events.filter((event) => event._id !== action.payload);
+      })
+      .addCase(deleteEvent.rejected, (state, action: PayloadAction<string | undefined>) => {
+        state.loading = false;
+        state.error = action.payload || "Failed to delete event";
       });
   },
 });
 
 export default eventsSlice.reducer;
+

@@ -4,7 +4,7 @@ import userReducer from "./features/userlistSlice";
 import EquipmentSlice from "./features/EquipmentSlice";
 import  volunteerSlice  from './features/volunteers'
 import eventsReducer from "./features/eventSlice"
-
+import donorsReducer from "./features/donorsSlice"
 export const makeStore = () => {
   return configureStore({
     reducer: {
@@ -12,7 +12,8 @@ export const makeStore = () => {
       users: userReducer,
      equipments:EquipmentSlice,
      volunteers:volunteerSlice,
-     events: eventsReducer
+     events: eventsReducer,
+     donors: donorsReducer
 
     },
   });
