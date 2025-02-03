@@ -47,11 +47,14 @@ function AllDoctors() {
     <div className="p-4 h-full">
       <h2 className="text-xl font-semibold mb-4 text-center">Doctors List</h2>
       <Table aria-label="Doctors List">
-        <TableHeader columns={columns}>
+        
+        <TableHeader columns={columns}  className="bg-gray-100">
           {(column: { key: string; label: string }) => (
             <TableColumn key={column.key}>{column.label}</TableColumn>
           )}
         </TableHeader>
+      
+        
         <TableBody items={rows}>
           {(item: typeof rows[0]) => (
             <TableRow key={item.key}>
@@ -59,7 +62,7 @@ function AllDoctors() {
                 <TableCell>
                   {columnKey === "name" ? (
                     <Link
-                      href={`/doctors/${item.key}`}
+                      href={`/admin/doctors/${item.key}`}
                       className="text-blue-600 hover:underline"
                     >
                       {getKeyValue(item, columnKey)}
