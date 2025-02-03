@@ -104,14 +104,14 @@ function AllDonors() {
                 <td className=" p-3 flex justify-center space-x-2">
                   <button
                     onClick={() => handleEdit(donor._id)}
-                    className="p-2 mt-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+                    className="p-2 mt-4 text-blue-800 rounded-md transition"
                   >
                     <FaEdit />
                   </button>
 
                   <button
                     onClick={() => handleDelete(donor._id)}
-                    className="p-2 bg-red-600 mt-4 text-white rounded-md hover:bg-red-700 transition"
+                    className="p-2 mt-4 text-red-700 rounded-md transition"
                   >
                     <FaTrash />
                   </button>

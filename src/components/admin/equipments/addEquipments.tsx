@@ -4,7 +4,7 @@ import Equipments from '../Forms/equipments'
 const AddEquipments = () => {
   return (
     <div>
-      <Equipments/>
+      <Equipments />
     </div>
   )
 }

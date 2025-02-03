@@ -29,7 +29,7 @@ const initialValues: FormValue = {
 };
 
 const Equipments = () => {
-    const router=useRouter()
+    const router = useRouter()
     const { isLoading, allEquipment } = useAppSelector((state) => state.equipments);
     const { equipmentid } = useParams();
     console.log('id:', equipmentid);
@@ -40,7 +40,7 @@ const Equipments = () => {
             const foundItem = allEquipment?.find((eq) => eq._id === equipmentid) ?? null;
             setItem(foundItem);
             if (foundItem?.image) {
-              
+
                 setImagePreview(foundItem.image);
                 setFieldValue("image", foundItem.image);
             }
@@ -67,15 +67,15 @@ const Equipments = () => {
                 setImagePreview(null);
 
                 if (!equipmentid) {
-                    console.log('formdata:',formData);
-                    
+                    console.log('formdata:', formData);
+
                     await dispatch(addnewEquipment(formData));
                     router.push('/admin/equipments/list')
                     await handleReset(e);
                 } else {
                     try {
                         await axiosInstance.put(`/equipment/editEquipment/${equipmentid}`, formData);
-                         router.push('/admin/equipments/list')
+                        router.push('/admin/equipments/list')
                     } catch (error) {
                         axiosErrorManager(error);
                     }
@@ -93,7 +93,7 @@ const Equipments = () => {
             setFieldValue("quantity", item.quantity);
             setFieldValue("description", item.description);
         }
-    }, [item, setFieldValue]); 
+    }, [item, setFieldValue]);
 
     console.log('item:', item);
 
@@ -104,8 +104,8 @@ const Equipments = () => {
                     Add Equipment
                 </h2>
 
-                <form className="space-y-2" onSubmit={handleSubmit}>
-                    
+                <form className="space-y-2 " onSubmit={handleSubmit}>
+
                     <div>
                         <label className="block font-medium text-gray-700">Name</label>
                         <input
@@ -122,9 +122,9 @@ const Equipments = () => {
                         )}
                     </div>
 
-                  
+
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        
+
                         <div>
                             <label className="block font-medium text-gray-700">Quantity</label>
                             <input
@@ -141,7 +141,7 @@ const Equipments = () => {
                             )}
                         </div>
 
-                       
+
                         <div>
                             <label className="block font-medium text-gray-700">Equipment Image</label>
                             <label className="w-full h-32 p-6 border-2 border-dashed rounded-md bg-green-100 flex flex-col items-center justify-center cursor-pointer">
@@ -175,7 +175,7 @@ const Equipments = () => {
                         </div>
                     </div>
 
-                
+
                     <div>
                         <label className="block font-medium text-gray-700">About the Equipment</label>
                         <textarea
@@ -184,7 +184,7 @@ const Equipments = () => {
                             id="description"
                             onBlur={handleBlur}
                             onChange={handleChange}
-                            value={values.description} 
+                            value={values.description}
                         ></textarea>
                         {errors.description && touched.description && (
                             <div className="text-red-500 text-sm">{errors.description}</div>

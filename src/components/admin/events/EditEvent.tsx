@@ -19,20 +19,20 @@ interface EventFormData {
 }
 
 const EditEvent = () => {
-  const { id } = useParams(); 
-  console.log("id",id)
+  const { id } = useParams();
+  console.log("id", id)
   const router = useRouter();
-  const { register, handleSubmit,  setValue } = useForm<EventFormData>();
+  const { register, handleSubmit, setValue } = useForm<EventFormData>();
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchEventDetails = async () => {
       try {
         const response = await axiosInstance.get(`/events/geteventbyid/${id}`);
-        console.log(response,'response');
+        console.log(response, 'response');
 
         const eventData = response.data.event;
-        console.log(eventData,'response');
+        console.log(eventData, 'response');
 
         setValue("title", eventData.title);
         setValue("organization", eventData.organization);
@@ -64,17 +64,17 @@ const EditEvent = () => {
       formData.append("location", data.location);
       formData.append("date", data.date);
       formData.append("description", data.description);
-  
+
       if (data.image) {
         formData.append("image", data.image[0]);
       }
-  
+
       await axiosInstance.put(`/events/editevent/${id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-  
+
       toast.success("Event updated successfully!", { autoClose: 1500 });
-  
+
       setTimeout(() => {
         router.push("/admin/allEvents");
       }, 1500);
@@ -117,14 +117,14 @@ const EditEvent = () => {
             className="w-full p-3 border rounded-lg focus:ring focus:ring-green-300 bg-gradient-to-r from-green-100 to-green-200"
           />
 
-          
+
           <label className="w-full flex items-center justify-center p-3 sm:p-4 sm:text-lg border rounded-lg cursor-pointer hover:opacity-80 transition focus:ring-green-300 bg-gradient-to-r from-green-100 to-green-200 min-h-[50px] sm:min-h-[60px]">
             <input
               type="file"
               accept="image/*"
               className="hidden"
               onChange={handleImageChange}
-              
+
             />
             <FiFolder className="mr-2 text-xl sm:text-2xl" />
             <span className="text-sm sm:text-base">Change Image</span>

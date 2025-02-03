@@ -10,13 +10,13 @@ import { useParams } from 'next/navigation';
 
 import axiosInstance from '@/utils/axios';
 import axiosErrorManager from '@/utils/axiosErrormanager';
-import {  useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 
 interface formValue {
     name: string,
-    phone:number | string,
-    gender:  'male' | 'female' | null,
+    phone: number | string,
+    gender: 'male' | 'female' | null,
     image: File | null
 }
 
@@ -28,28 +28,28 @@ const initialState: formValue = {
 }
 
 const Vlounteers = () => {
-    const route=useRouter()
-    const dispatch=useAppDispatch()
-    const {volunteerid}=useParams()
-    const{allVolunteers}=useAppSelector((state)=>state.volunteers)
-    const [volunteer,setVolunteer]=useState<Volunteer|null>(null)
+    const route = useRouter()
+    const dispatch = useAppDispatch()
+    const { volunteerid } = useParams()
+    const { allVolunteers } = useAppSelector((state) => state.volunteers)
+    const [volunteer, setVolunteer] = useState<Volunteer | null>(null)
     const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-    useEffect(()=>{
-        if(volunteerid){
-            const selectvolunteer=allVolunteers?.find((vol) => vol._id === volunteerid) ?? null;
+    useEffect(() => {
+        if (volunteerid) {
+            const selectvolunteer = allVolunteers?.find((vol) => vol._id === volunteerid) ?? null;
             setVolunteer(selectvolunteer)
-            if(selectvolunteer){
+            if (selectvolunteer) {
                 setImagePreview(selectvolunteer.image)
-                setFieldValue("image",selectvolunteer.image)
-            
-               
-            }
-           
-        }
-    },[allVolunteers,volunteerid])
+                setFieldValue("image", selectvolunteer.image)
 
-    
+
+            }
+
+        }
+    }, [allVolunteers, volunteerid])
+
+
 
     const { values, errors, handleChange, handleBlur, handleSubmit, touched, setFieldValue } = useFormik({
         initialValues: initialState,
@@ -64,42 +64,42 @@ const Vlounteers = () => {
                     formData.append('image', values.image);
                 }
                 setImagePreview(null);
-                if(!volunteerid){
-                    const response=  await dispatch(addVolunteer(formData))
-                    if(response.meta.requestStatus=='fulfilled'){
+                if (!volunteerid) {
+                    const response = await dispatch(addVolunteer(formData))
+                    if (response.meta.requestStatus == 'fulfilled') {
                         route.push('/admin/volunteers/list')
                     }
-                    console.log('resp',response.meta.requestStatus);
-                }else{
+                    console.log('resp', response.meta.requestStatus);
+                } else {
                     try {
-                        const response=await axiosInstance.put(`/volunteers/edit/${volunteerid}`,formData)
+                        const response = await axiosInstance.put(`/volunteers/edit/${volunteerid}`, formData)
                         if (response.status === 200) {
                             route.push('/admin/volunteers/list');
                         }
-                        
+
                     } catch (error) {
                         axiosErrorManager(error)
                     }
                 }
-             
-        
-    
-              
+
+
+
+
             } catch (error) {
                 console.log("error:", error);
             }
         }
     });
-    
-    useEffect(()=>{
-        if(volunteer){
-            setFieldValue("name",volunteer.name)
-            setFieldValue("phone",volunteer.phone)
-            setFieldValue("gender",volunteer.gender)
+
+    useEffect(() => {
+        if (volunteer) {
+            setFieldValue("name", volunteer.name)
+            setFieldValue("phone", volunteer.phone)
+            setFieldValue("gender", volunteer.gender)
         }
 
-    },[volunteer,setFieldValue])
-    
+    }, [volunteer, setFieldValue])
+
     return (
         <div className="w-screen h-fit fixed flex justify-center items-center p-6 sm:w-fit">
             <div className="mx-5 w-full h-4/6 my-11 sm:w-11/12 md:w-[1000px] lg:w- bg-white p-6 rounded-lg">

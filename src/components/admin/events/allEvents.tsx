@@ -97,14 +97,14 @@ function AllEvents() {
                 <td className=" p-3 flex justify-center space-x-2">
                   <button
                     onClick={() => handleEdit(event._id)}
-                    className="p-2 bg-blue-600 mt-5 text-white  rounded-md  hover:bg-blue-700 transition shadow-md"
+                    className="p-2 mt-5 text-blue-700  rounded-md transition shadow-md"
                   >
                     <MdEdit size={20} />
                   </button>
 
                   <button
                     onClick={() => handleDelete(event._id)}
-                    className="p-2 mt-5 bg-red-600 text-white  rounded-md hover:bg-red-700 transition shadow-md"
+                    className="p-2 mt-5 text-red-800  rounded-md transition shadow-md"
                   >
                     <MdDelete size={20} />
                   </button>
