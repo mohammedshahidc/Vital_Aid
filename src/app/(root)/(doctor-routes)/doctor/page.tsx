@@ -1,5 +1,5 @@
-import Home from '@/components/docter/Home/home'
-import Sidebar from '@/components/docter/sidbar/sidbar'
+import Home from '../../../../components/doctor/Home/home'
+import Sidebar from '../../../../components/doctor/sidbar/sidbar'
 import React from 'react'
 
 function Page() {

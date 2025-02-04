@@ -1,8 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axiosInstance from "@/utils/axios";
-import Cookies from "js-cookie";
 import axiosErrorManager from "@/utils/axiosErrormanager";
-import { string } from "yup";
+
 
 interface User {
   _id: string;

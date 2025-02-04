@@ -1,15 +1,20 @@
 "use client";
 import { Button } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { useRouter } from "next/navigation";
-import { loginUser,loginadmin,loginDoctor } from "@/lib/store/features/userSlice";
+import { useParams, useRouter } from "next/navigation";
+import { loginUser, loginadmin, loginDoctor, setType } from "@/lib/store/features/userSlice";
 import LoginModal from "../ui/loginModal";
 import Image from "next/image";
 import DRpng from "../../../public/Doctor.png"
+import { toast } from "react-hot-toast";
 
 const Login: React.FC = () => {
+  const { admin } = useParams()
+  console.log('wdd', admin);
+
+
   const dispatch = useAppDispatch();
   const { isLoading, error, userType } = useAppSelector((state) => state.auth);
   const router = useRouter();
@@ -18,30 +23,39 @@ const Login: React.FC = () => {
 
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-
+  useEffect(() => {
+    if (admin) {
+      dispatch(setType("Admin"))
+    }
+  }, [admin])
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const result =userType=="User"? await dispatch(loginUser({ email, password })):userType=="Admin"?await dispatch(loginadmin({ email, password })):await dispatch(loginDoctor({ email, password }));
-    console.log("result:",result);
-    
+
+    const result = userType == "User" ? await dispatch(loginUser({ email, password })) : userType == "Admin" ? await dispatch(loginadmin({ email, password })) : await dispatch(loginDoctor({ email, password }));
+    console.log("result:", result);
+    if (error) {
+      toast.error(error)
+    }
     const role = localStorage.getItem("user");
-   
-    if(result.meta.requestStatus=='fulfilled'){
+
+    if (result.meta.requestStatus == 'fulfilled') {
       if (role && role === "User") {
-            router.push("/user");
-          }
-          if (role && role === "Doctor") {
-            router.push("/doctor");
-          }
-          if (role && role === "Admin") {
-            router.push("/admin");
-          }
+        router.push("/user");
+      }
+      if (role && role === "Doctor") {
+        router.push("/doctor");
+      }
+      if (role && role === "Admin") {
+        router.push("/admin");
+      }
     }
   };
-
+  if (error) {
+    toast.error(error)
+  }
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleOpenModal = () => setIsModalOpen(true);
+  // const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
 
@@ -59,17 +73,21 @@ const Login: React.FC = () => {
         ? "from-blue-300 via-blue-400 to-blue-500"
         : " from-custom-green-100 via-custom-green-200 to-custom-green-300";
 
+
+  const handleClick = async () => {
+    await dispatch(setType("Doctor"))
+  }
   return (
     <div
       className={`relative flex h-screen items-center justify-center bg-gray-100`}
     >
-      <div className="absolute top-36 md:top-6 space-x-4 mt-7  ">
+      {/* <div className="absolute top-36 md:top-6 space-x-4 mt-7  ">
         <Button onClick={handleOpenModal} variant="text" color="success">
           Login as
         </Button>
-      </div>
+      </div> */}
 
-      <div className="flex w-full  max-w-4xl sm:h-4/6 bg-gray-50 shadow-lg flex-col sm:flex-row rounded-lg">
+      <div className="flex w-full  max-w-4xl sm:h-5/12 bg-gray-50 shadow-lg flex-col sm:flex-row rounded-lg">
         <div className="w-full md:pt-20 sm:w-1/2 px-8 py-12 sm:p-8">
           <h2 className="text-xl font-bold text-center text-gray-700 mb-2">
             WELCOME BACK
@@ -126,20 +144,26 @@ const Login: React.FC = () => {
             >
               {isLoading ? "Loading..." : `Login as ${userType}`}
             </Button>
+            <div className="my-4 w-ful">
+              {userType == "User" && <Link href={'/login/doctor'} className="text-blue-700 end-3 " onClick={handleClick}>Are you a doctor? Click here to log in.</Link>}
+
+
+            </div>
+
           </form>
-          {error && <p className="text-red-500 text-sm mt-4">{error}</p>}
-          {userType === "User" &&(
-          <div className="sm:hidden mt-2 flex  items-center justify-center space-y-4">
-            <p className="text-gray-700 mt-3 text-base font-medium">
-              Dont have an account yet?
-            </p>
-            <Link href="/register" passHref>
-              <Button  variant="text" color="success">
-                Create it
-              </Button>
-            </Link>
-            
-          </div>)}
+
+          {userType === "User" && (
+            <div className="sm:hidden mt-2 flex  items-center justify-center space-y-4">
+              <p className="text-gray-700 mt-3 text-base font-medium">
+                Dont have an account yet?
+              </p>
+              <Link href="/register" passHref>
+                <Button variant="text" color="success">
+                  Create it
+                </Button>
+              </Link>
+
+            </div>)}
         </div>
 
         <div
@@ -180,6 +204,7 @@ const Login: React.FC = () => {
         </div>
       </div>
       <LoginModal open={isModalOpen} onClose={handleCloseModal} />
+
     </div>
   );
 };

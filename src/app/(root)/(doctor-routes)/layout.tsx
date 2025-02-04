@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import Navbar from "@/components/docter/Navbar/navbar";
+import Navbar from "../../../components/doctor/Navbar/navbar";
 
 
 interface LayoutProps {

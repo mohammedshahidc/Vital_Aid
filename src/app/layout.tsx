@@ -5,7 +5,7 @@ import SessionProvider from "@/providers.ts/authProvider"
 import { getServerSession } from "next-auth";
 import StoreProvider from "@/lib/store/store-provider";
 import Providers from "@/lib/Query/providers";
-
+import {Toaster} from 'react-hot-toast'
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -38,6 +38,7 @@ export default async function RootLayout({
         <SessionProvider session={session}>
           <StoreProvider>
             <Providers>
+            <Toaster position="top-right" reverseOrder={false} />
               {children}
             </Providers>
 
