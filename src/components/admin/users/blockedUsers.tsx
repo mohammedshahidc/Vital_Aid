@@ -20,10 +20,10 @@ interface User {
 const BlockedUsersList: React.FC = () => {
   const [blockedUsers, setBlockedUsers] = useState<User[]>([]);
   const dispatch = useAppDispatch();
-  const { isLoading, error, users } = useAppSelector((state) => state.users);
+  const { isLoading, error } = useAppSelector((state) => state.users);
 
   useEffect(() => {
-    dispatch(fetchUsers());
+    dispatch(fetchUsers(1));
   }, [dispatch]);
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const BlockedUsersList: React.FC = () => {
   const handleUnblockUser = async (_id: string) => {
     try {
       await axiosInstance.post(`/users/blockUser/${_id}`);
-      dispatch(fetchUsers());
+      dispatch(fetchUsers(1));
       setBlockedUsers((prev) => prev.filter((user) => user._id !== _id));
     } catch (error) {
       console.error("Error unblocking user:", error);

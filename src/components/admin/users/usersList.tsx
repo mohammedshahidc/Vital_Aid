@@ -1,36 +1,50 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { fetchUsers } from "@/lib/store/features/userlistSlice";
 import axiosInstance from "@/utils/axios";
 import { FaBan, FaCheckCircle } from "react-icons/fa";
+import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@mui/material";
 
 function UsersList() {
   const dispatch = useAppDispatch();
-  const { isLoading, error, users } = useAppSelector((state) => state.users);
+  const { isLoading, error, users, totalPages } = useAppSelector((state) => state.users);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    dispatch(fetchUsers());
-  }, [dispatch]);
+    dispatch(fetchUsers(currentPage));
+  }, [dispatch, currentPage]);
 
   const handleBlockUser = async (_id: string) => {
     try {
       const response = await axiosInstance.post(`/users/blockUser/${_id}`);
       console.log(response.data.message);
-      dispatch(fetchUsers());
+      dispatch(fetchUsers(currentPage));
     } catch (error) {
       console.error("Error blocking/unblocking user:", error);
     }
   };
 
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
   return (
-    <div className="p-6 max-w-5xl mx-auto bg-white dark:bg-gray-800 rounded-lg">
+    <div className="p-6 max-w- mx-auto bg-white dark:bg-gray-800 rounded-lg">
       <h2 className="text-2xl font-bold text-gray-700 dark:text-white mb-4 text-center">
         Users List
       </h2>
 
       {isLoading && <p className="text-gray-500 dark:text-gray-300 text-center">Loading...</p>}
       {error && <p className="text-red-500 text-center">{error}</p>}
+
+      <div className="flex justify-end items-end pr-1 pb-4">
+        <Link href={"/admin/blockedList"}>
+          <Button variant="outlined" color="error">Blocked Users</Button>
+        </Link>
+      </div>
 
       <div className="overflow-x-auto">
         <table className="w-full border-collapse border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden text-center">
@@ -49,8 +63,10 @@ function UsersList() {
               <tr key={user._id} className="border hover:bg-gray-50 dark:hover:bg-gray-600">
                 <td className="border p-3">
                   <div className="flex justify-center">
-                    <img
+                    <Image
                       src={user.profileImage.thumbnail || "/default-avatar.png"}
+                      width={200}
+                      height={200}
                       alt={user.name}
                       className="w-10 h-10 rounded-full object-cover"
                     />
@@ -95,6 +111,27 @@ function UsersList() {
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="flex justify-center mt-4 gap-2">
+        <Button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="px-4 py-2 border rounded disabled:opacity-50"
+        >
+          Previous
+        </Button>
+        <span className="px-4 py-2">
+          Page {currentPage} of {totalPages}
+        </span>
+
+        <Button 
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          variant="text"
+          color="success"
+        >
+          Next
+        </Button>
       </div>
     </div>
   );

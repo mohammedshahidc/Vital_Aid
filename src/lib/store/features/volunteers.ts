@@ -1,4 +1,4 @@
-import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axiosErrorManager from "@/utils/axiosErrormanager";
 import axiosInstance from "@/utils/axios";
 
@@ -14,87 +14,93 @@ export interface Volunteer {
     image: string;
 }
 
-interface volunteerState{
-    volunteer:Volunteer|null,
-    allVolunteers:Volunteer[]|null,
-    error:string |null,
-    isLoading:boolean
+interface volunteerState {
+    volunteer: Volunteer | null,
+    allVolunteers: Volunteer[] | null,
+    error: string | null,
+    isLoading: boolean
+    totalPages: number
 }
 
 export const addVolunteer = createAsyncThunk<
-  Volunteer,
-  FormData,
-  { formData: FormData; rejectValue: string }
->('addVolunteer', async (formData , { rejectWithValue }) => {
+    Volunteer,
+    FormData,
+    { formData: FormData; rejectValue: string }
+>('addVolunteer', async (formData, { rejectWithValue }) => {
     try {
-       
-        const response = await axiosInstance.post('/volunteers/add',formData,{
+
+        const response = await axiosInstance.post('/volunteers/add', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-            }})
+            }
+        })
 
         return response.data.data
     } catch (error) {
-        return rejectWithValue(axiosErrorManager(error)); 
+        return rejectWithValue(axiosErrorManager(error));
     }
 });
 
-export const getAllvolunteers=createAsyncThunk<Volunteer[],void,{ rejectValue: string }>('getVolunteers',async(_, {rejectWithValue })=>{
+export const getAllvolunteers = createAsyncThunk<{ allVolunteers: Volunteer[], totalPages: number }, number, { rejectValue: string }>('getVolunteers', async (page, { rejectWithValue }) => {
     try {
-       const response=await axiosInstance.get('/volunteers/getall')
-    return response.data.data
+        const response = await axiosInstance.get(`/volunteers/getall?page=${page}&limit=5`)
+        console.log(response.data);
+        
+        return {
+            allVolunteers: response.data.allVolunteers,
+            totalPages: response.data.totalPages
+        }
     } catch (error) {
-       return rejectWithValue(axiosErrorManager(error));
+        return rejectWithValue(axiosErrorManager(error));
     }
-   })
+})
 
 
 
-
-
-
-
-const initialState:volunteerState={
-    volunteer:null,
-    allVolunteers:null,
-    error:null,
-    isLoading:false
+const initialState: volunteerState = {
+    volunteer: null,
+    allVolunteers: null,
+    error: null,
+    isLoading: false,
+    totalPages: 0
 }
 
-const volunteerSlice=createSlice({
-    name:'volunteer',
+const volunteerSlice = createSlice({
+    name: 'volunteer',
     initialState,
-    reducers:{},
-    extraReducers:(builder)=>{
+    reducers: {},
+    extraReducers: (builder) => {
         builder
-        .addCase(addVolunteer.pending,(state)=>{
-            state.error=null
-            state.isLoading=true
-        })
-        .addCase(addVolunteer.fulfilled,(state)=>{
-            state.error=null
-            state.isLoading=true
+            .addCase(addVolunteer.pending, (state) => {
+                state.error = null
+                state.isLoading = true
+            })
+            .addCase(addVolunteer.fulfilled, (state) => {
+                state.error = null
+                state.isLoading = true
 
-        })
-        .addCase(addVolunteer.rejected,(state,action)=>{
-            state.error= action.payload||'an error occured'
-            state.isLoading=false
-        })
+            })
+            .addCase(addVolunteer.rejected, (state, action) => {
+                state.error = action.payload || 'an error occured'
+                state.isLoading = false
+            })
 
-        .addCase(getAllvolunteers.pending,(state)=>{
-            state.error=null
-            state.isLoading=true
-        })
-        .addCase(getAllvolunteers.fulfilled,(state,action)=>{
-            state.error=null
-            state.isLoading=false
-            state.allVolunteers=action.payload
+            .addCase(getAllvolunteers.pending, (state) => {
+                state.error = null
+                state.isLoading = true
+            })
 
-        })
-        .addCase(getAllvolunteers.rejected,(state,action)=>{
-            state.error= action.payload||'an error occured'
-            state.isLoading=false
-        })
+            .addCase(getAllvolunteers.fulfilled, (state, action: PayloadAction<{ allVolunteers: Volunteer[], totalPages: number }>) => {
+                state.error = null
+                state.isLoading = false
+                state.allVolunteers = action.payload.allVolunteers
+                state.totalPages = action.payload.totalPages
+
+            })
+            .addCase(getAllvolunteers.rejected, (state, action) => {
+                state.error = action.payload || 'an error occured'
+                state.isLoading = false
+            })
     }
 
 })

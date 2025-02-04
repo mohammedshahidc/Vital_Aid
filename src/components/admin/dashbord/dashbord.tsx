@@ -1,32 +1,31 @@
 "use client";
 import React, { useEffect } from "react";
 import { FaUserMd, FaBed, FaCalendarAlt, FaStethoscope, FaLaptopMedical, FaTint, FaHandHoldingHeart, FaDonate } from "react-icons/fa";
-import { useAppSelector,useAppDispatch } from "@/lib/store/hooks";
+import { useAppSelector, useAppDispatch } from "@/lib/store/hooks";
 import { fetchUsers } from "@/lib/store/features/userlistSlice";
 import { fetchDonors } from "@/lib/store/features/donorsSlice";
 import { fetchEvents } from "@/lib/store/features/eventSlice";
 import { getallEquipment } from "@/lib/store/features/EquipmentSlice";
 import { getAllvolunteers } from "@/lib/store/features/volunteers";
-// import Equipments from "../Forms/equipments";
+
 
 function Dashboard() {
-  const dispatch=useAppDispatch()
-  useEffect(()=>{
-     dispatch(fetchUsers());
-     dispatch(fetchDonors());
-     dispatch(fetchEvents());
-     dispatch(getallEquipment())
-      dispatch(getAllvolunteers())
+  const dispatch = useAppDispatch()
+  const { users } = useAppSelector((state) => state.users)
+  const { donors } = useAppSelector((state) => state.donors)
+  const { events } = useAppSelector((state) => state.events)
+  const { allEquipment } = useAppSelector((state) => state.equipments)
+  const { allVolunteers } = useAppSelector((state) => state.volunteers)
 
-  },[dispatch])
-  const {users}=useAppSelector((state)=>state.users)
-    const {donors}=useAppSelector((state)=>state.donors)
-    const {events}=useAppSelector((state)=>state.events)
-    const {allEquipment}=useAppSelector((state)=>state.equipments)
-    const{allVolunteers}=useAppSelector((state)=>state.volunteers)
+  useEffect(() => {
+    dispatch(fetchUsers(1));
+    dispatch(fetchDonors(1));
+    dispatch(fetchEvents(1));
+    dispatch(getallEquipment())
+    dispatch(getAllvolunteers(1))
 
-  
-  
+  }, [dispatch])
+
   return (
     <div className="flex w-full flex-row p-8 dark:bg-gray-800 overflow-auto">
       <main className="mt-6 w-full ">
@@ -55,28 +54,25 @@ function Dashboard() {
             <p className="text-2xl font-bold text-purple-600">350</p>
           </div>
 
-          {/* Available Equipment */}
+
           <div className="bg-indigo-100 dark:bg-indigo-800 shadow-lg rounded-lg p-6 flex flex-col items-center relative">
             <FaLaptopMedical className="absolute top-2 right-2 text-4xl text-indigo-600 opacity-30" />
             <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300">Available Equipment</h2>
             <p className="text-2xl font-bold text-indigo-600">{allEquipment?.length}</p>
           </div>
 
-          {/* Active Blood Donors */}
           <div className="bg-red-100 dark:bg-red-800 shadow-lg rounded-lg p-6 flex flex-col items-center relative">
             <FaTint className="absolute top-2 right-2 text-4xl text-red-600 opacity-30" />
             <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300">Blood Donors</h2>
             <p className="text-2xl font-bold text-red-600">{donors.length}</p>
           </div>
 
-          {/* Active Donors */}
           <div className="bg-teal-100 dark:bg-teal-800 shadow-lg rounded-lg p-6 flex flex-col items-center relative">
             <FaHandHoldingHeart className="absolute top-2 right-2 text-4xl text-teal-600 opacity-30" />
             <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300"> Volenteers</h2>
             <p className="text-2xl font-bold text-teal-600">{allVolunteers?.length}</p>
           </div>
 
-          {/* Donations */}
           <div className="bg-pink-100 dark:bg-pink-800 shadow-lg rounded-lg p-6 flex flex-col items-center relative">
             <FaDonate className="absolute top-2 right-2 text-4xl text-pink-600 opacity-30" />
             <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300">Donations</h2>

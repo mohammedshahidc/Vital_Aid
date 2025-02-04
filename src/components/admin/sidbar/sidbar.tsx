@@ -8,13 +8,10 @@ import {
   Typography,
   Accordion,
   AccordionSummary,
-  AccordionDetails,
   List,
-  ListItemText,
   ListItemIcon,
-  ListItemButton,
 } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
 import PeopleIcon from "@mui/icons-material/People";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import EventIcon from "@mui/icons-material/Event";
@@ -28,16 +25,11 @@ import { IoClose } from "react-icons/io5";
 
 
 const Sidebar = () => {
-  const [open, setOpen] = useState<number | null>(null);
-  const [isOpen, setIsOpen] = useState(false);
 
-  const handleOpen = (panel: number) => {
-    setOpen(open === panel ? null : panel);
-  };
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
-
       <button
         className="sm:hidden fixed top-4 left-4 z-50 bg-transparent text-gray-500 p-2 rounded-md"
         onClick={() => setIsOpen(!isOpen)}
@@ -50,11 +42,11 @@ const Sidebar = () => {
           } sm:translate-x-0`}
       >
         <div className="flex justify-center pt-3 pb-4">
-        <Typography variant="h5" fontWeight="bold" color="text.primary">
-          Admin Panel
-        </Typography>
+          <Typography variant="h5" fontWeight="bold" color="text.primary">
+            Admin Panel
+          </Typography>
         </div>
-        
+
         <Card
           sx={{
             height: "100vh",
@@ -64,236 +56,87 @@ const Sidebar = () => {
           }}
         >
           <List>
-            <Accordion expanded={open === 1} onChange={() => handleOpen(1)}>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
-                <ListItemIcon>
-                  <PeopleIcon />
-                </ListItemIcon>
-                <Typography>Users</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <List>
-                  <Link
-                    href="/admin/usersList"
-                    style={{ textDecoration: "none", color: "inherit" }}
-                    
-                  >
-                    <ListItemButton onClick={() => setIsOpen(!isOpen)}>
-                      <ListItemText primary="Active Users" />
-                    </ListItemButton>
-                  </Link>
-                  <Link
-                    href="/admin/blockedList"
-                    style={{ textDecoration: "none", color: "inherit" }}
-                  >
-                    <ListItemButton>
-                      <ListItemText primary="Blocked Users" />
-                    </ListItemButton>
-                  </Link>
-                 
-                </List>
-              </AccordionDetails>
+            <Accordion >
+              <Link href={"/admin/usersList"}>
+                <AccordionSummary>
+                  <ListItemIcon>
+                    <PeopleIcon />
+                  </ListItemIcon>
+                  <Typography>Users</Typography>
+                </AccordionSummary>
+              </Link>
             </Accordion>
           </List>
           <List>
-            <Accordion expanded={open === 2} onChange={() => handleOpen(2)}>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
-                <ListItemIcon>
-                  <LocalHospitalIcon />
-                </ListItemIcon>
-                <Typography>Doctors</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <List>
-                  <Link
-                    href="/admin/doctors"
-                    style={{ textDecoration: "none", color: "inherit" }}
-                  >
-                    <ListItemButton>
-                      <ListItemText primary="Active Doctors" />
-                    </ListItemButton>
-                  </Link>
-                  <Link
-                    href="/admin/addDoctors"
-                    style={{ textDecoration: "none", color: "inherit" }}
-                  >
-                    <ListItemButton>
-                      <ListItemText primary="Add Doctors" />
-                    </ListItemButton>
-                  </Link>
-                </List>
-              </AccordionDetails>
+            <Accordion >
+              <Link href={"/admin/doctors"}>
+                <AccordionSummary>
+                  <ListItemIcon>
+                    <LocalHospitalIcon />
+                  </ListItemIcon>
+                  <Typography>Doctors</Typography>
+                </AccordionSummary>
+              </Link>
             </Accordion>
           </List>
           <List>
-            <Accordion expanded={open === 3} onChange={() => handleOpen(3)}>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
-                <ListItemIcon>
-                  <CalendarMonthIcon />
-                </ListItemIcon>
-                <Typography>Appoinment</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <List>
-                  <Link
-                    href="/Admin-listing"
-                    style={{ textDecoration: "none", color: "inherit" }}
-                  >
-                    <ListItemButton>
-                      <ListItemText primary="All Appoinments" />
-                    </ListItemButton>
-                  </Link>
-
-                </List>
-              </AccordionDetails>
+            <Accordion >
+              <Link href={""}>
+                <AccordionSummary>
+                  <ListItemIcon>
+                    <CalendarMonthIcon />
+                  </ListItemIcon>
+                  <Typography>Appoinment</Typography>
+                </AccordionSummary>
+              </Link>
             </Accordion>
           </List>
           <List>
-            <Accordion expanded={open === 4} onChange={() => handleOpen(4)}>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
-                <ListItemIcon>
-                  <EventIcon />
-                </ListItemIcon>
-                <Typography>Events</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <List>
-                  <Link
-                    href="/admin/allEvents"
-                    style={{ textDecoration: "none", color: "inherit" }}
-                  >
-                    <ListItemButton>
-                      <ListItemText primary="All Events" />
-                    </ListItemButton>
-                  </Link>
-                  <Link
-                    href="/admin/addEvents"
-                    style={{ textDecoration: "none", color: "inherit" }}
-                  >
-                    <ListItemButton>
-                      <ListItemText primary="Create Events" />
-                    </ListItemButton>
-                  </Link>
-                </List>
-              </AccordionDetails>
+            <Accordion >
+              <Link href={"/admin/allEvents"}>
+                <AccordionSummary>
+                  <ListItemIcon>
+                    <EventIcon />
+                  </ListItemIcon>
+                  <Typography>Events</Typography>
+                </AccordionSummary>
+              </Link>
             </Accordion>
           </List>
           <List>
-            <Accordion expanded={open === 5} onChange={() => handleOpen(5)}>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
-                <ListItemIcon>
-                  <BloodtypeIcon />
-                </ListItemIcon>
-                <Typography>Blood Donors</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <List>
-                  <Link
-                    href="/admin/donorsTable"
-                    style={{ textDecoration: "none", color: "inherit" }}
-                  >
-                    <ListItemButton>
-                      <ListItemText primary="All Donors" />
-                    </ListItemButton>
-                  </Link>
-                  <Link
-                    href="/admin/addDonors"
-                    style={{ textDecoration: "none", color: "inherit" }}
-                  >
-                    <ListItemButton>
-                      <ListItemText primary=" Add a Donor" />
-                    </ListItemButton>
-                  </Link>
-                </List>
-              </AccordionDetails>
+            <Accordion >
+              <Link href={"/admin/donorsTable"}>
+                <AccordionSummary>
+                  <ListItemIcon>
+                    <BloodtypeIcon />
+                  </ListItemIcon>
+                  <Typography>Blood Donors</Typography>
+                </AccordionSummary>
+              </Link>
             </Accordion>
           </List>
           <List>
-            <Accordion expanded={open === 6} onChange={() => handleOpen(6)}>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
-                <ListItemIcon>
-                  <VolunteerActivismIcon />
-                </ListItemIcon>
-                <Typography>Volunteers</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <List>
-                  <Link
-                    href="/admin/volunteers/list"
-                    style={{ textDecoration: "none", color: "inherit" }}
-                  >
-                    <ListItemButton>
-                      <ListItemText primary="All Volunteers" />
-                    </ListItemButton>
-                  </Link>
-                  <Link
-                    href="/admin/volunteers/add"
-                    style={{ textDecoration: "none", color: "inherit" }}
-                  >
-                    <ListItemButton>
-                      <ListItemText primary="Add volunteer" />
-                    </ListItemButton>
-                  </Link>
-                </List>
-              </AccordionDetails>
+            <Accordion >
+              <Link href={"/admin/volunteers/list"}>
+                <AccordionSummary>
+                  <ListItemIcon>
+                    <VolunteerActivismIcon />
+                  </ListItemIcon>
+                  <Typography>Volunteers</Typography>
+                </AccordionSummary>
+              </Link>
             </Accordion>
           </List>
           <List>
-            <Accordion expanded={open === 7} onChange={() => handleOpen(7)}>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
-                <ListItemIcon>
-                  <MedicalServicesIcon />
-                </ListItemIcon>
-                <Typography>Equipments</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <List>
-                  <Link
-                    href="/admin/equipments/list"
-                    style={{ textDecoration: "none", color: "inherit" }}
-                  >
-                    <ListItemButton>
-                      <ListItemText primary="All Equipment" />
-                    </ListItemButton>
-                  </Link>
-                  <Link
-                    href="/admin/equipments/add"
-                    style={{ textDecoration: "none", color: "inherit" }}
-                  >
-                    <ListItemButton>
-                      <ListItemText primary="Add Equipments" />
-                    </ListItemButton>
-                  </Link>
-                </List>
-              </AccordionDetails>
+            <Accordion >
+              <Link href={"/admin/equipments/list"}>
+                <AccordionSummary>
+                  <ListItemIcon>
+                    <MedicalServicesIcon />
+                  </ListItemIcon>
+                  <Typography>Equipments</Typography>
+                </AccordionSummary>
+              </Link>
             </Accordion>
           </List>
         </Card>

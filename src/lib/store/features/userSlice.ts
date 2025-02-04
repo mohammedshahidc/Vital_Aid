@@ -113,7 +113,7 @@ export const loginadmin = createAsyncThunk<LoginFulfilledType,LoginArgumentType,
     console.log(response);
     
     const { data } = response;
-console.log('role',data.user);
+    console.log('role',data.user);
 
     return {
       name:data.user.name,

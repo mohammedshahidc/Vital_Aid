@@ -1,21 +1,29 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { deleteDonor, fetchDonors } from "@/lib/store/features/donorsSlice";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import Link from "next/link";
+import { Button } from "@mui/material";
 
 function AllDonors() {
-  const { donors, loading, error } = useAppSelector((state) => state.donors);
+  const { donors, loading, error, totalPages } = useAppSelector((state) => state.donors);
+  const [currentPage, setCurrentPage] = useState(1);
   console.log(donors, "donors");
 
   const dispatch = useAppDispatch();
   const router = useRouter();
 
   useEffect(() => {
-    dispatch(fetchDonors());
-  }, [dispatch]);
+    dispatch(fetchDonors(currentPage));
+  }, [dispatch, currentPage]);
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
@@ -29,15 +37,20 @@ function AllDonors() {
     );
     if (confirmDelete) {
       await dispatch(deleteDonor(id));
-      dispatch(fetchDonors());
+      dispatch(fetchDonors(1));
     }
   };
 
   return (
-    <div className="p-6 max-w-5xl mx-auto bg-white dark:bg-gray-800 rounded-lg">
+    <div className="p-6 w-full mx-auto bg-white dark:bg-gray-800 rounded-lg">
       <h2 className="text-2xl font-bold text-gray-700 dark:text-white mb-4 text-center">
         All Donors
       </h2>
+      <div className="flex justify-end items-end pr-1 md:pb-4">
+        <Link href={"/admin/addDonors"}>
+          <Button variant="outlined">Add a Donor</Button>
+        </Link>
+      </div>
       <div className="overflow-x-auto">
         <table className="w-full border-collapse border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden text-center">
           <thead className="bg-gray-100 dark:bg-gray-700">
@@ -120,6 +133,27 @@ function AllDonors() {
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="flex justify-center mt-4 gap-2">
+        <Button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="px-4 py-2 border rounded disabled:opacity-50"
+        >
+          Previous
+        </Button>
+        <span className="px-4 py-2">
+          Page {currentPage} of {totalPages}
+        </span>
+
+        <Button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          variant="text"
+          color="success"
+        >
+          Next
+        </Button>
       </div>
     </div>
   );

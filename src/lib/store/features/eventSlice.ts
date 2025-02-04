@@ -17,22 +17,26 @@ interface EventsState {
   events: Event[];
   loading: boolean;
   error: string | null;
+  totalPages: number;
 }
 
 const initialState: EventsState = {
   events: [],
   loading: false,
   error: null,
+  totalPages: 0
 };
 
-// Async thunk to fetch events
-export const fetchEvents = createAsyncThunk<Event[], void, { rejectValue: string }>(
+
+export const fetchEvents = createAsyncThunk<{ events: Event[]; totalPages: number }, number, { rejectValue: string }>(
   "events/fetchEvents",
-  async (_, { rejectWithValue }) => {
+  async (page, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get("/events/getevents");
-      
-      return response.data.events; // Return the events array
+      const response = await axiosInstance.get(`/events/getevents?page=${page}&limit=5`);
+      return {
+        events: response.data.events,
+        totalPages: response.data.totalPages
+      };
     } catch (error) {
       return rejectWithValue(axiosErrorManager(error));
     }
@@ -45,14 +49,14 @@ export const deleteEvent = createAsyncThunk<string, string, { rejectValue: strin
   async (eventId, { rejectWithValue }) => {
     try {
       await axiosInstance.post(`/events/deleteEvent/${eventId}`);
-      return eventId; 
+      return eventId;
     } catch (error) {
       return rejectWithValue(axiosErrorManager(error));
     }
   }
 );
 
-// Create the slice
+
 const eventsSlice = createSlice({
   name: "events",
   initialState,
@@ -63,9 +67,10 @@ const eventsSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchEvents.fulfilled, (state, action: PayloadAction<Event[]>) => {
+      .addCase(fetchEvents.fulfilled, (state, action: PayloadAction<{ events: Event[]; totalPages: number }>) => {
         state.loading = false;
-        state.events = action.payload;
+        state.events = action.payload.events;
+        state.totalPages = action.payload.totalPages
       })
       .addCase(fetchEvents.rejected, (state, action: PayloadAction<string | undefined>) => {
         state.loading = false;
