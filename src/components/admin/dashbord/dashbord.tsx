@@ -21,7 +21,7 @@ function Dashboard() {
     dispatch(fetchUsers(1));
     dispatch(fetchDonors(1));
     dispatch(fetchEvents(1));
-    dispatch(getallEquipment())
+    dispatch(getallEquipment(1))
     dispatch(getAllvolunteers(1))
 
   }, [dispatch])

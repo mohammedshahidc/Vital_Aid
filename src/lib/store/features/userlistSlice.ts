@@ -17,7 +17,7 @@ interface User {
   isDeleted: boolean;
   createdAt: string;
   updatedAt?: string;
-  blocked:boolean;
+  blocked: boolean;
 }
 
 interface UsersState {
@@ -32,26 +32,26 @@ const initialState: UsersState = {
   isLoading: false,
   error: null,
   totalPages: 0
-  
+
 };
 
 
 
 export const fetchUsers = createAsyncThunk<
-  { users: User[]; totalPages: number },number, { rejectValue: string }>(
-  "users/fetchUsers",
-  async (page, { rejectWithValue }) => {
-    try {
-      const response = await axiosInstance.get(`/users/getUsers?page=${page}&limit=7`);
-      return {
-        users: response.data.users, 
-        totalPages: response.data.totalPages,
-      };
-    } catch (error) {
-      return rejectWithValue(axiosErrorManager(error));
+  { users: User[]; totalPages: number }, number, { rejectValue: string }>(
+    "users/fetchUsers",
+    async (page, { rejectWithValue }) => {
+      try {
+        const response = await axiosInstance.get(`/users/getUsers?page=${page}&limit=7`);
+        return {
+          users: response.data.users,
+          totalPages: response.data.totalPages,
+        };
+      } catch (error) {
+        return rejectWithValue(axiosErrorManager(error));
+      }
     }
-  }
-);
+  );
 
 
 
@@ -68,14 +68,14 @@ const userSlice = createSlice({
       .addCase(fetchUsers.fulfilled, (state, action: PayloadAction<{ users: User[], totalPages: number }>) => {
         state.isLoading = false;
         state.users = action.payload.users;
-        state.totalPages = action.payload.totalPages; 
+        state.totalPages = action.payload.totalPages;
       })
       .addCase(fetchUsers.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload || "Failed to fetch users.";
-      })
+      }
+    )
 
-    
   },
 
 });

@@ -27,7 +27,7 @@ const Login: React.FC = () => {
     if (admin) {
       dispatch(setType("Admin"))
     }
-  }, [admin])
+  }, [dispatch, admin])
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -55,7 +55,7 @@ const Login: React.FC = () => {
   }
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // const handleOpenModal = () => setIsModalOpen(true);
+
   const handleCloseModal = () => setIsModalOpen(false);
 
 

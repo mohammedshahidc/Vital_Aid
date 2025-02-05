@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { FiFolder } from "react-icons/fi";
 import axiosInstance from "@/utils/axios";
+import Image from "next/image";
 
 interface EventFormData {
   title: string;
@@ -105,8 +106,10 @@ const AddEvents = () => {
 
         {imagePreview && (
           <div className="relative mt-2">
-            <img
+            <Image
               src={imagePreview}
+              width={200}
+              height={200}
               alt="Preview"
               className="w-full h-40 object-cover rounded-lg"
             />
