@@ -5,14 +5,26 @@ import Link from "next/link";
 import { useDoctor } from "@/lib/Query/hooks/useDoctor";
 import {
   Table,
-  TableHeader,
-  TableColumn,
   TableBody,
-  TableRow,
   TableCell,
-  getKeyValue,
-} from "@heroui/react";
-import { Button } from "@mui/material";
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+  CircularProgress,
+  Typography,
+  Box,
+} from "@mui/material";
+
+type raw = {
+  key: string;
+  name: string;
+  email: string;
+  id: string;
+  phone: string;
+  status: string;
+};
 
 type Doctor = {
   _id: string;
@@ -26,10 +38,6 @@ function AllDoctors() {
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading } = useDoctor(currentPage);
 
-
-  if (isLoading) return <p>Loading...</p>;
-  if (!data) return <p>No doctors found.</p>;
-
   const columns = [
     { key: "name", label: "Name" },
     { key: "email", label: "Email" },
@@ -37,6 +45,32 @@ function AllDoctors() {
     { key: "phone", label: "Phone" },
     { key: "status", label: "Status" },
   ];
+
+  if (isLoading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="400px"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (!data) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="400px"
+      >
+        <Typography variant="h6">No doctors found.</Typography>
+      </Box>
+    );
+  }
 
   const rows = data?.data.map((doc: Doctor) => ({
     key: doc._id,
@@ -48,42 +82,81 @@ function AllDoctors() {
   }));
 
   return (
-    <div className="p-4 h-full">
-      <h2 className="text-xl font-semibold mb-4 text-center">Doctors List</h2>
-      <div className="flex justify-end items-end pr-1 md:pr-20">
-        <Link href={"/admin/addDoctors"}>
-          <Button variant="contained" color="info">Add a doctor</Button>
+    <Box className="p-4 h-full">
+      <Typography variant="h5" component="h2" align="center" gutterBottom>
+        Doctors List
+      </Typography>
+
+      <Box
+        display="flex"
+        justifyContent="flex-end"
+        mb={2}
+        pr={{ xs: 1, md: 3 }}
+      >
+        <Link href="/admin/addDoctors" style={{ textDecoration: "none" }}>
+          <Button variant="contained" color="info">
+            Add a doctor
+          </Button>
         </Link>
-      </div>
+      </Box>
 
-      <Table aria-label="Doctors List">
-        <TableHeader columns={columns} className="bg-gray-100">
-          {(column: { key: string; label: string }) => (
-            <TableColumn key={column.key}>{column.label}</TableColumn>
-          )}
-        </TableHeader>
-        <TableBody items={rows}>
-          {(item: typeof rows[0]) => (
-            <TableRow key={item.key}>
-              {(columnKey) => (
-                <TableCell>
-                  {columnKey === "name" ? (
-                    <Link
-                      href={`/admin/doctors/${item.key}`}
-                      className="text-blue-600 hover:underline"
-                    >
-                      {getKeyValue(item, columnKey)}
-                    </Link>
-                  ) : (
-                    getKeyValue(item, columnKey)
-                  )}
+      <TableContainer component={Paper} elevation={2}>
+        <Table aria-label="Doctors List">
+          <TableHead>
+            <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
+              {columns.map((column) => (
+                <TableCell
+                  key={column.key}
+                  sx={{
+                    backgroundColor: "grey.100",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {column.label}
                 </TableCell>
-              )}
+              ))}
             </TableRow>
-          )}
-        </TableBody>
-      </Table>
-
+          </TableHead>
+          <TableBody>
+            {rows.map((row: raw) => (
+              <TableRow
+                key={row.key}
+                sx={{ "&:hover": { backgroundColor: "grey.50" } }}
+              >
+                <TableCell>
+                  <Link href={`/admin/doctors/${row.key}`} passHref>
+                    <div style={{ textDecoration: "none", color: "#1976d2" }}>
+                      <Typography
+                        sx={{
+                          textDecoration: "none",
+                          "&:hover": { textDecoration: "underline" },
+                        }}
+                      >
+                        {row.name}
+                      </Typography>
+                    </div>
+                  </Link>
+                </TableCell>
+                <TableCell>{row.email}</TableCell>
+                <TableCell>{row.id}</TableCell>
+                <TableCell>{row.phone}</TableCell>
+                <TableCell>
+                  <Typography
+                    component="span"
+                    sx={{
+                      color:
+                        row.status === "Active" ? "success.main" : "error.main",
+                      fontWeight: "medium",
+                    }}
+                  >
+                    {row.status}
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
       <div className="flex justify-center mt-4 gap-2">
         <Button
           className="px-4 py-2 border rounded disabled:opacity-50"
@@ -99,13 +172,15 @@ function AllDoctors() {
 
         <button
           className="px-4 py-2 border rounded disabled:opacity-50"
-          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, data.totalPages))}
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, data.totalPages))
+          }
           disabled={currentPage === data.totalPages}
         >
           Next
         </button>
       </div>
-    </div>
+    </Box>
   );
 }
 

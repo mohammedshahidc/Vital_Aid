@@ -6,7 +6,22 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { MdDelete, MdEdit } from "react-icons/md";
 import Link from "next/link";
-import { Button } from "@mui/material";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+  Typography,
+  Box,
+  IconButton,
+  CircularProgress,
+  Pagination,
+
+} from "@mui/material";
 
 function AllEvents() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,17 +33,29 @@ function AllEvents() {
     dispatch(fetchEvents(currentPage));
   }, [dispatch, currentPage]);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
+        <Typography color="error">{error}</Typography>
+      </Box>
+    );
+  }
 
   const handleEdit = (id: string) => {
     router.push(`/admin/editEvents/${id}`);
   };
 
-  const handlePageChange = (newPage: number) => {
-    setCurrentPage(newPage);
+  const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+    setCurrentPage(page);
   };
-
 
   const handleDelete = async (id: string) => {
     const confirmDelete = window.confirm(
@@ -41,113 +68,89 @@ function AllEvents() {
   };
 
   return (
-    <div className="p-6 w-full mx-auto bg-white dark:bg-gray-800 rounded-lg">
-      <h2 className="text-2xl font-bold text-gray-700 dark:text-white mb-4 text-center">
-        All Events
-      </h2>
-      <div className="flex justify-end items-end pr-1 pb-4">
-        <Link href={"/admin/addEvents"}>
-          <Button variant="outlined" color="primary">Create an event</Button>
-        </Link>
-      </div>
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden text-center">
-          <thead className="bg-gray-100 dark:bg-gray-700">
-            <tr>
-              <th className="border p-3 text-gray-700 dark:text-white">
-                Image
-              </th>
-              <th className="border p-3 text-gray-700 dark:text-white">
-                Title
-              </th>
-              <th className="border p-3 text-gray-700 dark:text-white">Date</th>
-              <th className="border p-3 text-gray-700 dark:text-white">
-                Location
-              </th>
-              <th className="border p-3 text-gray-700 dark:text-white">
-                Organization
-              </th>
-              <th className="border p-3 text-gray-700 dark:text-white">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {events.map((event) => (
-              <tr
-                key={event._id}
-                className="hover:bg-gray-50 transition-colors"
-              >
-                <td className="border p-3">
-                  {event.image ? (
-                    <Image
-                      src={
-                        Array.isArray(event.image)
-                          ? event.image[0]
-                          : event.image
-                      }
-                      alt={event.title}
-                      width={64}
-                      height={64}
-                      className="object-cover rounded-lg"
-                    />
-                  ) : (
-                    <span className="text-gray-400">No Image</span>
-                  )}
-                </td>
-                <td className="border p-3 text-gray-700 dark:text-gray-300">
-                  {event.title}
-                </td>
-                <td className="border p-3 text-gray-700 dark:text-gray-300">
-                  {event.date}
-                </td>
-                <td className="border p-3 text-gray-700 dark:text-gray-300">
-                  {event.location}
-                </td>
-                <td className="border p-3 text-gray-700 dark:text-gray-300">
-                  {event.organization}
-                </td>
-                <td className=" p-3 flex justify-center space-x-2">
-                  <button
-                    onClick={() => handleEdit(event._id)}
-                    className="p-2 mt-5 text-blue-700  rounded-md transition shadow-md"
-                  >
-                    <MdEdit size={20} />
-                  </button>
+    
+      <Box sx={{ p: 2, bgcolor: 'background.paper', borderRadius: 1 }}>
+        <Typography variant="h4" component="h2" align="center" sx={{ mb: 2 }}>
+          All Events
+        </Typography>
 
-                  <button
-                    onClick={() => handleDelete(event._id)}
-                    className="p-2 mt-5 text-red-800  rounded-md transition shadow-md"
-                  >
-                    <MdDelete size={20} />
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="flex justify-center mt-4 gap-2">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="px-4 py-2 border rounded disabled:opacity-50"
-        >
-          Previous
-        </button>
-        <span className="px-4 py-2">
-          Page {currentPage} of {totalPages}
-        </span>
+        <Box display="flex" justifyContent="flex-end" sx={{ mb: 3 }}>
+          <Link href="/admin/addEvents" style={{ textDecoration: 'none' }}>
+            <Button variant="contained" color="primary">
+              Create an event
+            </Button>
+          </Link>
+        </Box>
 
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className="px-4 py-2 border rounded disabled:opacity-50"
-        >
-          Next
-        </button>
-      </div>
-    </div>
+        <TableContainer component={Paper} elevation={2}>
+          <Table aria-label="events table">
+            <TableHead>
+              <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
+                <TableCell align="center">Image</TableCell>
+                <TableCell align="center">Title</TableCell>
+                <TableCell align="center">Date</TableCell>
+                <TableCell align="center">Location</TableCell>
+                <TableCell align="center">Organization</TableCell>
+                <TableCell align="center">Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {events.map((event) => (
+                <TableRow
+                  key={event._id}
+                  sx={{ '&:hover': { bgcolor: 'action.hover' } }}
+                >
+                  <TableCell align="center">
+                    {event.image ? (
+                      <Image
+                        src={Array.isArray(event.image) ? event.image[0] : event.image}
+                        alt={event.title}
+                        width={64}
+                        height={64}
+                        style={{ objectFit: 'cover', borderRadius: '8px' }}
+                      />
+                    ) : (
+                      <Typography color="text.secondary">No Image</Typography>
+                    )}
+                  </TableCell>
+                  <TableCell align="center">{event.title}</TableCell>
+                  <TableCell align="center">{event.date}</TableCell>
+                  <TableCell align="center">{event.location}</TableCell>
+                  <TableCell align="center">{event.organization}</TableCell>
+                  <TableCell align="center">
+                    <IconButton
+                      color="primary"
+                      onClick={() => handleEdit(event._id)}
+                      size="small"
+                    >
+                      <MdEdit />
+                    </IconButton>
+                    <IconButton
+                      color="error"
+                      onClick={() => handleDelete(event._id)}
+                      size="small"
+                    >
+                      <MdDelete />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+
+        <Box display="flex" justifyContent="center" sx={{ mt: 3 }}>
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={handlePageChange}
+            color="primary"
+            variant="outlined"
+            shape="rounded"
+          />
+        </Box>
+      </Box>
+   
   );
 }
 

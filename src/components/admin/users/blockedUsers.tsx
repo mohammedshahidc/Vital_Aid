@@ -3,8 +3,23 @@ import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { fetchUsers } from "@/lib/store/features/userlistSlice";
 import axiosInstance from "@/utils/axios";
-import { FaBan } from "react-icons/fa";
+import BlockIcon from "@mui/icons-material/Block";
 import Image from "next/image";
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  Box,
+  CircularProgress,
+  Alert,
+  Button,
+  Chip,
+} from "@mui/material";
 
 interface User {
   _id: string;
@@ -51,70 +66,96 @@ const BlockedUsersList: React.FC = () => {
     }
   };
 
+  if (isLoading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="400px"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box m={2}>
+        <Alert severity="error">{error}</Alert>
+      </Box>
+    );
+  }
+
   return (
-    <div className="p-6 h-screen max-w-5xl mx-auto bg-white dark:bg-gray-800 rounded-lg">
-      <h2 className="text-2xl font-bold text-gray-700 dark:text-white mb-4 text-center">
+    <Box sx={{ p: 2, bgcolor: "background.paper", borderRadius: 1 }}>
+      <Typography variant="h4" component="h2" align="center" gutterBottom>
         Blocked Users
-      </h2>
+      </Typography>
 
-      {isLoading && (
-        <p className="text-gray-500 dark:text-gray-300 text-center">
-          Loading...
-        </p>
-      )}
-      {error && <p className="text-red-500 text-center">{error}</p>}
-
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden">
-          <thead className="bg-gray-100 dark:bg-gray-700">
-            <tr>
-              <th className="border p-3 text-center">Profile</th>
-              <th className="border p-3 text-center">Name</th>
-              <th className="border p-3 text-center">Email</th>
-              <th className="border p-3 text-center">Status</th>
-              <th className="border p-3 text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody>
+      <TableContainer component={Paper} elevation={2}>
+        <Table>
+          <TableHead>
+            <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
+              <TableCell align="center">Profile</TableCell>
+              <TableCell align="center">Name</TableCell>
+              <TableCell align="center">Email</TableCell>
+              <TableCell align="center">Status</TableCell>
+              <TableCell align="center">Action</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {blockedUsers.map((user) => (
-              <tr
+              <TableRow
                 key={user._id}
-                className="border hover:bg-gray-50 dark:hover:bg-gray-600 text-center"
+                hover
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <td className="border pl-8 ">
-                  <Image
-                    src={user.profileImage.thumbnail}
-                    alt={user.name}
-                    width={40}
-                    height={40}
-                    className="w-10 h-10 rounded-full object-cover"
+                <TableCell align="center">
+                  <Box display="flex" justifyContent="center">
+                    <Image
+                      src={user.profileImage.thumbnail}
+                      alt={user.name}
+                      width={40}
+                      height={40}
+                      style={{ borderRadius: "50%", objectFit: "cover" }}
+                    />
+                  </Box>
+                </TableCell>
+                <TableCell align="center">{user.name}</TableCell>
+                <TableCell align="center">{user.email}</TableCell>
+                <TableCell align="center">
+                  <Chip
+                    icon={<BlockIcon />}
+                    label="Blocked"
+                    color="error"
+                    size="small"
                   />
-                </td>
-                <td className="border p-3">{user.name}</td>
-                <td className="border p-3">{user.email}</td>
-                <td className="flex items-center justify-center text-red-500 p-3">
-                  <FaBan className="mr-1" /> Blocked
-                </td>
-                <td className="border p-3">
-                  <button
+                </TableCell>
+                <TableCell align="center">
+                  <Button
+                    variant="contained"
+                    color="success"
                     onClick={() => handleUnblockUser(user._id)}
-                    className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all"
+                    size="small"
                   >
                     Unblock
-                  </button>
-                </td>
-              </tr>
+                  </Button>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
-      </div>
+          </TableBody>
+        </Table>
+      </TableContainer>
 
       {blockedUsers.length === 0 && !isLoading && (
-        <p className="text-gray-500 dark:text-gray-300 mt-4 text-center">
-          No blocked users found.
-        </p>
+        <Box mt={4}>
+          <Typography variant="body1" color="text.secondary" align="center">
+            No blocked users found.
+          </Typography>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 };
 

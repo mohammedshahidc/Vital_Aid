@@ -3,14 +3,33 @@ import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { fetchUsers } from "@/lib/store/features/userlistSlice";
 import axiosInstance from "@/utils/axios";
-import { FaBan, FaCheckCircle } from "react-icons/fa";
+import BlockIcon from "@mui/icons-material/Block";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "@mui/material";
+import {
+  Button,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  Box,
+ 
+  CircularProgress,
+  Alert,
+  Pagination,
+  Chip,
+} from "@mui/material";
 
 function UsersList() {
   const dispatch = useAppDispatch();
-  const { isLoading, error, users, totalPages } = useAppSelector((state) => state.users);
+  const { isLoading, error, users, totalPages } = useAppSelector(
+    (state) => state.users
+  );
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
@@ -27,113 +46,128 @@ function UsersList() {
     }
   };
 
-  const handlePageChange = (newPage: number) => {
-    setCurrentPage(newPage);
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    page: number
+  ) => {
+    setCurrentPage(page);
   };
 
+  if (isLoading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="400px"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box m={2}>
+        <Alert severity="error">{error}</Alert>
+      </Box>
+    );
+  }
+
   return (
-    <div className="p-6 max-w- mx-auto bg-white dark:bg-gray-800 rounded-lg">
-      <h2 className="text-2xl font-bold text-gray-700 dark:text-white mb-4 text-center">
+    <Box sx={{ p: 2, bgcolor: "background.paper", borderRadius: 1 }}>
+      <Typography variant="h4" component="h2" align="center" gutterBottom>
         Users List
-      </h2>
+      </Typography>
 
-      {isLoading && <p className="text-gray-500 dark:text-gray-300 text-center">Loading...</p>}
-      {error && <p className="text-red-500 text-center">{error}</p>}
-
-      <div className="flex justify-end items-end pr-1 pb-4">
-        <Link href={"/admin/blockedList"}>
-          <Button variant="outlined" color="error">Blocked Users</Button>
+      <Box display="flex" justifyContent="flex-end" mb={3}>
+        <Link href="/admin/blockedList" passHref>
+          <Button variant="outlined" color="error">
+            Blocked Users
+          </Button>
         </Link>
-      </div>
+      </Box>
 
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden text-center">
-          <thead className="bg-gray-100 dark:bg-gray-700">
-            <tr>
-              <th className="border p-3 text-gray-700 dark:text-white">Profile</th>
-              <th className="border p-3 text-gray-700 dark:text-white">Name</th>
-              <th className="border p-3 text-gray-700 dark:text-white">Email</th>
-              <th className="border p-3 text-gray-700 dark:text-white">Phone</th>
-              <th className="border p-3 text-gray-700 dark:text-white">Status</th>
-              <th className="border p-3 text-gray-700 dark:text-white">Action</th>
-            </tr>
-          </thead>
-          <tbody>
+      <TableContainer component={Paper} elevation={2}>
+        <Table>
+          <TableHead>
+            <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
+              <TableCell align="center">Profile</TableCell>
+              <TableCell align="center">Name</TableCell>
+              <TableCell align="center">Email</TableCell>
+              <TableCell align="center">Phone</TableCell>
+              <TableCell align="center">Status</TableCell>
+              <TableCell align="center">Action</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {users.map((user) => (
-              <tr key={user._id} className="border hover:bg-gray-50 dark:hover:bg-gray-600">
-                <td className="border p-3">
-                  <div className="flex justify-center">
+              <TableRow
+                key={user._id}
+                hover
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell align="center">
+                  <Box display="flex" justifyContent="center">
                     <Image
                       src={user.profileImage.thumbnail || "/default-avatar.png"}
-                      width={200}
-                      height={200}
+                      width={40}
+                      height={40}
                       alt={user.name}
-                      className="w-10 h-10 rounded-full object-cover"
+                      style={{ borderRadius: "50%", objectFit: "cover" }}
                     />
-                  </div>
-                </td>
-                <td className="border p-3 text-gray-700 dark:text-gray-300">{user.name}</td>
-                <td className="border p-3 text-gray-700 dark:text-gray-300">{user.email}</td>
-                <td className="border p-3 text-gray-700 dark:text-gray-300">{user.phone}</td>
-                <td className="border p-3">
-                  <div className="flex justify-center items-center">
-                    {user.isDeleted || user.blocked ? (
-                      <span className="text-red-500 flex items-center">
-                        <FaBan className="mr-1" /> Blocked
-                      </span>
-                    ) : (
-                      <span className="text-green-500 flex items-center">
-                        <FaCheckCircle className="mr-1" /> Active
-                      </span>
-                    )}
-                  </div>
-                </td>
-                <td className="border p-3">
-                  <div className="flex justify-center">
-                    <button
-                      onClick={() => handleBlockUser(user._id)}
-                      className="px-6 py-2 text-white font-semibold rounded-lg transition-all duration-300 w-32 flex items-center justify-center gap-2
-                      bg-red-500 hover:bg-red-600 disabled:bg-gray-400"
-                    >
-                      {user.blocked ? (
-                        <>
-                          <FaCheckCircle className="text-white" /> Unblock
-                        </>
-                      ) : (
-                        <>
-                          <FaBan className="text-white" /> Block
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </td>
-              </tr>
+                  </Box>
+                </TableCell>
+                <TableCell align="center">{user.name}</TableCell>
+                <TableCell align="center">{user.email}</TableCell>
+                <TableCell align="center">{user.phone}</TableCell>
+                <TableCell align="center">
+                  {user.isDeleted || user.blocked ? (
+                    <Chip
+                      icon={<BlockIcon />}
+                      label="Blocked"
+                      color="error"
+                      size="small"
+                    />
+                  ) : (
+                    <Chip
+                      icon={<CheckCircleIcon />}
+                      label="Active"
+                      color="success"
+                      size="small"
+                    />
+                  )}
+                </TableCell>
+                <TableCell align="center">
+                  <Button
+                    variant="contained"
+                    color={user.blocked ? "primary" : "error"}
+                    onClick={() => handleBlockUser(user._id)}
+                    startIcon={
+                      user.blocked ? <CheckCircleIcon /> : <BlockIcon />
+                    }
+                    size="small"
+                  >
+                    {user.blocked ? "Unblock" : "Block"}
+                  </Button>
+                </TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="flex justify-center mt-4 gap-2">
-        <Button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="px-4 py-2 border rounded disabled:opacity-50"
-        >
-          Previous
-        </Button>
-        <span className="px-4 py-2">
-          Page {currentPage} of {totalPages}
-        </span>
+          </TableBody>
+        </Table>
+      </TableContainer>
 
-        <Button 
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          variant="text"
-          color="success"
-        >
-          Next
-        </Button>
-      </div>
-    </div>
+      <Box display="flex" justifyContent="center" sx={{ mt: 3 }}>
+        <Pagination
+          count={totalPages}
+          page={currentPage}
+          onChange={handlePageChange}
+          color="primary"
+          variant="outlined"
+          shape="rounded"
+        />
+      </Box>
+    </Box>
   );
 }
 

@@ -4,15 +4,31 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { deleteDonor, fetchDonors } from "@/lib/store/features/donorsSlice";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import Link from "next/link";
-import { Button } from "@mui/material";
+import {
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  IconButton,
+  Box,
+  CircularProgress,
+  Alert,
+  Pagination,
+  Paper,
+} from "@mui/material";
 
 function AllDonors() {
-  const { donors, loading, error, totalPages } = useAppSelector((state) => state.donors);
+  const { donors, loading, error, totalPages } = useAppSelector(
+    (state) => state.donors
+  );
   const [currentPage, setCurrentPage] = useState(1);
-  console.log(donors, "donors");
-
   const dispatch = useAppDispatch();
   const router = useRouter();
 
@@ -20,20 +36,20 @@ function AllDonors() {
     dispatch(fetchDonors(currentPage));
   }, [dispatch, currentPage]);
 
-  const handlePageChange = (newPage: number) => {
-    setCurrentPage(newPage);
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    page: number
+  ) => {
+    setCurrentPage(page);
   };
-
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
 
   const handleEdit = (id: string) => {
     router.push(`/admin/editDonors/${id}`);
   };
+
   const handleDelete = async (id: string) => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this event?"
+      "Are you sure you want to delete this donor?"
     );
     if (confirmDelete) {
       await dispatch(deleteDonor(id));
@@ -41,121 +57,112 @@ function AllDonors() {
     }
   };
 
+  if (loading)
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="400px"
+      >
+        <CircularProgress />
+      </Box>
+    );
+
+  if (error)
+    return (
+      <Box m={2}>
+        <Alert severity="error">Error: {error}</Alert>
+      </Box>
+    );
+
   return (
-    <div className="p-6 w-full mx-auto bg-white dark:bg-gray-800 rounded-lg">
-      <h2 className="text-2xl font-bold text-gray-700 dark:text-white mb-4 text-center">
-        All Donors
-      </h2>
-      <div className="flex justify-end items-end pr-1 md:pb-4">
-        <Link href={"/admin/addDonors"}>
-          <Button variant="outlined">Add a Donor</Button>
-        </Link>
-      </div>
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden text-center">
-          <thead className="bg-gray-100 dark:bg-gray-700">
-            <tr>
-              <th className="border p-3 text-gray-700 dark:text-white">
-                Image
-              </th>
-              <th className="border p-3 text-gray-700 dark:text-white">Name</th>
-              <th className="border p-3 text-gray-700 dark:text-white">
-                Blood Group
-              </th>
-              <th className="border p-3 text-gray-700 dark:text-white">
-                Phone
-              </th>
-              <th className="border p-3 text-gray-700 dark:text-white">
-                Gender
-              </th>
-              <th className="border p-3 text-gray-700 dark:text-white">Age</th>
-              <th className="border p-3 text-gray-700 dark:text-white">
-                Address
-              </th>
-              <th className="border p-3 text-gray-700 dark:text-white">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {donors.map((donor) => (
-              <tr
-                key={donor._id}
-                className="hover:bg-gray-50 transition-colors"
-              >
-                <td className="border p-3">
-                  {donor.image && donor.image.length > 0 ? (
-                    <Image
-                      src={donor.image[0]}
-                      alt={donor.name}
-                      width={64}
-                      height={64}
-                      className="object-cover rounded-lg"
-                    />
-                  ) : (
-                    <span className="text-gray-400">No Image</span>
-                  )}
-                </td>
-                <td className="border p-3 text-gray-700 dark:text-gray-300">
-                  {donor.name}
-                </td>
-                <td className="border p-3 text-gray-700 dark:text-gray-300">
-                  {donor.BloodGroup}
-                </td>
-                <td className="border p-3 text-gray-700 dark:text-gray-300">
-                  {donor.Phone}
-                </td>
-                <td className="border p-3 text-gray-700 dark:text-gray-300">
-                  {donor.Gender}
-                </td>
-                <td className="border p-3 text-gray-700 dark:text-gray-300">
-                  {donor.Age}
-                </td>
-                <td className="border p-3 text-gray-700 dark:text-gray-300">
-                  {donor.Address}
-                </td>
-                <td className=" p-3 flex justify-center space-x-2">
-                  <button
-                    onClick={() => handleEdit(donor._id)}
-                    className="p-2 mt-4 text-blue-800 rounded-md transition"
-                  >
-                    <FaEdit />
-                  </button>
+    
+      <Box sx={{ p: 2, bgcolor: "background.paper", borderRadius: 1 }}>
+        <Typography variant="h4" component="h2" align="center" gutterBottom>
+          All Donors
+        </Typography>
 
-                  <button
-                    onClick={() => handleDelete(donor._id)}
-                    className="p-2 mt-4 text-red-700 rounded-md transition"
-                  >
-                    <FaTrash />
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="flex justify-center mt-4 gap-2">
-        <Button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="px-4 py-2 border rounded disabled:opacity-50"
-        >
-          Previous
-        </Button>
-        <span className="px-4 py-2">
-          Page {currentPage} of {totalPages}
-        </span>
+        <Box display="flex" justifyContent="flex-end" mb={3}>
+          <Link href="/admin/addDonors" passHref>
+            <Button variant="contained" color="primary">
+              Add a Donor
+            </Button>
+          </Link>
+        </Box>
 
-        <Button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          variant="text"
-          color="success"
-        >
-          Next
-        </Button>
-      </div>
-    </div>
+        <TableContainer component={Paper} elevation={2}>
+          <Table>
+            <TableHead>
+              <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
+                <TableCell>Image</TableCell>
+                <TableCell>Name</TableCell>
+                <TableCell>Blood Group</TableCell>
+                <TableCell>Phone</TableCell>
+                <TableCell>Gender</TableCell>
+                <TableCell>Age</TableCell>
+                <TableCell>Address</TableCell>
+                <TableCell align="center">Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {donors.map((donor) => (
+                <TableRow key={donor._id} hover>
+                  <TableCell>
+                    {donor.image && donor.image.length > 0 ? (
+                      <Image
+                        src={donor.image[0]}
+                        alt={donor.name}
+                        width={64}
+                        height={64}
+                        style={{ borderRadius: "8px", objectFit: "cover" }}
+                      />
+                    ) : (
+                      <Typography variant="body2" color="text.secondary">
+                        No Image
+                      </Typography>
+                    )}
+                  </TableCell>
+                  <TableCell>{donor.name}</TableCell>
+                  <TableCell>{donor.BloodGroup}</TableCell>
+                  <TableCell>{donor.Phone}</TableCell>
+                  <TableCell>{donor.Gender}</TableCell>
+                  <TableCell>{donor.Age}</TableCell>
+                  <TableCell>{donor.Address}</TableCell>
+                  <TableCell align="center">
+                    <IconButton
+                      color="primary"
+                      onClick={() => handleEdit(donor._id)}
+                      size="small"
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      color="error"
+                      onClick={() => handleDelete(donor._id)}
+                      size="small"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+
+        <Box display="flex" justifyContent="center" sx={{ mt: 3 }}>
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={handlePageChange}
+            color="primary"
+            variant="outlined"
+            shape="rounded"
+          />
+        </Box>
+      </Box>
+  
   );
 }
 

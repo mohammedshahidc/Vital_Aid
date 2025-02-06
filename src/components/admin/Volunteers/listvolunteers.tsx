@@ -1,121 +1,172 @@
-'use client'
-import { getAllvolunteers } from '@/lib/store/features/volunteers'
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
-import Image from 'next/image'
-import React, { useEffect, useState } from 'react'
-import { RiEdit2Fill } from "react-icons/ri";
-import { MdDeleteForever } from "react-icons/md";
-import Link from 'next/link'
-import axiosInstance from '@/utils/axios'
-import axiosErrorManager from '@/utils/axiosErrormanager'
-import { Button } from '@mui/material'
+"use client";
+import { getAllvolunteers } from "@/lib/store/features/volunteers";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import Link from "next/link";
+import axiosInstance from "@/utils/axios";
+import axiosErrorManager from "@/utils/axiosErrormanager";
+import {
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  IconButton,
+  Box,
+
+  CircularProgress,
+  Pagination,
+  Stack,
+  Paper,
+} from "@mui/material";
 
 const Listvolunteers = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const { allVolunteers, isLoading, totalPages } = useAppSelector(
+    (state) => state.volunteers
+  );
+  const dispatch = useAppDispatch();
 
-    const [currentPage, setCurrentPage] = useState(1);
+  useEffect(() => {
+    dispatch(getAllvolunteers(currentPage));
+  }, [dispatch, currentPage]);
 
-    const handlePageChange = (newPage: number) => {
-        setCurrentPage(newPage);
-    };
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    page: number
+  ) => {
+    setCurrentPage(page);
+  };
 
-    const { allVolunteers, isLoading, totalPages } = useAppSelector((state) => state.volunteers)
-    const dispatch = useAppDispatch()
-
-    useEffect(() => {
-        dispatch(getAllvolunteers(currentPage))
-    }, [dispatch, currentPage])
-
-    const deletevolunteer = async (id: string) => {
-        try {
-            const response = await axiosInstance.put(`volunteers/delete/${id}`)
-            if (response.status == 200) {
-                dispatch(getAllvolunteers(currentPage))
-            }
-        } catch (error) {
-            axiosErrorManager(error)
-        }
+  const deletevolunteer = async (id: string) => {
+    try {
+      const response = await axiosInstance.put(`volunteers/delete/${id}`);
+      if (response.status == 200) {
+        dispatch(getAllvolunteers(currentPage));
+      }
+    } catch (error) {
+      axiosErrorManager(error);
     }
+  };
+
+  if (isLoading) {
     return (
-        <div className="w-full h-fit flex flex-col px-2 justify-center items-center overflow-y-scroll scrollbar-none">
-            {isLoading && <p className="text-blue-500 font-bold">Loading...</p>}
-            <div className="overflow-x-auto w-full sm:w-full mx-auto rounded-lg">
-                <h2 className="text-2xl font-bold text-gray-700 dark:text-white mb-4 text-center">
-                    volunteers
-                </h2>
-                <div className="flex justify-end items-end pr-1 pb-4">
-                    <Link href={"/admin/volunteers/add"}>
-                        <Button variant="contained" color='success'>Add</Button>
-                    </Link>
-                </div>
-                <table className="w-full border-collapse rounded-lg shadow-lg ">
-                    <thead className="bg-green-200 rounded-xl">
-                        <tr className="text-left text-sm md:text-base">
-                            <th className="p-2 md:p-3">ID</th>
-                            <th className="p-2 md:p-3">Username</th>
-                            <th className="p-2 md:p-3">Profile</th>
-                            <th className="p-2 md:p-3">Gender</th>
-                            <th className="p-2 md:p-3">Phone</th>
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="400px"
+      >
+        <CircularProgress color="success" />
+      </Box>
+    );
+  }
 
-                            <th className="p-2 md:p-3">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {allVolunteers && allVolunteers.map((volunteer) => (
-                            <tr key={volunteer._id} className="border-b hover:bg-gray-100 text-xs md:text-sm">
-                                <td className="p-2 md:p-3">{volunteer._id}</td>
-                                <td className="p-2 md:p-3 font-semibold">{volunteer.name}</td>
-                                <td className="p-2 md:p-3">
-                                    {volunteer.image ? (
-                                        <Image
-                                            src={volunteer.image}
-                                            alt="Profile"
-                                            width={40}
-                                            height={40}
-                                            className="rounded-full object-cover"
-                                        />
-                                    ) : (
-                                        <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
-                                            ❓
-                                        </div>
-                                    )}
-                                </td>
-                                <td className="p-2 md:p-3">{volunteer.gender}</td>
-                                <td className="p-2 md:p-3">{volunteer.phone}</td>
+  return (
+    <Box sx={{ p: 2, bgcolor: "background.paper", borderRadius: 1 }}>
+      <Typography variant="h4" component="h2" align="center" gutterBottom>
+        Volunteers
+      </Typography>
 
-                                <td className="p-2 md:p-3 text-center flex space-x-10">
-                                    <Link href={`/admin/volunteers/edit/${volunteer._id}`}>
-                                        <RiEdit2Fill className="w-4 h-4 md:w-5 md:h-5 cursor-pointer text-blue-500" />
-                                    </Link>
-                                    <MdDeleteForever className="w-4 h-4 md:w-5 md:h-5 cursor-pointer text-red-500" onClick={() => { deletevolunteer(volunteer._id) }} />
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-            <div className="flex justify-center mt-4 gap-2">
-                <Button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className="px-4 py-2 border rounded disabled:opacity-50"
+      <Box display="flex" justifyContent="flex-end" mb={3}>
+        <Link href="/admin/volunteers/add" passHref>
+          <Button variant="contained" color="success">
+            Add Volunteer
+          </Button>
+        </Link>
+      </Box>
+
+      <TableContainer component={Paper} elevation={2}>
+        <Table>
+          <TableHead sx={{ borderRadius: 2 }}>
+            <TableRow sx={{ backgroundColor: "#f5f5f6" }}>
+              <TableCell>ID</TableCell>
+              <TableCell>Username</TableCell>
+              <TableCell>Profile</TableCell>
+              <TableCell>Gender</TableCell>
+              <TableCell>Phone</TableCell>
+              <TableCell align="center">Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {allVolunteers &&
+              allVolunteers.map((volunteer) => (
+                <TableRow
+                  key={volunteer._id}
+                  hover
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                    Previous
-                </Button>
-                <span className="px-4 py-2">
-                    Page {currentPage} of {totalPages}
-                </span>
+                  <TableCell>{volunteer._id}</TableCell>
+                  <TableCell sx={{ fontWeight: "medium" }}>
+                    {volunteer.name}
+                  </TableCell>
+                  <TableCell>
+                    {volunteer.image ? (
+                      <Image
+                        src={volunteer.image}
+                        alt="Profile"
+                        width={40}
+                        height={40}
+                        style={{ borderRadius: "50%", objectFit: "cover" }}
+                      />
+                    ) : (
+                      <Box
+                        sx={{
+                          width: 40,
+                          height: 40,
+                          bgcolor: "grey.300",
+                          borderRadius: "50%",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        ❓
+                      </Box>
+                    )}
+                  </TableCell>
+                  <TableCell>{volunteer.gender}</TableCell>
+                  <TableCell>{volunteer.phone}</TableCell>
+                  <TableCell>
+                    <Stack direction="row" spacing={2} justifyContent="center">
+                      <Link href={`/admin/volunteers/edit/${volunteer._id}`}>
+                        <IconButton size="small" color="primary">
+                          <EditIcon />
+                        </IconButton>
+                      </Link>
+                      <IconButton
+                        size="small"
+                        color="error"
+                        onClick={() => deletevolunteer(volunteer._id)}
+                      >
+                        <DeleteForeverIcon />
+                      </IconButton>
+                    </Stack>
+                  </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
 
-                <Button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    variant="text"
-                    color="success"
-                >
-                    Next
-                </Button>
-            </div>
-        </div>
-    )
-}
+      <Box display="flex" justifyContent="center" sx={{ mt: 3 }}>
+        <Pagination
+          count={totalPages}
+          page={currentPage}
+          onChange={handlePageChange}
+          color="primary"
+          variant="outlined"
+          shape="rounded"
+        />
+      </Box>
+    </Box>
+  );
+};
 
 export default Listvolunteers;
