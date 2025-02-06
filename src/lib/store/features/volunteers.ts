@@ -17,6 +17,7 @@ export interface Volunteer {
 interface volunteerState {
     volunteer: Volunteer | null,
     allVolunteers: Volunteer[] | null,
+    searchedVolunteers:Volunteer[]|null
     error: string | null,
     isLoading: boolean
     totalPages: number
@@ -57,10 +58,30 @@ export const getAllvolunteers = createAsyncThunk<{ allVolunteers: Volunteer[], t
 })
 
 
+export const searchVolunteers = createAsyncThunk<
+    Volunteer[],
+    string, 
+    { rejectValue: string }
+>('searchVolunteers', async (query, { rejectWithValue }) => {
+    try {
+        const response = await axiosInstance.get('/admin/searchvolunteer', {
+            params: { q: query } 
+        });
+        // console.log('ehgfeu',query);
+        
+        // console.log('response:',response.data);
+        
+        return response.data; 
+    } catch (error) {
+        return rejectWithValue(axiosErrorManager(error));
+    }
+});
+
 
 const initialState: volunteerState = {
     volunteer: null,
     allVolunteers: null,
+    searchedVolunteers:null,
     error: null,
     isLoading: false,
     totalPages: 0
@@ -102,6 +123,23 @@ const volunteerSlice = createSlice({
                 state.error = action.payload || 'an error occured'
                 state.isLoading = false
             })
+
+            .addCase(searchVolunteers.pending, (state) => {
+                state.error = null;
+                state.isLoading = true;
+            })
+            .addCase(searchVolunteers.fulfilled, (state, action: PayloadAction<Volunteer[]>) => {
+                state.error = null;
+                state.isLoading = false;
+                state.searchedVolunteers = action.payload; 
+                console.log(action.payload);
+                
+            })
+            .addCase(searchVolunteers.rejected, (state, action) => {
+                state.error = action.payload || 'An error occurred';
+                state.isLoading = false;                
+                state.searchedVolunteers=null
+            });
     }
 
 })
