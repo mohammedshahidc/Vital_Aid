@@ -29,21 +29,28 @@ const initialState: EquipmentState = {
     totalPages:0
 };
 
+type formvalue={
+    imageUrl: string | null;
+    name: string;
+    quantity: number | string;
+    image: string| null;
+    description: string;
+} 
+
 export const addnewEquipment = createAsyncThunk<
     Equipment,
-    FormData,
+    formvalue,
     { rejectValue: string }
 >(
     'addequipment',
-    async (formData, { rejectWithValue }) => {
+    async (formvalue, { rejectWithValue }) => {
+        console.log("data",formvalue);
+        
         try {
-            const response = await axiosInstance.post('/equipment/addequipment', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-
+            const response = await axiosInstance.post('/equipment/addequipment', formvalue);
+            console.log(response.data.data);
             return response.data.data;
+            
         } catch (error) {
 
             return rejectWithValue(axiosErrorManager(error));

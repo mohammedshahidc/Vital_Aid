@@ -27,6 +27,15 @@ const initialState: formValue = {
     image: null
 }
 
+type formvalue={
+    imageUrl: string | null;
+    name: string;
+    phone: number | string;
+    gender: "male" | "female" | null;
+    image: File | null;
+} 
+
+
 const Vlounteers = () => {
     const route = useRouter()
     const dispatch = useAppDispatch()
@@ -34,6 +43,7 @@ const Vlounteers = () => {
     const { allVolunteers } = useAppSelector((state) => state.volunteers)
     const [volunteer, setVolunteer] = useState<Volunteer | null>(null)
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [imageUrl, setImageUrl] = useState<string | null>(null);
 
     useEffect(() => {
         if (volunteerid) {
@@ -50,8 +60,42 @@ const Vlounteers = () => {
     }, [allVolunteers, volunteerid])
 
 
+    const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+
+        if (file) {
+            setImagePreview(URL.createObjectURL(file));
+
+            try {
+                const response = await axiosInstance.get(`/auth/generate-signed-url`, {
+                    params: { fileType: file.type },
+                });
+
+                const { signedUrl, fileName } = response.data;
+                console.log("dddd", signedUrl);
+
+
+                await fetch(signedUrl, {
+                    method: "PUT",
+                    body: file,
+                    headers: { "Content-Type": file.type },
+                });
+
+                const uploadedUrl = `https://vitalaidnsr.s3.${process.env.NEXT_PUBLIC_AWS_REGION}.amazonaws.com/${fileName}`;
+                setImageUrl(uploadedUrl);
+                setFieldValue("image", uploadedUrl);
+
+                console.log("Uploaded Image URL:", uploadedUrl);
+            } catch (error) {
+                console.error("Error uploading image:", error);
+            }
+        }
+    };
+
+ 
 
     const { values, errors, handleChange, handleBlur, handleSubmit, touched, setFieldValue } = useFormik({
+
         initialValues: initialState,
         validationSchema: volunteerSchema,
         onSubmit: async () => {
@@ -64,8 +108,15 @@ const Vlounteers = () => {
                     formData.append('image', values.image);
                 }
                 setImagePreview(null);
+
+
+                const formvalue:formvalue = {
+                    ...values, imageUrl
+                }
+
+
                 if (!volunteerid) {
-                    const response = await dispatch(addVolunteer(formData))
+                    const response = await dispatch(addVolunteer(formvalue))
                     if (response.meta.requestStatus == 'fulfilled') {
                         route.push('/admin/volunteers/list')
                     }
@@ -81,9 +132,6 @@ const Vlounteers = () => {
                         axiosErrorManager(error)
                     }
                 }
-
-
-
 
             } catch (error) {
                 console.log("error:", error);
@@ -206,11 +254,7 @@ const Vlounteers = () => {
                                     className="hidden bg-green-200"
                                     id="image"
                                     onBlur={handleBlur}
-                                    onChange={(event) => {
-                                        const file = event.currentTarget.files?.[0] || null;
-                                        setFieldValue("image", file);
-                                        setImagePreview(file ? URL.createObjectURL(file) : null);
-                                    }}
+                                    onChange={handleImageChange}
                                 />
                             </label>
                             {errors.image && touched.image && (

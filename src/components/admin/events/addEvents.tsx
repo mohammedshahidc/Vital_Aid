@@ -15,41 +15,56 @@ interface EventFormData {
 }
 
 const AddEvents = () => {
-  const { register, handleSubmit, reset, setValue } = useForm<EventFormData>();
+  const { register, handleSubmit, reset } = useForm<EventFormData>();
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+
     if (file) {
       setImagePreview(URL.createObjectURL(file));
-      setValue("image", e.target.files);
+
+      try {
+        const response = await axiosInstance.get(`/auth/generate-signed-url`, {
+          params: { fileType: file.type },
+        });
+
+        const { signedUrl, fileName } = response.data;
+
+        await fetch(signedUrl, {
+          method: "PUT",
+          body: file,
+          headers: { "Content-Type": file.type },
+        });
+
+        const uploadedUrl = `https://vitalaidnsr.s3.${process.env.NEXT_PUBLIC_AWS_REGION}.amazonaws.com/${fileName}`;
+        setImageUrl(uploadedUrl);
+
+        console.log("Uploaded Image URL:", uploadedUrl);
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      }
     }
   };
 
   const onSubmit: SubmitHandler<EventFormData> = async (data) => {
-    if (!data.image) {
+    if (!imageUrl) {
       alert("Please select an image");
       return;
     }
-
     try {
-      const formData = new FormData();
-      formData.append("title", data.title);
-      formData.append("organization", data.organization);
-      formData.append("location", data.location);
-      formData.append("date", data.date);
-      formData.append("description", data.description);
-      formData.append("image", data.image[0]);
+      const eventData = {
+        ...data,
+        imageUrl,
+      };
 
-      await axiosInstance.post("/events/addevents", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      await axiosInstance.post("/events/addevents", eventData);
 
       alert("Event added successfully!");
       reset();
       setImagePreview(null);
+      setImageUrl(null);
     } catch (error) {
       console.error(error);
       alert("Error adding event");
@@ -128,6 +143,7 @@ const AddEvents = () => {
             onClick={() => {
               reset();
               setImagePreview(null);
+              setImageUrl(null);
             }}
             className="px-4 py-2 text-gray-600 border border-gray-400 rounded-lg hover:bg-gray-200 transition"
           >

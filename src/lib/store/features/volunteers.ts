@@ -21,20 +21,21 @@ interface volunteerState {
     isLoading: boolean
     totalPages: number
 }
+type formvalue={
+    imageUrl: string | null;
+    name: string;
+    phone: number | string;
+    gender: "male" | "female" | null;
+    image: File | null;
+} 
 
 export const addVolunteer = createAsyncThunk<
     Volunteer,
-    FormData,
-    { formData: FormData; rejectValue: string }
->('addVolunteer', async (formData, { rejectWithValue }) => {
+    formvalue,
+    { formData: formvalue; rejectValue: string }
+>('addVolunteer', async (formvalue, { rejectWithValue }) => {
     try {
-
-        const response = await axiosInstance.post('/volunteers/add', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            }
-        })
-
+        const response = await axiosInstance.post('/volunteers/add', formvalue)
         return response.data.data
     } catch (error) {
         return rejectWithValue(axiosErrorManager(error));

@@ -16,38 +16,51 @@ interface DonorFormData {
 }
 
 const AddDonor = () => {
-  const { register, handleSubmit, reset, setValue } = useForm<DonorFormData>();
+  const { register, handleSubmit, reset } = useForm<DonorFormData>();
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
+
     if (file) {
       setImagePreview(URL.createObjectURL(file));
-      setValue("image", e.target.files);
+      try {
+
+        const response = await axiosInstance.get(`/auth/generate-signed-url`, {
+          params: { fileType: file.type },
+        });
+
+        const { signedUrl, fileName } = response.data;
+
+        await fetch(signedUrl, {
+          method: "PUT",
+          body: file,
+          headers: { "Content-Type": file.type },
+        });
+
+        await setImageUrl(`https://vitalaidnsr.s3.${process.env.NEXT_PUBLIC_AWS_REGION}.amazonaws.com/${fileName}`);
+
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      }
     }
   };
 
+
   const onSubmit: SubmitHandler<DonorFormData> = async (data) => {
-    if (!data.image) {
+    if (!imageUrl) {
       alert("Please select an image");
       return;
     }
 
     try {
-      const formData = new FormData();
-      formData.append("name", data.name);
-      formData.append("BloodGroup", data.BloodGroup);
-      formData.append("Phone", data.Phone);
-      formData.append("Gender", data.Gender);
-      formData.append("Age", data.Age);
-      formData.append("Address", data.Address);
-      formData.append("image", data.image[0]);
+      const donorData = {
+        ...data,
+        imageUrl,
+      };
 
-      await axiosInstance.post("/donors/addDoners", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      await axiosInstance.post("/donors/addDoners", donorData);
 
       alert("Donor added successfully!");
       reset();
@@ -138,6 +151,8 @@ const AddDonor = () => {
           <div className="relative mt-2">
             <Image
               src={imagePreview}
+              width={200}
+              height={200}
               alt="Preview"
               className="w-full h-40 object-cover rounded-lg"
             />

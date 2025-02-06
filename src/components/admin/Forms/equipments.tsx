@@ -17,7 +17,7 @@ import { useRouter } from "next/navigation";
 interface FormValue {
     name: string;
     quantity: number | string;
-    image: File | null;
+    image: string| null;
     description: string;
 }
 
@@ -29,11 +29,16 @@ const initialValues: FormValue = {
 };
 
 const Equipments = () => {
-    const router = useRouter()
+
     const { isLoading, allEquipment } = useAppSelector((state) => state.equipments);
-    const { equipmentid } = useParams();
-    console.log('id:', equipmentid);
     const [item, setItem] = useState<Equipment | null>(null);
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [imageUrl, setImageUrl] = useState<string | null>(null);
+    const router = useRouter()
+    const { equipmentid } = useParams();
+    const dispatch = useAppDispatch();
+    
+
 
     useEffect(() => {
         if (equipmentid) {
@@ -46,9 +51,48 @@ const Equipments = () => {
             }
         }
     }, [equipmentid, allEquipment]);
+   
+    
 
-    const dispatch = useAppDispatch();
-    const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+
+        if (file) {
+            setImagePreview(URL.createObjectURL(file));
+
+            try {
+                const response = await axiosInstance.get(`/auth/generate-signed-url`, {
+                    params: { fileType: file.type },
+                });
+
+                const { signedUrl, fileName } = response.data;
+                console.log("dddd",signedUrl);
+                
+
+                await fetch(signedUrl, {
+                    method: "PUT",
+                    body: file,
+                    headers: { "Content-Type": file.type },
+                });
+
+                const uploadedUrl = `https://vitalaidnsr.s3.${process.env.NEXT_PUBLIC_AWS_REGION}.amazonaws.com/${fileName}`;
+                setImageUrl(uploadedUrl);
+                setFieldValue("image", uploadedUrl);
+
+                console.log("Uploaded Image URL:", uploadedUrl);
+            } catch (error) {
+                console.error("Error uploading image:", error);
+            }
+        }
+    };
+    
+    type formvalue={
+        imageUrl: string | null;
+        name: string;
+        quantity: number | string;
+        image: string| null;
+        description: string;
+    } 
 
     const { errors, touched, handleBlur, handleChange, handleSubmit, handleReset, values, setFieldValue } = useFormik({
         initialValues: initialValues,
@@ -63,13 +107,14 @@ const Equipments = () => {
                 if (values.image) {
                     formData.append('image', values.image);
                 }
+               const formvalue:formvalue = {
+                    ...values, imageUrl
+                }
 
                 setImagePreview(null);
 
                 if (!equipmentid) {
-                    console.log('formdata:', formData);
-
-                    await dispatch(addnewEquipment(formData));
+                    await dispatch(addnewEquipment(formvalue));
                     router.push('/admin/equipments/list')
                     await handleReset(e);
                 } else {
@@ -95,7 +140,6 @@ const Equipments = () => {
         }
     }, [item, setFieldValue]);
 
-    console.log('item:', item);
 
     return (
         <div className="w-screen h-fit fixed flex justify-center items-center p-6 sm:w-fit">
@@ -155,18 +199,14 @@ const Equipments = () => {
                                         className="rounded-md object-cover"
                                     />
                                 ) : (
-                                    <span className="text-gray-600">{values.image?.name || "Upload image"}</span>
+                                    <span className="text-gray-600">{"Upload image"}</span>
                                 )}
                                 <input
                                     type="file"
                                     className="hidden"
                                     id="image"
                                     onBlur={handleBlur}
-                                    onChange={(event) => {
-                                        const file = event.currentTarget.files?.[0] || null;
-                                        setFieldValue("image", file);
-                                        setImagePreview(file ? URL.createObjectURL(file) : null);
-                                    }}
+                                    onChange={handleImageChange}
                                 />
                             </label>
                             {errors.image && touched.image && (
@@ -191,7 +231,6 @@ const Equipments = () => {
                         )}
                     </div>
 
-                    {/* Buttons */}
                     <div className="flex gap-4 justify-center">
                         <button
                             type="submit"
