@@ -1,11 +1,10 @@
-
-import Equipmentsuser from '@/components/users/Equipments/equipments'
+import EquipmentbyId from '@/components/users/Equipments/equipmentbyId'
 import React from 'react'
 
 const Page = () => {
   return (
     <div>
-      <Equipmentsuser/>
+      <EquipmentbyId/>
     </div>
   )
 }

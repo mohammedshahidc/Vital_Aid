@@ -78,6 +78,25 @@ export const getallEquipment = createAsyncThunk<{ allEquipment: Equipment[], tot
     }
 })
 
+
+export const getEquipmentById = createAsyncThunk<
+   Equipment , 
+  string, 
+  { rejectValue: string }
+>(
+  'getequipmentsById',
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(`/users/getequipmentbyid/${id}`);
+      return  response.data.data ;
+    } catch (error) {
+      return rejectWithValue(axiosErrorManager(error));
+    }
+  }
+);
+
+
+
 export const getallEquipmentforuser = createAsyncThunk<{ allEquipment: Equipment[], totalPages: number }, number, { rejectValue: string }>('getequipmentsforuser', async (page, { rejectWithValue }) => {
     try {
         
@@ -170,15 +189,40 @@ const equipmentSlice = createSlice({
             })
 
             .addCase(getallEquipmentforuser.fulfilled, (state, action: PayloadAction<{allEquipment:Equipment[],totalPages: number}>) => {
-                state.error = null
-                state.allEquipment = action.payload.allEquipment
-                state.isLoading = false
-                state.totalPages=action.payload.totalPages
+                state.error = null;
+                if (!state.allEquipment) {
+                  state.allEquipment = action.payload.allEquipment;
+                } else {
+                 
+                  state.allEquipment.push(...action.payload.allEquipment);
+                  const deduped = new Map<string, Equipment>();
+                  state.allEquipment.forEach(equipment => {
+                    deduped.set(equipment._id, equipment);
+                  });
+                  state.allEquipment = Array.from(deduped.values());
+                }
+                state.isLoading = false;
+                state.totalPages = action.payload.totalPages;
             })
 
             .addCase(getallEquipmentforuser.rejected, (state, action) => {
                 state.error = action.payload || "An unknown error occurred"
                 state.isLoading = false
+            })
+
+            .addCase(getEquipmentById.pending, (state) => {
+                state.error = null;
+                state.isLoading = true;
+            })
+            .addCase(getEquipmentById.fulfilled, (state, action: PayloadAction<Equipment>) => {
+                state.error = null;
+                state.isLoading = false;
+                state.equipment = action.payload; 
+            })
+            .addCase(getEquipmentById.rejected, (state, action) => {
+                state.error = action.payload || 'An error occurred';
+                state.isLoading = false;
+                state.equipment=null
             })
 
     }

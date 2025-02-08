@@ -1,7 +1,5 @@
 "use client";
 
-"use client";
-
 import React, { useState } from "react";
 import {
   Card,
@@ -22,6 +20,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import Link from "next/link";
 import { FaBars } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
+import AddCardOutlinedIcon from '@mui/icons-material/AddCardOutlined';
 
 
 const Sidebar = () => {
@@ -135,6 +134,18 @@ const Sidebar = () => {
                     <MedicalServicesIcon />
                   </ListItemIcon>
                   <Typography>Equipments</Typography>
+                </AccordionSummary>
+              </Link>
+            </Accordion>
+          </List>
+          <List>
+            <Accordion >
+              <Link href={"/admin/requests"}>
+                <AccordionSummary>
+                  <ListItemIcon>
+                    <AddCardOutlinedIcon/>
+                  </ListItemIcon>
+                  <Typography>Equipment Requests</Typography>
                 </AccordionSummary>
               </Link>
             </Accordion>
