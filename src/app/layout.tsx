@@ -1,19 +1,17 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SessionProvider from "@/providers.ts/authProvider"
 import { getServerSession } from "next-auth";
 import StoreProvider from "@/lib/store/store-provider";
 import Providers from "@/lib/Query/providers";
 import {Toaster} from 'react-hot-toast'
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+import { Poppins } from "next/font/google";
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+
+const poppins = Poppins({
   subsets: ["latin"],
+  weight: ["400", "500", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -33,7 +31,7 @@ export default async function RootLayout({
     <html lang="en">
 
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${poppins.className}`}
       >
         <SessionProvider session={session}>
           <StoreProvider>

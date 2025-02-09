@@ -1,7 +1,21 @@
+"use client"
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
 
 const Footer = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!isVisible) return null; // Hide footer for 500ms
+
   return (
     <footer className="bg-gray-900 text-gray-300 py-8">
       <div className="container mx-auto px-6 md:px-12">
@@ -14,7 +28,7 @@ const Footer = () => {
             </p>
           </div>
 
-    
+          {/* Quick Links */}
           <div>
             <h2 className="text-xl font-semibold text-white">Quick Links</h2>
             <ul className="mt-2 space-y-2 text-sm">

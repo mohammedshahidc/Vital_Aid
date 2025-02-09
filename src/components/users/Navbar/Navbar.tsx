@@ -46,25 +46,25 @@ export default function Navbar() {
             {dropdownOpen && (
               <div className="absolute mt-2 bg-white dark:bg-gray-800 shadow-lg rounded-md py-2 z-10 w-40">
                 <Link onClick={() => setDropdownOpen(!dropdownOpen)}
-                  href="/doctors"
+                  href="/user/doctors"
                   className="block px-4 py-2 font-serif font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
                   Doctors
                 </Link>
                 <Link onClick={() => setDropdownOpen(!dropdownOpen)}
-                  href="/volunteers"
+                  href="/user/volunteers"
                   className="block px-4 py-2 font-serif font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
                   Volunteers
                 </Link>
                 <Link onClick={() => setDropdownOpen(!dropdownOpen)}
-                  href="/events"
+                  href="/user/events"
                   className="block px-4 py-2 font-serif font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
                   Events
                 </Link>
                 <Link onClick={() => setDropdownOpen(!dropdownOpen)}
-                  href="/blooddonors"
+                  href="/user/bloodDonors"
                   className="block px-4 py-2 font-serif font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
                   Blood Donors
