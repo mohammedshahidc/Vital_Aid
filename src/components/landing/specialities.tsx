@@ -2,10 +2,10 @@
 
 import Image from "next/image";
 import React, { useEffect } from "react";
-import Doctorimg from "../../../../public/Doctor.jpg"
-import donorimg from "../../../../public/donor.jpg"
-import equipment from "../../../../public/equipment2.jpeg"
-import volunteer from "../../../../public/volunteer.jpg"
+import Doctorimg from "../../../public/Doctor.jpg"
+import donorimg from "../../../public/donor.jpg"
+import equipment from "../../../public/equipment2.jpeg"
+import volunteer from "../../../public/volunteer.jpg"
 import Link from "next/link";
 import Aos from "aos";
 

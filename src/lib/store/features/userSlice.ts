@@ -6,7 +6,6 @@ import axiosErrorManager from "@/utils/axiosErrormanager";
 
 interface UserState {
   user: {
-
     email: string | null;
     id: string | null;
     token: string | null;
@@ -34,13 +33,16 @@ interface userRegistrationdata {
 type LoginFulfilledType = { email: string; id: string; token: string, role: string, profileImage: { originalProfile: string, thumbnail: string }, phone: string, name: string };
 type LoginArgumentType = { email: string; password: string };
 type LoginRejectValueType = string;
+const storedUser = localStorage.getItem("userState");
 
-const initialState: UserState = {
+const initialState: UserState = storedUser ? JSON.parse(storedUser) : {
   user: null,
   isLoading: false,
   error: null,
-  userType: "User"
+  userType: "User",
 };
+
+
 
 export const userRegistration = createAsyncThunk<void, userRegistrationdata, { rejectValue: string }>(
   'user/userRegistration',
@@ -105,7 +107,7 @@ export const loginDoctor = createAsyncThunk<LoginFulfilledType, LoginArgumentTyp
 );
 
 
-//login admin
+
 export const loginadmin = createAsyncThunk<LoginFulfilledType, LoginArgumentType, { rejectValue: LoginRejectValueType }>("Admin/login", async (credentials, { rejectWithValue }) => {
   try {
     console.log('hi2');
@@ -140,6 +142,7 @@ const userSlice = createSlice({
       state.user = null;
       state.error = null;
       Cookies.remove("user");
+      localStorage.removeItem("userState");
     },
     setType: (state, action) => {
       state.userType = action.payload;
@@ -156,6 +159,7 @@ const userSlice = createSlice({
         state.user = action.payload;
         localStorage.setItem('user', action.payload.role)
         localStorage.setItem('username', action.payload.name)
+        localStorage.setItem("userState", JSON.stringify(state));
         state.error = null;
       })
       .addCase(loginUser.rejected, (state, action: PayloadAction<LoginRejectValueType | undefined>) => {

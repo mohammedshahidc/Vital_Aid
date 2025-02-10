@@ -1,23 +1,42 @@
 import { configureStore } from "@reduxjs/toolkit";
-import authReducer from "./features/userSlice"; 
-import userReducer from "./features/userlistSlice"; 
+import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import authReducer from "./features/userSlice";
+import userReducer from "./features/userlistSlice";
 import EquipmentSlice from "./features/EquipmentSlice";
-import  volunteerSlice  from './features/volunteers'
-import eventsReducer from "./features/eventSlice"
-import donorsReducer from "./features/donorsSlice"
+import volunteerSlice from "./features/volunteers";
+import eventsReducer from "./features/eventSlice";
+import donorsReducer from "./features/donorsSlice";
+
+// 🔹 Define persist config
+const authPersistConfig = {
+  key: "auth",
+  storage,
+};
+
+// 🔹 Wrap auth reducer with persistReducer
+const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
+
 export const makeStore = () => {
   return configureStore({
     reducer: {
-      auth: authReducer,  
+      auth: persistedAuthReducer, // Use persisted reducer
       users: userReducer,
-     equipments:EquipmentSlice,
-     volunteers:volunteerSlice,
-     events: eventsReducer,
-     donors: donorsReducer
-
+      equipments: EquipmentSlice,
+      volunteers: volunteerSlice,
+      events: eventsReducer,
+      donors: donorsReducer,
     },
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: {
+          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        },
+      }),
   });
 };
+
+export const persistor = persistStore(makeStore());
 
 export type AppStore = ReturnType<typeof makeStore>;
 export type RootState = ReturnType<AppStore["getState"]>;

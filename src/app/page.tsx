@@ -1,5 +1,5 @@
 import Footer from "@/components/ui/footer";
-import Homepage from "@/components/users/Home/home";
+import Homepage from "@/components/landing/home";
 import Landinav from "@/components/users/Navbar/landingNav";
 
 

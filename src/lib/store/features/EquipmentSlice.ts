@@ -3,6 +3,7 @@ import axiosInstance from "@/utils/axios";
 import axiosErrorManager from "@/utils/axiosErrormanager";
 
 
+
 export interface Equipment {
     _id: string;
     name: string;

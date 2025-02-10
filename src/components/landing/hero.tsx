@@ -5,7 +5,7 @@ import Image from 'next/image';
 import React, { useEffect } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import heroimg from '../../../../public/heroimg.jpg';
+import heroimg from "../../../public/heroimg.jpg";
 
 function Hero() {
   useEffect(() => {
