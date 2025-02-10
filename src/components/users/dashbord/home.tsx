@@ -4,19 +4,22 @@ import Image from "next/image";
 import { Avatar, Button, Card, CardContent, CardHeader } from "@mui/material";
 import {
   FaClock,
-  FaHeart,
   FaMapPin,
   FaPhone,
   FaStethoscope,
-  FaUser,
 } from "react-icons/fa";
 import { FiMail } from "react-icons/fi";
 import { useAppSelector } from "@/lib/store/hooks";
 import axiosInstance from "@/utils/axios";
 import axiosErrorManager from "@/utils/axiosErrormanager";
+import BloodtypeIcon from "@mui/icons-material/Bloodtype";
 import AddReportModal from "@/components/ui/addDetail";
 import ReportModal from "@/components/ui/report";
 import { useRouter } from "next/navigation";
+import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
+import EventIcon from "@mui/icons-material/Event";
+import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
+
 
 type UserDetails = {
   age: number;
@@ -93,7 +96,7 @@ const Home = () => {
               variant="contained"
               className="w-full flex items-center gap-3 bg-red-500 hover:bg-red-600 text-white py-2"
             >
-              <FaHeart className="w-5 h-5" /> Request Blood
+              <BloodtypeIcon /> Request Blood
             </Button>
 
             <Button
@@ -101,21 +104,21 @@ const Home = () => {
               variant="contained"
               className="w-full flex items-center gap-3 bg-blue-500 hover:bg-blue-600 text-white py-2"
             >
-              <FaUser className="w-5 h-5" /> Medical Equipment
+              <MedicalServicesIcon /> Medical Equipment
             </Button>
             <Button
               onClick={() => Router.push("/user/events")}
               variant="contained"
               className="w-full flex items-center gap-3 bg-blue-500 hover:bg-blue-600 text-white py-2"
             >
-              <FaUser className="w-5 h-5" />
+              <EventIcon />
               our Events
             </Button>
 
             <Button
               onClick={() => Router.push("/user/doctors")}
               variant="contained"
-              className="w-full flex items-center gap-3 bg-green-500 hover:bg-green-600 text-white py-2"
+              className="w-full flex items-center gap-3 hover:bg-blue-600 text-white py-2"
             >
               <FaStethoscope className="w-5 h-5" /> Consult a Doctor
             </Button>
@@ -123,9 +126,16 @@ const Home = () => {
             <Button
               onClick={() => Router.push("/user/volunteers")}
               variant="contained"
-              className="w-full flex items-center gap-3 bg-purple-500 hover:bg-purple-600 text-white py-2"
+              className="w-full flex items-center gap-3 bg-purple-500 hover:bg-blue-600 text-white py-2"
             >
-              <FaUser className="w-5 h-5" />our volunteers
+              <VolunteerActivismIcon />our volunteers
+            </Button>
+            <Button
+              onClick={() => Router.push("/user/equipments/request")}
+              variant="contained"
+              className="w-full flex items-center gap-3 bg-blue-500 hover:bg-blue-600 text-white py-2"
+            >
+              <MedicalServicesIcon /> My Requests
             </Button>
           </div>
         </div>
@@ -266,7 +276,7 @@ const Home = () => {
           variant="contained"
           className="flex flex-col items-center gap-1 bg-red-500 hover:bg-red-600 text-white py-2"
         >
-          <FaHeart className="w-5 h-5" />
+          <EventIcon />
           <span className="text-xs">events</span>
         </Button>
 
@@ -275,7 +285,7 @@ const Home = () => {
           variant="contained"
           className="flex flex-col items-center gap-1 bg-blue-500 hover:bg-blue-600 text-white py-2"
         >
-          <FaUser className="w-5 h-5" />
+          <MedicalServicesIcon />
           <span className="text-xs">Equipment</span>
         </Button>
 
@@ -293,7 +303,7 @@ const Home = () => {
           variant="contained"
           className="flex flex-col items-center gap-1 bg-purple-500 hover:bg-purple-600 text-white py-2"
         >
-          <FaUser className="w-5 h-5" />
+          <BloodtypeIcon />
           <span className="text-xs">Donors</span>
         </Button>
 
@@ -302,7 +312,7 @@ const Home = () => {
           variant="contained"
           className="flex flex-col items-center gap-1 bg-purple-500 hover:bg-purple-600 text-white py-2"
         >
-          <FaUser className="w-5 h-5" />
+          <VolunteerActivismIcon />
           <span className="text-xs">volunteers</span>
         </Button>
       </div>
