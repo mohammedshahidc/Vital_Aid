@@ -8,7 +8,7 @@ import Image from 'next/image'
 
 const Equipmentsuser = () => {
   const dispatch = useAppDispatch()
-  const { allEquipment, searchedEquipments, totalPages } = useAppSelector((state) => state.equipments)
+  const { allEquipment, totalPages } = useAppSelector((state) => state.equipments)
   const [currentPage, setCurrentPage] = useState<number>(1)
 
   useEffect(() => {

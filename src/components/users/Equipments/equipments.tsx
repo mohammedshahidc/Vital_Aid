@@ -3,13 +3,14 @@
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
 import React, { useEffect, useState } from 'react'
 import { IoIosArrowDropdownCircle } from "react-icons/io";
-
+import { FaArrowDown } from "react-icons/fa"; 
 import { Button } from '@mui/material'
 import { getallEquipmentforuser } from '@/lib/store/features/EquipmentSlice'
 import Image from 'next/image'
 import Link from 'next/link';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import HowItWorks from './howItWork';
 
 const Equipmentsuser = () => {
   const dispatch = useAppDispatch()
@@ -32,8 +33,14 @@ const Equipmentsuser = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+       <div className="flex flex-col items-center">
+        <HowItWorks />
+        <div className="mt-4 animate-bounce"> {/* Smooth bounce animation */}
+          <FaArrowDown size={30} className="text-gray-600" />
+        </div>
+      </div>
     {/* Responsive Equipment Grid */}
-    <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
+    <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 mt-3">
       {allEquipment?.map((equipment) => (
         <Link key={equipment._id} href={`/user/equipments/detailes/${equipment._id}`}>
           <div

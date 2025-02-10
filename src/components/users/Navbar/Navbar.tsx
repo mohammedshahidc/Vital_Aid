@@ -1,4 +1,5 @@
 "use client";
+import Dropdown from "@/components/admin/navbar/Dropdown";
 import { Button } from "@mui/material";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -9,7 +10,10 @@ import { HiMenu, HiX } from "react-icons/hi";
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
+const[click,setClick]=useState<boolean>(false)
+const handleClick=()=>{
+  setClick(!click)
+}
   return (
     <nav className="bg-white border-b border-gray-200 dark:bg-gray-900 w-full shadow-md">
       <div className="container mx-auto flex items-center justify-between py-4 px-6">
@@ -69,6 +73,12 @@ export default function Navbar() {
                 >
                   Blood Donors
                 </Link>
+                <Link onClick={() => setDropdownOpen(!dropdownOpen)}
+                  href="/user/equipments"
+                  className="block px-4 py-2 font-serif font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  Equipments
+                </Link>
               </div>
             )}
           </div>
@@ -87,9 +97,10 @@ export default function Navbar() {
           <button className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition w-full lg:w-auto">
             <FaBell size={20} />
           </button>
-          <Link href={"/user/profile"} className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition w-full lg:w-auto">
-            <FaUser size={20} />
-          </Link>
+          <div  className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition w-full lg:w-auto">
+            <FaUser size={20} onClick={handleClick}/>
+          </div>
+          {click&&<Dropdown/>}
         </div>
       </div>
 

@@ -1,13 +1,10 @@
-
-
-
-import Equipmentsuser from '@/components/users/Equipments/equipments'
+import Hero from '@/components/doctor/Home/hero'
 import React from 'react'
 
 const Page = () => {
   return (
     <div>
-      <Equipmentsuser/>
+      <Hero/>
     </div>
   )
 }

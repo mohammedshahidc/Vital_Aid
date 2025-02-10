@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Request } from '@/lib/store/features/requestSlice';
 import Image from 'next/image';
 import {
@@ -25,7 +25,9 @@ import axiosErrorManager from '@/utils/axiosErrormanager';
 
 const EquipmentRequest = () => {
     const [currentPage, setCurrentPage] = useState<number>(1)
+    const [filteredRequest, setfilteredRequest] = useState<Request[]| null>(null)
     const [status, setStaus] = useState<string>('')
+    const [selector, setSelector] = useState<string>('')
     const { data, isLoading, error, refetch } = useAllRequest(currentPage)
     const allrequest: Request[] = data?.data
     const handlePageChange = (
@@ -46,8 +48,19 @@ const EquipmentRequest = () => {
             axiosErrorManager(error)
         }
     }
-    console.log('status:', status);
-
+    console.log('status:', allrequest);
+    useEffect(() => {
+        if(allrequest){
+            if(selector=="all"){
+                setfilteredRequest(null)
+            }else{
+                const filter=allrequest.filter((req)=>req.status==selector)
+                setfilteredRequest(filter)
+            }
+          
+        }
+      
+    }, [selector])
 
     return (
         <div>
@@ -62,21 +75,29 @@ const EquipmentRequest = () => {
 
 
 
-                        {/* <div className='flex justify-between mb-3 w-[90%] '>
-                        <div>
-                            <TextField
-                                label="Search Equipments"
-                                variant="outlined"
-                                onChange={(e) => debounsedsearch(e.target.value)}
-                                sx={{ width: { xs: '250px', sm: '300px' }, boxShadow: "none" }}
-                            />
+                        <div className='flex justify-between mb-3 w-[90%] '>
+                            <div>
+                                <FormControl fullWidth>
+                                    <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                                        Status
+                                    </InputLabel>
+                                    <NativeSelect
+                                        onChange={(e)=>setSelector(e.target.value)}
+                                        inputProps={{
+                                            name: 'status',
+                                            defaultValue:"all",
+                                            id: 'uncontrolled-native',
+                                        }}
+                                    >
+                                        <option value="all">All</option>
+                                        <option value="pending">Pending</option>
+                                        <option value="accepted">Accepted</option>
+                                        <option value="delivered">Delivered</option>
+                                        <option value="cancelled">Cancelled</option>
+                                    </NativeSelect>
+                                </FormControl>
+                            </div>
                         </div>
-                        <div className=" pr-1 mt-4">
-                            <Link href={"/admin/equipments/add"}>
-                                <Button variant="outlined" color="primary">add an equipment</Button>
-                            </Link>
-                        </div>
-                    </div> */}
 
                         {isLoading ? (
                             <CircularProgress color="primary" />
@@ -100,7 +121,7 @@ const EquipmentRequest = () => {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {allrequest && allrequest.map((req) => (
+                                        {(filteredRequest &&filteredRequest?filteredRequest: allrequest).map((req) => (
                                             <TableRow key={req._id} sx={{ "&:hover": { backgroundColor: "#f9f9f9" } }}>
                                                 <TableCell>{req.user?.name}</TableCell>
                                                 <TableCell>

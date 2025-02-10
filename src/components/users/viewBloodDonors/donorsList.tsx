@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "@/utils/axios";
 import React, { useState } from "react";
 import Image from "next/image";
+import HowItWorks from "./Howitwork";
 
 export interface Donor {
   _id: string;
@@ -61,16 +62,10 @@ const DonorsList: React.FC = () => {
 
   return (
     <div className="max-w-full mx-auto p-5 w-full">
-      <h1 className="text-3xl font-semibold text-red-900 text-center mb-6">
-        Blood Donors: Lifesavers at Your Service
-      </h1>
-      <p className="text-lg text-gray-700 text-center mb-8">
-        Need a blood donor? Here's a list of volunteers ready to help. Browse,
-        connect, and save lives!
-      </p>
+     <HowItWorks/>
 
       {/* Filter Section */}
-      <div className="mb-6 flex justify-center gap-4">
+      <div className="mb-6 flex mt-3 justify-center gap-4">
         <input
           type="text"
           placeholder="Search by Name"
@@ -154,36 +149,6 @@ const DonorsList: React.FC = () => {
         >
           Next
         </button>
-      </div>
-
-      <div className="text-center mt-12">
-        <h2 className="text-2xl font-bold text-red-800">
-          How to Use This Donor List
-        </h2>
-        <p className="mt-4 text-lg text-gray-700">
-          This list features volunteers who are ready to help you in times of
-          need. Here's how you can use this information:
-        </p>
-        <ul className="mt-4 text-lg text-gray-700 list-disc pl-8">
-          <li>
-            <strong>Browse Donors:</strong> Find volunteers by their blood group,
-            and contact them directly for help.
-          </li>
-          <li>
-            <strong>Phone Numbers:</strong> You can easily reach out to donors
-            via their provided phone number.
-          </li>
-          <li>
-            <strong>Urgent Requests:</strong> In case of urgent need, don’t
-            hesitate to contact multiple donors.
-          </li>
-        </ul>
-      </div>
-
-      <div className="mt-8 text-center">
-        <p className="text-lg font-semibold text-gray-900">
-          Together, we can save lives! 💖
-        </p>
       </div>
     </div>
   );
