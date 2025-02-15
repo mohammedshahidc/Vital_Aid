@@ -33,7 +33,9 @@ export default function Doctor() {
   });
 
   if (isLoading)
-    return <div className="text-center text-xl py-10">Loading doctor details...</div>;
+    return (
+      <div className="text-center text-xl py-10">Loading doctor details...</div>
+    );
 
   if (error)
     return (
@@ -43,7 +45,11 @@ export default function Doctor() {
     );
 
   if (!data)
-    return <div className="text-center text-gray-500 py-10">No doctor details found</div>;
+    return (
+      <div className="text-center text-gray-500 py-10">
+        No doctor details found
+      </div>
+    );
 
   return (
     <>
@@ -60,15 +66,21 @@ export default function Doctor() {
           </div>
 
           <div className="md:w-2/3 mt-8 text-center md:text-left">
-            <h1 className="text-3xl font-bold text-gray-900">{data.doctor.name}</h1>
+            <h1 className="text-3xl font-bold text-gray-900">
+              {data.doctor.name}
+            </h1>
 
             <div className="text-xl text-pink-600 font-medium mt-2 max-w-sm break-words text-center md:text-left">
-  {data.specialization.map((spec, idx) => (
-    <p key={idx} className="leading-snug">{spec}</p>
-  ))}
-</div>
+              {data.specialization.map((spec, idx) => (
+                <p key={idx} className="leading-snug">
+                  {spec}
+                </p>
+              ))}
+            </div>
 
-            <p className="text-lg text-pink-600 font-medium mt-1">{data.hospital}</p>
+            <p className="text-lg text-pink-600 font-medium mt-1">
+              {data.hospital}
+            </p>
 
             <div className="mt-4">
               <button className="bg-red-950 hover:bg-red-900 text-white font-semibold py-2 px-6 rounded-md shadow-md transition-all duration-300">
@@ -77,14 +89,19 @@ export default function Doctor() {
             </div>
           </div>
         </div>
-
       </div>
 
       <div className="w-full bg-white shadow-lg p-6">
-        <h2 className="text-2xl font-bold text-gray-800 border-b pb-2 mb-4">About</h2>
-        <p className="text-gray-700 text-lg leading-relaxed">{data.description}</p>
+        <h2 className="text-2xl font-bold text-gray-800 border-b pb-2 mb-4">
+          About
+        </h2>
+        <p className="text-gray-700 text-lg leading-relaxed">
+          {data.description}
+        </p>
 
-        <h3 className="text-xl font-semibold text-gray-800 mt-4">Qualifications</h3>
+        <h3 className="text-xl font-semibold text-gray-800 mt-4">
+          Qualifications
+        </h3>
         <ul className="list-disc list-inside text-gray-600 space-y-1 mt-2">
           {data.qualification.map((qual, index) => (
             <li key={index}>{qual}</li>

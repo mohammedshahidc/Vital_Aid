@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import axiosInstance from "@/utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import { FaPhoneAlt, FaRegHandshake, FaUsers } from "react-icons/fa";
+import HowItWorks from "./howitWork";
 
 interface Volunteer {
   _id: string;
@@ -42,40 +42,10 @@ function Volunteers() {
     );
 
   return (
+    <>
+    <HowItWorks/>
     <div className="min-h-screen flex flex-col items-center py-10 w-full">
-
-      <div className="w-full max-w-3xl text-center p-6 rounded-lg  mb-8">
-        <h2 className="text-3xl font-bold text-blue-900">
-          Need Volunteer Support?
-        </h2>
-        <p className="text-gray-700 mt-3">
-          Our volunteers are here to help! Get the assistance you need—quickly
-          and easily.
-        </p>
-        <h3 className="text-xl font-semibold text-blue-800 mt-4">
-          How to Get Support?
-        </h3>
-        <div className="flex flex-wrap justify-center gap-6 text-left mx-auto max-w-lg mt-4">
-          <div className="flex items-center gap-2">
-            <FaUsers className="text-blue-600" />
-            <span>Browse our volunteers.</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <FaPhoneAlt className="text-blue-600" />
-            <span>Contact them directly.</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <FaRegHandshake className="text-blue-600" />
-            <span>Get the support you need.</span>
-          </div>
-        </div>
-        <p className="text-gray-800 font-medium mt-4">
-          Urgent?{" "}
-          <span className="text-blue-700">Call us at 123-456-7890.</span>
-        </p>
-      </div>
-
-      <h2 className="text-4xl font-bold text-white mb-8">Volunteers</h2>
+      
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full px-8">
         {data?.allVolunteers.map((volunteer) => (
@@ -137,6 +107,8 @@ function Volunteers() {
         </button>
       </div>
     </div>
+    </>
+    
   );
 }
 

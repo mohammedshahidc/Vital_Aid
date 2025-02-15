@@ -4,41 +4,48 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useParams, useRouter } from "next/navigation";
-import { loginUser, loginadmin, loginDoctor, setType } from "@/lib/store/features/userSlice";
+import {
+  loginUser,
+  loginadmin,
+  loginDoctor,
+  setType,
+} from "@/lib/store/features/userSlice";
 import LoginModal from "../ui/loginModal";
 import Image from "next/image";
-import DRpng from "../../../public/Doctor.png"
+import DRpng from "../../../public/Doctor.png";
 import { toast } from "react-hot-toast";
 
 const Login: React.FC = () => {
-  const { admin } = useParams()
-  console.log('wdd', admin);
-
-
+  const { admin } = useParams();
   const dispatch = useAppDispatch();
   const { isLoading, error, userType } = useAppSelector((state) => state.auth);
   const router = useRouter();
-
-  console.log(userType);
-
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
   useEffect(() => {
     if (admin) {
-      dispatch(setType("Admin"))
+      dispatch(setType("Admin"));
     }
-  }, [dispatch, admin])
+  }, [dispatch, admin]);
+
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const result = userType == "User" ? await dispatch(loginUser({ email, password })) : userType == "Admin" ? await dispatch(loginadmin({ email, password })) : await dispatch(loginDoctor({ email, password }));
-    console.log("result:", result);
+    const result =
+      userType == "User"
+        ? await dispatch(loginUser({ email, password }))
+        : userType == "Admin"
+          ? await dispatch(loginadmin({ email, password }))
+          : await dispatch(loginDoctor({ email, password }));
+
     if (error) {
-      toast.error(error)
+      toast.error(error);
     }
     const role = localStorage.getItem("user");
 
-    if (result.meta.requestStatus == 'fulfilled') {
+    if (result.meta.requestStatus == "fulfilled") {
       if (role && role === "User") {
         router.push("/user");
       }
@@ -51,20 +58,18 @@ const Login: React.FC = () => {
     }
   };
   if (error) {
-    toast.error(error)
+    toast.error(error);
   }
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-
   const handleCloseModal = () => setIsModalOpen(false);
 
-
   const btnColor =
-    userType === "Admin"
-      ? "bg-purple-500"
-      : userType === "Doctor"
-        ? "bg-blue-500"
-        : "bg-green-500";
+    userType == "Admin"
+      ? "info"
+      : userType == "Doctor"
+        ? "primary"
+        : "success";
 
   const gradientColor =
     userType === "Admin"
@@ -73,10 +78,9 @@ const Login: React.FC = () => {
         ? "from-blue-300 via-blue-400 to-blue-500"
         : " from-custom-green-100 via-custom-green-200 to-custom-green-300";
 
-
   const handleClick = async () => {
-    await dispatch(setType("Doctor"))
-  }
+    await dispatch(setType("Doctor"));
+  };
   return (
     <div
       className={`relative flex h-screen items-center justify-center bg-gray-100`}
@@ -137,19 +141,23 @@ const Login: React.FC = () => {
             <Button
               type="submit"
               variant="contained"
+              color={`${btnColor}`}
               className={`w-3/4 ${btnColor}`}
-              sx={{
-                backgroundColor: "transparent",
-              }}
+
             >
               {isLoading ? "Loading..." : `Login as ${userType}`}
             </Button>
             <div className="my-4 w-ful">
-              {userType == "User" && <Link href={'/login/doctor'} className="text-blue-700 end-3 " onClick={handleClick}>Are you a doctor? Click here to log in.</Link>}
-
-
+              {userType == "User" && (
+                <Link
+                  href={"/login/doctor"}
+                  className="text-blue-700 end-3 "
+                  onClick={handleClick}
+                >
+                  Are you a doctor? Click here to log in.
+                </Link>
+              )}
             </div>
-
           </form>
 
           {userType === "User" && (
@@ -162,8 +170,8 @@ const Login: React.FC = () => {
                   Create it
                 </Button>
               </Link>
-
-            </div>)}
+            </div>
+          )}
         </div>
 
         <div
@@ -172,25 +180,24 @@ const Login: React.FC = () => {
           <div className="text-center">
             {userType === "Admin" ? (
               <div>
-                <p className="text-white text-2xl sm:text-xl font-medium font-serif mb-4">Welcome Admin</p>
-                <p className="text-white text-2xl sm:text-xl font-medium font-serif mb-4">Manage, Monitor, and Optimize with Ease</p>
-
+                <p className="text-white text-2xl sm:text-xl font-medium font-serif mb-4">
+                  Welcome Admin
+                </p>
+                <p className="text-white text-2xl sm:text-xl font-medium font-serif mb-4">
+                  Manage, Monitor, and Optimize with Ease
+                </p>
               </div>
-
             ) : userType === "Doctor" ? (
               <div className=" justify-center">
-                <p className="text-white text-2xl sm:text-xl font-medium font-serif">Welcome Doctor</p>
-                <Image
-                  src={DRpng}
-                  alt="drimg"
-                />
-
-
+                <p className="text-white text-2xl sm:text-xl font-medium font-serif">
+                  Welcome Doctor
+                </p>
+                <Image src={DRpng} alt="drimg" />
               </div>
-
-
             ) : (
-              <p className="text-white text-2xl sm:text-xl font-medium font-serif mb-4">Dont have an account yet?</p>
+              <p className="text-white text-2xl sm:text-xl font-medium font-serif mb-4">
+                Dont have an account yet?
+              </p>
             )}
             {userType === "User" && (
               <Link href="/register" passHref>
@@ -199,12 +206,10 @@ const Login: React.FC = () => {
                 </p>
               </Link>
             )}
-
           </div>
         </div>
       </div>
       <LoginModal open={isModalOpen} onClose={handleCloseModal} />
-
     </div>
   );
 };

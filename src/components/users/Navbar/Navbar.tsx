@@ -2,23 +2,31 @@
 import Dropdown from "@/components/admin/navbar/Dropdown";
 import { Button } from "@mui/material";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
 import React, { useState } from "react";
 import { FaUser, FaBell } from "react-icons/fa";
 import { HiMenu, HiX } from "react-icons/hi";
-
+import { IoChatbubblesOutline } from "react-icons/io5";
+import { LuCircleUser } from "react-icons/lu";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-const[click,setClick]=useState<boolean>(false)
-const handleClick=()=>{
-  setClick(!click)
-}
+  const [click, setClick] = useState<boolean>(false);
+  const handleClick = () => {
+    setClick(!click);
+  };
+  const Route=useRouter()
+
+
   return (
     <nav className="bg-white border-b border-gray-200 dark:bg-gray-900 w-full shadow-md">
       <div className="container mx-auto flex items-center justify-between py-4 px-6">
-       
-        <Link href={"/user"} className="text-xl font-bold text-gray-900 dark:text-white" >
+        <Link
+          href={"/user"}
+          className="text-xl font-bold text-gray-900 dark:text-white"
+        >
           Vital Aid
         </Link>
 
@@ -31,9 +39,7 @@ const handleClick=()=>{
           </button>
         </div>
 
-        <div
-          className={`hidden lg:flex lg:items-center lg:space-x-8`}
-        >
+        <div className={`hidden lg:flex lg:items-center lg:space-x-8`}>
           <Link
             href="/user"
             className="block text-gray-700 font-serif font-semibold dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition py-2 lg:py-0"
@@ -49,31 +55,36 @@ const handleClick=()=>{
             </button>
             {dropdownOpen && (
               <div className="absolute mt-2 bg-white dark:bg-gray-800 shadow-lg rounded-md py-2 z-10 w-40">
-                <Link onClick={() => setDropdownOpen(!dropdownOpen)}
+                <Link
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
                   href="/user/doctors"
                   className="block px-4 py-2 font-serif font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
                   Doctors
                 </Link>
-                <Link onClick={() => setDropdownOpen(!dropdownOpen)}
+                <Link
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
                   href="/user/volunteers"
                   className="block px-4 py-2 font-serif font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
                   Volunteers
                 </Link>
-                <Link onClick={() => setDropdownOpen(!dropdownOpen)}
+                <Link
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
                   href="/user/events"
                   className="block px-4 py-2 font-serif font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
                   Events
                 </Link>
-                <Link onClick={() => setDropdownOpen(!dropdownOpen)}
+                <Link
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
                   href="/user/bloodDonors"
                   className="block px-4 py-2 font-serif font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
                   Blood Donors
                 </Link>
-                <Link onClick={() => setDropdownOpen(!dropdownOpen)}
+                <Link
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
                   href="/user/equipments"
                   className="block px-4 py-2 font-serif font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
@@ -91,20 +102,23 @@ const handleClick=()=>{
         </div>
 
         <div className="hidden lg:flex lg:items-center space-x-4">
-          <Button className="bg-lime-700 text-white py-2 px-4 rounded h-10 lg:w-auto">
+          <Button
+            variant="contained"
+            color="success"
+            className="bg-lime-700 text-white py-2 px-4 rounded h-10 lg:w-auto"
+          >
             Donate now
           </Button>
-          <button className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition w-full lg:w-auto">
-            <FaBell size={20} />
+          <button onClick={()=>Route.push("/user/message")} className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition w-full lg:w-auto">
+            <IoChatbubblesOutline size={20} />
           </button>
-          <div  className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition w-full lg:w-auto">
-            <FaUser size={20} onClick={handleClick}/>
+          <div className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition w-full lg:w-auto">
+            <LuCircleUser size={20} onClick={handleClick} />
           </div>
-          {click&&<Dropdown/>}
+          {click && <Dropdown />}
         </div>
       </div>
 
-    
       {menuOpen && (
         <div className="lg:hidden bg-sky-50 dark:bg-gray-900 py-4 px-6 absolute z-50 right-1  space-y-4 float-right ">
           <Link
@@ -114,42 +128,7 @@ const handleClick=()=>{
           >
             Home
           </Link>
-          <div>
-            <button
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="block text-gray-700 font-serif font-semibold dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition"
-            >
-              Services
-            </button>
-            {dropdownOpen && (
-              <div className="mt-2 bg-white dark:bg-gray-800 shadow-lg rounded-md py-2 space-y-2 z-10">
-                <Link onClick={() => setDropdownOpen(!dropdownOpen)}
-                  href="/doctors"
-                  className="block px-4 py-2 font-serif font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  Doctors
-                </Link>
-                <Link onClick={() => setDropdownOpen(!dropdownOpen)}
-                  href="/volunteers"
-                  className="block px-4 py-2 font-serif font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  Volunteers
-                </Link>
-                <Link onClick={() => setDropdownOpen(!dropdownOpen)}
-                  href="/events"
-                  className="block px-4 py-2 font-serif font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  Events
-                </Link>
-                <Link onClick={() => setDropdownOpen(!dropdownOpen)}
-                  href="/blooddonors"
-                  className="block px-4 py-2 font-serif font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  Blood Donors
-                </Link>
-              </div>
-            )}
-          </div>
+
           <Link
             href="/about-us"
             className="block text-gray-700 font-serif font-semibold dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition"
@@ -157,7 +136,10 @@ const handleClick=()=>{
           >
             About Us
           </Link>
-          <Button variant="contained" className="bg-lime-700 text-white py-2 px-4 rounded ">
+          <Button
+            variant="contained"
+            className="bg-lime-700 text-white py-2 px-4 rounded "
+          >
             Donate now
           </Button>
           <div className="flex space-x-4">

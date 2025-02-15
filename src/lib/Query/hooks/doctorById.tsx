@@ -1,5 +1,5 @@
 import axiosInstance from "@/utils/axios";
-import { useQuery } from "@tanstack/react-query";
+
 
 export const fetchDoctorById = async (id: string) => {
     if (!id) throw new Error("Doctor ID is required");

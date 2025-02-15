@@ -23,7 +23,7 @@ export default function Landinav() {
         
 
         <Link href={"/login"} className="lg:flex lg:items-center space-x-4 mx-16">
-          <Button className="bg-lime-700 text-white py-2 px-4 rounded h-10 lg:w-auto">
+          <Button variant="contained" color="success" className="bg-lime-700 text-white py-2 px-4 rounded h-10 lg:w-auto">
             Login
           </Button>
           

@@ -1,11 +1,13 @@
 "use client";
-import { Button } from "@mui/material";
-import Link from "next/link";
-import React, { useState } from "react";
-import { FaUser, FaBell } from "react-icons/fa";
-import { HiMenu, HiX } from "react-icons/hi";
+
+import React from "react";
+import { FaUser} from "react-icons/fa";
+import { IoChatbubblesOutline } from "react-icons/io5";
+import { useRouter } from "next/navigation";
+
 
 function Navbar() {
+  const Route=useRouter()
   return (
     <nav className="bg-sky-50 border-b border-gray-200 dark:bg-gray-900 w-full shadow-md">
       <div className="container mx-auto flex items-center justify-between py-4 px-6">
@@ -14,6 +16,12 @@ function Navbar() {
         </div>
 
         <div className="flex space-x-4">
+          <button
+            onClick={() => Route.push("/doctor/message")}
+            className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition w-full lg:w-auto"
+          >
+            <IoChatbubblesOutline size={20} />
+          </button>
           <button className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">
             <FaUser size={20} />
           </button>

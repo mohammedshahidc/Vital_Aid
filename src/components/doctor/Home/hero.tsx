@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import React from 'react';
 import Doctor from "../../../../public/Doctor.png";
-import { useAppSelector } from '@/lib/store/hooks';
+
 
 
 function Hero() {
