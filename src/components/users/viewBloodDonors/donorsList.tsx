@@ -64,7 +64,6 @@ const DonorsList: React.FC = () => {
     <div className="max-w-full mx-auto p-5 w-full">
      <HowItWorks/>
 
-      {/* Filter Section */}
       <div className="mb-6 flex mt-3 justify-center gap-4">
         <input
           type="text"
@@ -150,6 +149,8 @@ const DonorsList: React.FC = () => {
           Next
         </button>
       </div>
+      
+
     </div>
   );
 };

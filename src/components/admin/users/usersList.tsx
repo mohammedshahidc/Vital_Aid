@@ -23,6 +23,8 @@ import {
   Pagination,
   Chip,
   TextField,
+  Switch,
+  FormControlLabel,
 } from "@mui/material";
 import toast from "react-hot-toast";
 
@@ -32,7 +34,8 @@ function UsersList() {
     (state) => state.users
   );
   const [currentPage, setCurrentPage] = useState(1);
-  
+  const [showBlocked, setShowBlocked] = useState(false);
+
   useEffect(() => {
     dispatch(fetchUsers(currentPage));
   }, [dispatch, currentPage]);
@@ -66,6 +69,11 @@ function UsersList() {
   ) => {
     setCurrentPage(page);
   };
+
+  // Filter users based on the switch state
+  const filteredUsers = showBlocked
+    ? users.filter((user) => user.isDeleted || user.blocked)
+    : users;
 
   if (isLoading) {
     return (
@@ -107,14 +115,24 @@ function UsersList() {
           <Button onClick={handleSendMessage}>send</Button>
         </div>
 
-        <Box display="flex" justifyContent="flex-end" mb={3}>
-          <Link href="/admin/blockedList" passHref>
-            <Button variant="outlined" color="error">
-              Blocked Users
-            </Button>
-          </Link>
-        </Box>
-      </div>
+      <Box display="flex" justifyContent="space-between" mb={3}>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={showBlocked}
+              onChange={() => setShowBlocked(!showBlocked)}
+              color="primary"
+            />
+          }
+          label="Show Blocked Users"
+        />
+
+        <Link href="/admin/blockedList" passHref>
+          <Button variant="outlined" color="error">
+            Blocked Users
+          </Button>
+        </Link>
+      </Box>
 
       <TableContainer component={Paper} elevation={2}>
         <Table>
@@ -129,25 +147,23 @@ function UsersList() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {users.map((user) => (
+            {filteredUsers.map((user) => (
               <TableRow
                 key={user?._id}
                 hover
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell align="center">
-                  <Link key={user._id} href={`/admin/usersList/${user?._id}`}>
-                    <Box display="flex" justifyContent="center">
-                      <Image
-                        src={
-                          user.profileImage.thumbnail || "/default-avatar.png"
-                        }
-                        width={40}
-                        height={40}
-                        alt={user.name}
-                        style={{ borderRadius: "50%", objectFit: "cover" }}
-                      />
-                    </Box>
+                <Link key={user._id} href={`/admin/usersList/${user?._id}`}>
+                  <Box display="flex" justifyContent="center">
+                    <Image
+                      src={user?.profileImage?.thumbnail || "/default-avatar.png"}
+                      width={40}
+                      height={40}
+                      alt={user?.name || "User"}
+                      style={{ borderRadius: "50%", objectFit: "cover" }}
+                    />
+                  </Box>
                   </Link>
                 </TableCell>
                 <TableCell align="center">{user.name}</TableCell>
@@ -175,9 +191,7 @@ function UsersList() {
                     variant="contained"
                     color={user.blocked ? "primary" : "error"}
                     onClick={() => handleBlockUser(user._id)}
-                    startIcon={
-                      user.blocked ? <CheckCircleIcon /> : <BlockIcon />
-                    }
+                    startIcon={user.blocked ? <CheckCircleIcon /> : <BlockIcon />}
                     size="small"
                   >
                     {user.blocked ? "Unblock" : "Block"}

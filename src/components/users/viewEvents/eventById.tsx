@@ -24,7 +24,7 @@ const EventById: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
         <div className="relative w-full h-80">
           <Image
-            src={event?.event?.image[0] || "/default-image.jpg"} // Use first image or default
+            src={event?.event?.image[0] || "/default-image.jpg"} 
             alt={event.event?.title}
             layout="fill"
             objectFit="cover"

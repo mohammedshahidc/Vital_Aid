@@ -37,6 +37,8 @@ export default async function RootLayout({
           <StoreProvider>
             <Providers>
             <Toaster position="top-right" reverseOrder={false} />
+            <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
               {children}
             </Providers>
 

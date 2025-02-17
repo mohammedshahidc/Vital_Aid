@@ -102,11 +102,9 @@ export default function Navbar() {
         </div>
 
         <div className="hidden lg:flex lg:items-center space-x-4">
-          <Button
-            variant="contained"
-            color="success"
-            className="bg-lime-700 text-white py-2 px-4 rounded h-10 lg:w-auto"
-          >
+          <Link 
+          href="/user/donationHome" 
+          className="bg-lime-700 text-white py-2 px-4 rounded h-10 lg:w-auto">
             Donate now
           </Button>
           <button onClick={()=>Route.push("/user/message")} className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition w-full lg:w-auto">
