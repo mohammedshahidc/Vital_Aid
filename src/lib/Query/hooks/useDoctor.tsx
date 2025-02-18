@@ -17,7 +17,6 @@ interface Doctor {
     specialties: Speciality[];
   }
 const fetchDoctors = async (page: number) => {
-    
     const response = await axiosInstance.get(`/doctors/getdoctors?page=${page}&limit=5`);
     return response.data;
 };

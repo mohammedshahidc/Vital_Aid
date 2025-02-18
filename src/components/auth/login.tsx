@@ -201,9 +201,9 @@ const Login: React.FC = () => {
             )}
             {userType === "User" && (
               <Link href="/register" passHref>
-                <p className="px-5 py-2.5 font-bold bg-blue-50 hover:bg-blue-100 hover:text-green-600 text-green-700 rounded-lg text-sm inline-block w-[100px] text-center">
+                <Button variant="contained" color="inherit">
                   Create it
-                </p>
+                </Button>
               </Link>
             )}
           </div>

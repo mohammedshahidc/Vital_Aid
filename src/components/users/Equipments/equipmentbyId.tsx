@@ -15,7 +15,9 @@ const EquipmentbyId = () => {
     const[adress,setAdress]=useState<string>('')
     const { id } = useParams() 
     useEffect(() => {
-        dispatch(getEquipmentById(id))
+        if (typeof id === 'string') {
+            dispatch(getEquipmentById(id))
+        }
     }, [dispatch, id])
 
     const makeRequest=async()=>{

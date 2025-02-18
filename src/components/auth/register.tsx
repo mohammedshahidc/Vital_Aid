@@ -4,11 +4,12 @@ import React, { useState } from "react";
 import { signIn } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
 import { useSession } from "next-auth/react";
-import { useFormik } from 'formik'
+import { useFormik } from "formik";
 import { userSchema } from "@/schema/userSchema";
 import { userRegistration } from "@/lib/store/features/userSlice";
 import { useAppDispatch } from "@/lib/store/hooks";
 import { useRouter } from "next/navigation";
+import { Button, TextField } from "@mui/material";
 
 interface FormValues {
   name: string;
@@ -19,75 +20,80 @@ interface FormValues {
 }
 
 const initialValues: FormValues = {
-  name: '',
-  email: '',
-  phone: '',
-  password: '',
-  conformPassword: ''
-}
+  name: "",
+  email: "",
+  phone: "",
+  password: "",
+  conformPassword: "",
+};
 const Register = () => {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const { data } = useSession();
-  const [loading, setloading] = useState(false)
-  const router = useRouter()
+  const [loading, setloading] = useState(false);
+  const router = useRouter();
   if (data) {
-    console.log('rh',data);
+    console.log("rh", data);
   }
-  const { errors, handleChange, handleSubmit, values, touched, resetForm, handleBlur } = useFormik({
+  const {
+    errors,
+    handleChange,
+    handleSubmit,
+    values,
+    touched,
+    resetForm,
+    handleBlur,
+  } = useFormik({
     initialValues,
     validationSchema: userSchema,
     onSubmit: async () => {
-      setloading(true)
+      setloading(true);
       try {
         const result = await dispatch(userRegistration(values));
-        if (result.meta.requestStatus === 'fulfilled') {
-          router.push('/login');
+        if (result.meta.requestStatus === "fulfilled") {
+          router.push("/login");
         }
 
-        await console.log('user:', values);
-        resetForm()
+        await console.log("user:", values);
+        resetForm();
       } catch (error) {
-
         console.log(error);
-
       }
-    }
-
-  })
+    },
+  });
   return (
     <div className="flex justify-center items-center h-screen bg-white w-screen">
-      <div className=" w-5/6 shadow-xl rounded-lg overflow-hidden sm:w-4/6 md:w-3/5 flex">
-        {/* Left Panel */}
-        <div className="hidden sm:block bg-gradient-to-tr from-emerald-700 to-green-400  w-1/2 h-auto">
+      <div className=" w-5/6 shadow-xl rounded-lg overflow-hidden sm:w-4/6 md:w-3/5 flex ">
+        
+        <div className="hidden sm:block bg-gradient-to-tr from-emerald-700 to-green-400  w-1/2 h-auto p-7">
           <p className="text-white font-serif mt-16 ml-14 font-bold text-xl">
             Create an Account
           </p>
-          <div className="ml-14 mt-16 space-y-2 font-bold font-mono">
+          <div className="ml-14 mt-16  space-y-2 text-white ">
             <p>Join Us to Build a</p>
             <p>Healthier Tomorrow -</p>
             <p>Together, Every Step</p>
             <p>Counts!</p>
           </div>
-          <button className="w-fit p-1 bg-gray-200 text-black rounded-lg font-thin mt-14 ml-12">
-            Learn more
-          </button>
+          <div className="ml-14 mt-16">
+            <Button variant="contained" color="inherit" >Learn more</Button>
+          </div>
         </div>
 
-        {/* Right Panel */}
-        <div className="bg-gray-300  w-full sm:w-1/2 p-4 sm:p-5 sm:flex sm:flex-col sm:justify-between">
+        <div className="bg-gray-100  w-full sm:w-1/2 p-4 sm:p-9 sm:flex sm:flex-col sm:justify-between">
           <div className="w-full text-black">
             <form className="space-y-3 sm:space-y-2" onSubmit={handleSubmit}>
               <div>
-                <label >Full Name</label>
-                <br />
-                <input
+              
+                <TextField
+                  fullWidth
                   id="name"
+                  label="Full Name"
                   value={values.name}
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  placeholder="enter your name"
                   type="text"
-                  className="border border-gray-400 w-full h-10 pl-2 rounded-md"
+                  margin="dense"
+                  
                 />
                 <br />
                 {errors?.name && touched.name && (
@@ -95,16 +101,17 @@ const Register = () => {
                 )}
               </div>
               <div>
-                <label>Email</label>
-                <br />
-                <input
+                
+                <TextField
+                  fullWidth
                   id="email"
+                  label="Email id"
                   value={values.email}
                   onBlur={handleBlur}
                   onChange={handleChange}
-                   placeholder="enter email address"
                   type="text"
-                  className="border border-gray-400 w-full h-10 pl-2 rounded-md"
+                  margin="dense"
+             
                 />
                 <br />
                 {errors?.email && touched.email && (
@@ -112,16 +119,17 @@ const Register = () => {
                 )}
               </div>
               <div>
-                <label>Mobile Number</label>
-                <br />
-                <input
+                
+                <TextField
                   id="phone"
+                  fullWidth
+                  label="mobile number"
                   value={values.phone}
                   onBlur={handleBlur}
                   onChange={handleChange}
-                   placeholder="phone number"
                   type="text"
-                  className="border border-gray-400 w-full h-10 pl-2 rounded-md"
+                  margin="dense"
+              
                 />
                 <br />
                 {errors?.phone && touched.phone && (
@@ -130,46 +138,51 @@ const Register = () => {
               </div>
               <div className="w-full sm:flex sm:space-x-4">
                 <div className="sm:w-1/2">
-                  <label className="sm:text-sm">Password</label>
-                  <br />
-                  <input
+                  <TextField
+                  fullWidth
                     id="password"
+                    label="Password"
                     value={values.password}
                     onBlur={handleBlur}
                     onChange={handleChange}
-                     placeholder="Type a password"
                     type="password"
-                    className="border border-gray-400 w-full h-10 pl-2 rounded-md"
+                    margin="dense"
                   />
                   {errors?.password && touched.password && (
-                    <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.password}
+                    </p>
                   )}
                 </div>
                 <div className="sm:w-1/2 mt-4 sm:mt-0">
-                  <label className="sm:text-sm">Confirm Password</label>
-                  <br />
-                  <input
+                  
+                  <TextField
                     id="conformPassword"
+                    label="conform password"
                     value={values.conformPassword}
-                     placeholder="Confirm thepassword"
+                    fullWidth
                     onBlur={handleBlur}
                     onChange={handleChange}
                     type="password"
-                    className="border border-gray-400 w-full h-10 pl-2 rounded-md"
+                    margin="dense"
                   />
                   {errors?.conformPassword && touched.conformPassword && (
-                    <p className="text-red-500 text-sm mt-1">{errors.conformPassword}</p>
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.conformPassword}
+                    </p>
                   )}
                 </div>
               </div>
               <div className="w-full pt-8 space-y-3 sm:space-y-4">
-                <button
-                  className={`w-full bg-lime-600 h-10 font-bold text-white text-lg rounded-lg ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                <Button variant="contained" color="success"
+                  className={`w-full h-10 font-bold text-white text-lg rounded-lg ${
+                    loading ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                   type="submit"
                   disabled={loading}
                 >
-                  {loading ? 'Submitting...' : 'Create an account'}
-                </button>
+                  {loading ? "Submitting..." : "Create an account"}
+                </Button>
                 <button
                   type="button"
                   className="w-full bg-white border border-gray-300 text-black py-2 rounded-full hover:bg-gray-100 text-sm"

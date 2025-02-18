@@ -17,7 +17,6 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchDoctorById } from "@/lib/Query/hooks/doctorById";
 import Image from "next/image";
 
-
 interface Doctor {
   doctor: {
     _id: string;
@@ -34,6 +33,7 @@ interface Message {
   receiverId: string;
   receiverModel: "User" | "Doctor";
   message: string;
+  createdAt: string;
 }
 interface DoctorData {
   description: string;
@@ -47,10 +47,7 @@ interface DoctorData {
 
 const Message = () => {
   const { doctors } = useDoctorUser();
-  console.log(doctors);
-
   const { user } = useAppSelector((state) => state.auth);
-  console.log(user);
 
   const doctorsList: Doctor[] = useMemo(
     () => (Array.isArray(doctors?.data?.data) ? doctors.data.data : []),
@@ -120,7 +117,18 @@ const Message = () => {
         .catch((err) => console.error("Error fetching chat:", err));
     }
   }, [selectedDoctor, user?.id]);
+  interface FormatTime {
+    (timestamp: string): string;
+  }
 
+  const formatTime: FormatTime = (timestamp) => {
+    if (!timestamp) return "";
+    return new Date(timestamp).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
   const sendMessage = useCallback(async () => {
     if (!newMessage.trim() || !selectedDoctor) return;
 
@@ -130,6 +138,7 @@ const Message = () => {
       receiverId: selectedDoctor._id,
       receiverModel: "Doctor",
       message: newMessage,
+      createdAt: new Date().toISOString(),
     };
 
     try {
@@ -143,7 +152,7 @@ const Message = () => {
   }, [newMessage, selectedDoctor, user?.id]);
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }
@@ -151,7 +160,6 @@ const Message = () => {
 
   return (
     <div className="flex h-screen bg-gray-50">
-      
       <div className="w-1/4 bg-white border-r border-gray-200 shadow-sm overflow-hidden flex flex-col">
         <div className="p-4 border-b border-gray-200">
           <h2 className="text-xl font-semibold text-green-600 mb-4">
@@ -168,7 +176,6 @@ const Message = () => {
             <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           </div>
         </div>
-        
         <div className="flex-1 overflow-y-auto p-3 scrollbar-none">
           {filteredDoctors.length > 0 ? (
             <ul className="space-y-2">
@@ -212,8 +219,8 @@ const Message = () => {
             <div className="flex flex-col items-center justify-center h-full text-gray-500">
               <p>No doctors found</p>
               {search && (
-                <button 
-                  onClick={() => setSearch('')}
+                <button
+                  onClick={() => setSearch("")}
                   className="text-green-500 mt-2 text-sm hover:underline"
                 >
                   Clear search
@@ -224,7 +231,6 @@ const Message = () => {
         </div>
       </div>
 
-    
       <div className="w-3/4 flex flex-col bg-white">
         {selectedDoctor ? (
           <>
@@ -248,30 +254,33 @@ const Message = () => {
                 </h2>
                 {data?.specialization && data.specialization.length > 0 && (
                   <p className="text-sm text-gray-500">
-                    {data.specialization.join(', ')}
+                    {data.specialization.join(", ")}
                   </p>
                 )}
               </div>
             </div>
-
-            
             <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50 scrollbar-none">
               {messages.length > 0 ? (
                 messages.map((msg, index) => (
                   <div
                     key={index}
-                    className={`flex ${
-                      msg.senderId === user?.id ? "justify-end" : "justify-start"
+                    className={`flex items-end gap-2 ${
+                      msg.senderId === user?.id
+                        ? "justify-end"
+                        : "justify-start"
                     }`}
                   >
                     <div
-                      className={`p-3 rounded-lg max-w-[70%] break-words shadow-sm ${
+                      className={`p-3 rounded-lg max-w-[50%] break-words shadow-sm ${
                         msg.senderId === user?.id
                           ? "bg-green-500 text-white"
                           : "bg-white text-gray-800 border border-gray-200"
                       }`}
                     >
-                      {msg.message}
+                      <p>{msg.message}</p>
+                      <p className="text-xs text-black mt-1 text-right">
+                        {formatTime(msg.createdAt)}
+                      </p>
                     </div>
                   </div>
                 ))
@@ -280,12 +289,13 @@ const Message = () => {
                   <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-4">
                     <GrSend size={24} className="text-green-500" />
                   </div>
-                  <p className="text-center">Start your conversation with Dr. {selectedDoctor.name}</p>
+                  <p className="text-center">
+                    Start your conversation with Dr. {selectedDoctor.name}
+                  </p>
                 </div>
               )}
               <div ref={chatEndRef} />
             </div>
-
             
             <div className="p-4 bg-white border-t border-gray-200">
               <div className="flex items-center space-x-2">
@@ -312,7 +322,9 @@ const Message = () => {
             <div className="w-24 h-24 rounded-full bg-green-100 flex items-center justify-center mb-6">
               <GrSend size={36} className="text-green-500" />
             </div>
-            <h3 className="text-xl font-medium text-gray-700 mb-2">Welcome to VitalAid Chat</h3>
+            <h3 className="text-xl font-medium text-gray-700 mb-2">
+              Welcome to VitalAid Chat
+            </h3>
             <p className="text-center max-w-md">
               Select a doctor from the list to start a conversation
             </p>

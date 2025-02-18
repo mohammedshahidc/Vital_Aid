@@ -19,7 +19,7 @@ export interface Doctor {
     name: string;
     email: string;
     phone: string;
-    drDetails?: DrDetails; 
+    drDetails?: DrDetails;
 }
 export interface TokenType {
     _id: string;
@@ -30,11 +30,10 @@ export interface TokenType {
     status: string;
 }
 
-
 const fetchtokens = async (id: string) => {
-    const response = await axiosInstance.get(`/users/getalltokens/${id}`)
-    return response.data
-}
+    const response = await axiosInstance.get(`/users/getalltokens/${id}`);
+    return response.data;
+};
 
 export const useAlltoken = (id: string) => {
     return useQuery({
@@ -46,21 +45,19 @@ export const useAlltoken = (id: string) => {
 export const addToken = async (datas: object) => {
     console.log("datas", datas);
     try {
-        await axiosInstance.post("/users/createtoken", datas)
-        toast.success('appointment created successfully')
-        
+        await axiosInstance.post("/users/createtoken", datas);
+        toast.success("appointment created successfully");
     } catch (error) {
-        axiosErrorManager(error)
+        axiosErrorManager(error);
         console.log("error:", error);
-        toast.error('this token already booked')
+        toast.error("this token already booked");
     }
-}
-
+};
 
 const fetchtokensfordoctors = async (id: string) => {
-    const response = await axiosInstance.get(`/doctors/alltoken/${id}`)
-    return response.data
-}
+    const response = await axiosInstance.get(`/doctors/alltoken/${id}`);
+    return response.data;
+};
 
 export const useAlltokenfordoctor = (id: string) => {
     return useQuery({
@@ -70,9 +67,11 @@ export const useAlltokenfordoctor = (id: string) => {
 };
 
 const fetchtokenseachdoctors = async (date: string) => {
-    const response = await axiosInstance.get(`/doctors/tokensofeachdoctors?date=${date}`)
-    return response.data
-}
+    const response = await axiosInstance.get(
+        `/doctors/tokensofeachdoctors?date=${date}`
+    );
+    return response.data;
+};
 
 export const useAlltokenofeachdoctors = (date: string) => {
     return useQuery({
@@ -81,41 +80,69 @@ export const useAlltokenofeachdoctors = (date: string) => {
     });
 };
 
-export const editToken = async (id: string, status: string,refetch: () => void) => {
+export const editToken = async (
+    id: string,
+    status: string,
+    refetch: () => void
+) => {
     try {
-        console.log('id:',id,"status:",status);
-        
-        await axiosInstance.put(`/doctors/updatetoken/${id}`, { status: status })
-        refetch()
+        console.log("id:", id, "status:", status);
+
+        await axiosInstance.put(`/doctors/updatetoken/${id}`, { status: status });
+        refetch();
     } catch (error) {
         console.log("error:", error);
-        axiosErrorManager(error)
-
+        axiosErrorManager(error);
     }
-}
+};
 
+const fetchtokensforusers = async (date: string) => {
+    const response = await axiosInstance.get(`/users/getalltoken?date=${date}`);
+    return response.data;
+};
 
-const fetchtokensforusers = async (date:string) => {
-    const response = await axiosInstance.get(`/users/getalltoken?date=${date}`)
-    return response.data
-}
-
-export const useAlltokenforuser = (date:string) => {
+export const useAlltokenforuser = (date: string) => {
     return useQuery({
         queryKey: ["alltoken"],
         queryFn: () => fetchtokensforusers(date),
     });
 };
 
-export const cancellToken = async (id: string, status: string,refetch: () => void) => {
+export const cancellToken = async (
+    id: string,
+    status: string,
+    refetch: () => void
+) => {
     try {
-        console.log('id:',id,"status:",status);
-        
-        await axiosInstance.put(`/users/canceltoken/${id}`, { status: status })
-        refetch()
+        console.log("id:", id, "status:", status);
+
+        await axiosInstance.put(`/users/canceltoken/${id}`, { status: status });
+        refetch();
     } catch (error) {
         console.log("error:", error);
-        axiosErrorManager(error)
-
+        axiosErrorManager(error);
     }
-}
+};
+const getTokensForUsers = async () => {
+    try {
+        const response = await axiosInstance.get("/users/getalltokenofuser");
+        return response.data.data;
+    } catch (error) {
+        axiosErrorManager(error);
+    }
+};
+
+export const useGetTokenForUser = () => {
+    const {
+        data: tokens = [],
+        isLoading,
+        error,
+    } = useQuery({
+        queryKey: ["allTokenUser"],
+        queryFn: getTokensForUsers,
+        staleTime: 5 * 60 * 1000,
+        retry: 2,
+    });
+
+    return { tokens, isLoading, error };
+};

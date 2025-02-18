@@ -1,8 +1,14 @@
 "use client";
 
 import React from "react";
-import { Box, Card, CardContent, Typography, Avatar, Divider } from "@mui/material";
-
+import {
+    Box,
+    Card,
+    CardContent,
+    Typography,
+    Avatar,
+    Divider,
+} from "@mui/material";
 
 export interface DoctorDetails {
     _id: string;
@@ -27,16 +33,28 @@ export interface DoctorDetails {
 
 interface Props {
     doctor: DoctorDetails;
-   
 }
 
 const DoctorProfile: React.FC<Props> = ({ doctor }) => {
     return (
-        <Card sx={{ display: "flex", flexDirection: "column", alignItems: "center", padding: 3, boxShadow: 3, borderRadius: 3, width: "100%", maxWidth: "900px" }}>
-            
-
+        <Card
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                padding: 3,
+                boxShadow: 3,
+                borderRadius: 3,
+                width: "100%",
+                maxWidth: "900px",
+            }}
+        >
             <Box display="flex" alignItems="center" width="100%" px={2}>
-                <Avatar src={doctor?.profileImage || "/doctor-image.jpg"} alt={doctor?.doctor?.name} sx={{ width: 120, height: 120, marginRight: 2 }} />
+                <Avatar
+                    src={doctor?.profileImage || "/doctor-image.jpg"}
+                    alt={doctor?.doctor?.name}
+                    sx={{ width: 120, height: 120, marginRight: 2 }}
+                />
 
                 <CardContent sx={{ flex: 1 }}>
                     <Typography variant="h6" fontWeight="bold" color="primary">
@@ -46,7 +64,8 @@ const DoctorProfile: React.FC<Props> = ({ doctor }) => {
                         {doctor?.qualification?.join(", ") || "Qualification Not Available"}
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
-                        {doctor?.specialization?.join(", ") || "Specialization Not Available"}
+                        {doctor?.specialization?.join(", ") ||
+                            "Specialization Not Available"}
                     </Typography>
 
                     <Divider sx={{ my: 1, borderColor: "blue" }} />
@@ -62,8 +81,12 @@ const DoctorProfile: React.FC<Props> = ({ doctor }) => {
                     </Typography>
                 </CardContent>
             </Box>
-            
-            <Typography variant="body2" color="textSecondary" sx={{ mt: 2, textAlign: "center" }}>
+
+            <Typography
+                variant="body2"
+                color="textSecondary"
+                sx={{ mt: 2, textAlign: "center" }}
+            >
                 {doctor?.description || "No description available."}
             </Typography>
         </Card>

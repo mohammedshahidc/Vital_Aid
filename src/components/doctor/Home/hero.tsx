@@ -6,10 +6,10 @@ import Image from 'next/image';
 import Doctor from "../../../../public/Doctor.png";
 
 function Hero() {
-  // const user = useAppSelector((state) => state.auth)
-  // console.log('gdchsg', user.user?.profileImage?.thumbnail);
-  const username = localStorage.getItem('username');
 
+  const username=localStorage.getItem('username')
+
+  
   return (
     <Box
       sx={{

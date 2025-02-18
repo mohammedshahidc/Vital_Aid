@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Card, Typography, Button, Grid} from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -17,17 +17,17 @@ import toast from "react-hot-toast";
 
 
 export interface Appointment {
-    _id: string;
-    doctor: string;
-    startingTime: string;
-    endingTime: string;
-    createdAt: string;
-    updatedAt: string;
-    isDeleted: boolean;
-    __v: number;
-  }
+  _id: string;
+  doctor: string;
+  startingTime: string;
+  endingTime: string;
+  createdAt: string;
+  updatedAt: string;
+  isDeleted: boolean;
+  __v: number;
+}
 interface MoreDetailsProps {
-    doctor: DoctorDetails;
+  doctor: DoctorDetails;
 }
 
 
@@ -60,14 +60,13 @@ const MoreDetailes: React.FC<MoreDetailsProps> = ({ doctor }) => {
     // const { data,refetch } = useDoctorSlots();
     // const slots: Appointment[] = data?.data || [];
 
-    const handleSubmit = async (event: React.FormEvent) => {
-        event.preventDefault();
-        
-        const slotData = {
-           startingTme: selectedStartingTime?.format("hh:mm A"), 
-            endingTime: selectedEndingTime?.format("hh:mm A"),
-            
-        };
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    const slotData = {
+      startingTme: selectedStartingTime?.format("hh:mm A"),
+      endingTime: selectedEndingTime?.format("hh:mm A"),
+    };
 
         try {
             await axiosInstance.put('/doctors/updateavailability', slotData);
@@ -89,40 +88,41 @@ console.log('time:',doctor);
                     Edit Availability
                 </Typography>
 
-                {/* Form */}
-                <form onSubmit={handleSubmit}>
-                    <Grid container spacing={3} alignItems="center">
-                       
-                        {/* Time Picker */}
-                        <Grid item xs={12} sm={4}>
-                            <TimePicker
-                                label="Select starting Time"
-                                value={selectedStartingTime}
-                                onChange={(newValue) => setSelectedStartingTime(newValue)}
-                                slotProps={{ textField: { fullWidth: true } }}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={4}>
-                            <TimePicker
-                                label="Select ending Time"
-                                value={selectedEndingTime}
-                                onChange={(newValue) => setSelectedEndingTimt(newValue)}
-                                slotProps={{ textField: { fullWidth: true } }}
-                            />
-                        </Grid>
+        <form onSubmit={handleSubmit}>
+          <Grid container spacing={3} alignItems="center">
+            
+            <Grid item xs={12} sm={4}>
+              <TimePicker
+                label="Select starting Time"
+                value={selectedStartingTime}
+                onChange={(newValue) => setSelectedStartingTime(newValue)}
+                slotProps={{ textField: { fullWidth: true } }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <TimePicker
+                label="Select ending Time"
+                value={selectedEndingTime}
+                onChange={(newValue) => setSelectedEndingTimt(newValue)}
+                slotProps={{ textField: { fullWidth: true } }}
+              />
+            </Grid>
 
-                        {/* Submit Button */}
-                        <Grid item xs={12} sm={4}>
-                            <Button variant="contained" color="success" fullWidth type="submit">
-                                Submit
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </form>
-
-            </Card>
-        </LocalizationProvider>
-    );
+            <Grid item xs={12} sm={4}>
+              <Button
+                variant="contained"
+                color="success"
+                fullWidth
+                type="submit"
+              >
+                Submit
+              </Button>
+            </Grid>
+          </Grid>
+        </form>
+      </Card>
+    </LocalizationProvider>
+  );
 };
 
 export default MoreDetailes;

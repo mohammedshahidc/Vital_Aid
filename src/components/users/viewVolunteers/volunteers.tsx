@@ -4,6 +4,7 @@ import axiosInstance from "@/utils/axios";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import HowItWorks from "./howitWork";
+import { Box, Pagination } from "@mui/material";
 
 interface Volunteer {
   _id: string;
@@ -43,72 +44,46 @@ function Volunteers() {
 
   return (
     <>
-    <HowItWorks/>
-    <div className="min-h-screen flex flex-col items-center py-10 w-full">
-      
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full px-8">
-        {data?.allVolunteers.map((volunteer) => (
-          <div
-            key={volunteer._id}
-            className="bg-white rounded-xl shadow-lg p-5 flex items-center gap-4 w-full"
-          >
-            <Image
-              src={volunteer.image}
-              alt={volunteer.name}
-              width={80}
-              height={80}
-              className="rounded-full object-cover border-2 border-blue-500"
-            />
-            <div className="text-black">
-              <p className="text-lg font-semibold">{volunteer.name}</p>
-              <p className="text-gray-600">📞 {volunteer.phone}</p>
-              <p className="text-gray-600">⚧ {volunteer.gender}</p>
+      <HowItWorks />
+      <div className="mx-20 p-5 flex flex-col items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full ">
+          {data?.allVolunteers.map((volunteer) => (
+            <div
+              key={volunteer._id}
+              className="bg-white rounded-xl shadow-lg p-5 flex items-center gap-4 w-full"
+            >
+              <Image
+                src={volunteer.image}
+                alt={volunteer.name}
+                width={80}
+                height={80}
+                className="rounded-full object-cover border-2 border-blue-500"
+              />
+              <div className="text-black">
+                <p className="text-lg font-semibold">{volunteer.name}</p>
+                <p className="text-gray-600">📞 {volunteer.phone}</p>
+                <p className="text-gray-600">⚧ {volunteer.gender}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+
+        <div className="flex justify-center items-center gap-3 mt-10">
+
+          <Box display="flex" justifyContent="center" sx={{ mt: 3, mb: 3 }}>
+            <Pagination
+              count={data?.totalPages ?? 1}
+              page={data?.currentPage ?? 1}
+              onChange={(event, value) => setPage(value)}
+              color="primary"
+              variant="outlined"
+              shape="rounded"
+            />
+          </Box>
+          
+        </div>
       </div>
-
-      <div className="flex justify-center items-center gap-3 mt-10">
-        <button
-          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-          disabled={page === 1}
-          className="px-4 py-2 bg-white text-blue-600 rounded-lg font-semibold shadow-md transition hover:bg-blue-600 hover:text-white disabled:opacity-50"
-        >
-          Prev
-        </button>
-
-        {[...Array(data?.totalPages ?? 1)].map((_, index) => (
-          <button
-            key={index + 1}
-            onClick={() => setPage(index + 1)}
-            className={`px-4 py-2 rounded-lg font-semibold shadow-md transition ${
-              page === index + 1
-                ? "text-black"
-                : "bg-gray-200 text-black hover:bg-gray-300"
-            }`}
-          >
-            {index + 1}
-          </button>
-        ))}
-
-        <button
-          onClick={() =>
-            setPage((prev) =>
-              (data?.currentPage ?? 1) < (data?.totalPages ?? 1)
-                ? prev + 1
-                : prev
-            )
-          }
-          disabled={(data?.currentPage ?? 1) >= (data?.totalPages ?? 1)}
-          className="px-4 py-2 bg-white text-blue-600 rounded-lg font-semibold shadow-md transition hover:bg-blue-600 hover:text-white disabled:opacity-50"
-        >
-          Next
-        </button>
-      </div>
-    </div>
     </>
-    
   );
 }
 

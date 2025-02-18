@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import axiosInstance from "@/utils/axios";
-import axiosErrorManager from "@/utils/axiosErrormanager";
 import BloodtypeIcon from "@mui/icons-material/Bloodtype";
 import AddReportModal from "@/components/ui/addDetail";
 import ReportModal from "@/components/ui/report";
@@ -22,14 +21,9 @@ import { FaClock, FaMapPin, FaPhone, FaStethoscope } from "react-icons/fa";
 import { FiMail } from "react-icons/fi";
 import { useAppSelector } from "@/lib/store/hooks";
 import { useRouter } from "next/navigation";
-
-type UserDetails = {
-  age: string;
-  gender: string;
-  bloodgroup: string;
-  occupation: string;
-  address: string;
-};
+import { useFetchreport, useFetchDetails } from "@/lib/Query/hooks/useReport";
+import { useFetchMessages } from "@/lib/Query/hooks/useMessage";
+import { useGetTokenForUser } from "@/lib/Query/hooks/addToken";
 
 type Report = {
   _id: string;
@@ -47,75 +41,65 @@ type editDatas = {
   bloodgroup: string;
   occupation: string;
   address: string;
+  profileImage: string;
 };
-
+type Message = {
+  _id: string;
+  message: string;
+};
 const Home = () => {
   const { user } = useAppSelector((state) => state.auth);
-  const [udetails, setUdetails] = useState<UserDetails | null>(null);
-  const [report, setReport] = useState<Report[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
-  type Message = {
-    _id: string;
-    message: string;
-  };
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
-  const [msg, setMessage] = useState<Message[]>([]);
-  console.log(msg);
   const Router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
+  const { details } = useFetchDetails(user?.id ?? "");
+  console.log(details);
+  
+  const { reports } = useFetchreport(user?.id ?? "");
+  const { messages } = useFetchMessages();
+  const { tokens } = useGetTokenForUser();
+  
+
   const [editData, setEditData] = useState<editDatas>({
-    age: "",
-    gender: "",
-    bloodgroup: "",
-    occupation: "",
-    address: "",
+    age: details?.age,
+    gender: details?.gender,
+    bloodgroup: details?.bloodgroup,
+    occupation: details?.occupation,
+    address: details?.address,
+    profileImage: "",
   });
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
 
-  useEffect(() => {
-    const fetchdetails = async () => {
+    if (file) {
       try {
-        const details = await axiosInstance.get(
-          `/users/getdetails/${user?.id}`
-        );
-        setUdetails(details.data[0]);
-        setEditData(details.data[0]);
-      } catch (error) {
-        axiosErrorManager(error);
-      }
-    };
-    fetchdetails();
-  }, [user]);
+        const response = await axiosInstance.get(`/auth/generate-signed-url`, {
+          params: { fileType: file.type },
+        });
 
-  useEffect(() => {
-    const fetchReports = async () => {
-      try {
-        const response = await axiosInstance.get(
-          `/users/getreportof/${user?.id}`
-        );
-        const reportData = response.data || [];
-        console.log(reportData);
-        setReport(reportData);
-      } catch (error) {
-        axiosErrorManager(error);
-      }
-    };
-    fetchReports();
-  }, [user]);
+        const { signedUrl, fileName } = response.data;
 
-  useEffect(() => {
-    const fetchmsg = async () => {
-      try {
-        const response = await axiosInstance.get("/users/getusermsg");
-        console.log("object", typeof response.data.data);
-        setMessage(response.data.data);
+        await fetch(signedUrl, {
+          method: "PUT",
+          body: file,
+          headers: { "Content-Type": file.type },
+        });
+
+        const newImageUrl = `https://vitalaidnsr.s3.${process.env.NEXT_PUBLIC_AWS_REGION}.amazonaws.com/${fileName}`;
+        await setImageUrl(newImageUrl);
+        setEditData((prev) => ({
+          ...prev,
+          profileImage: newImageUrl,
+        }));
       } catch (error) {
-        axiosErrorManager(error);
+        console.error("Error uploading image:", error);
       }
-    };
-    fetchmsg();
-  }, []);
+    }
+  };
 
   const handleReportClick = (report: Report) => {
     setSelectedReport(report);
@@ -128,13 +112,20 @@ const Home = () => {
 
   const handleSave = async () => {
     try {
-      await axiosInstance.post(`/users/addDetails/${user?.id}`, editData);
-
-      setIsEditing(false);
+      if(details){
+        await axiosInstance.put(`/users/editdetailsofthe`,editData)
+        setIsEditing(false)
+      }else{
+        await axiosInstance.post(`/users/addDetails/${user?.id}`, editData);
+        setIsEditing(false);
+      }
+      
+      
     } catch (error) {
       console.error(error);
     }
   };
+
   return (
     <div className="w-full mx-auto p-6 space-y-8 bg-gray-100 min-h-screen">
       <div className="flex flex-col sm:flex-row gap-6">
@@ -142,6 +133,7 @@ const Home = () => {
           <h2 className="text-xl font-bold text-gray-800 text-center">
             Welcome, {user?.name}
           </h2>
+
           <h3 className="font-bold text-green-600 mt-4 text-center">
             Quick Actions
           </h3>
@@ -199,9 +191,10 @@ const Home = () => {
         <div className="flex-1 space-y-6 pb-16 sm:pb-0">
           <div className="flex items-center justify-between bg-white shadow-lg rounded-lg p-6">
             <div className="flex items-center gap-6">
-              <Avatar className="h-40 w-40 shadow-lg">
+              <Avatar className="h-40 w-40 shadow-lg relative">
                 <Image
                   src={
+                    // Show selected image preview
                     user?.profileImage?.originalProfile ||
                     "https://i.pinimg.com/736x/ed/fe/67/edfe6702e44cfd7715a92390c7d8a418.jpg"
                   }
@@ -210,7 +203,16 @@ const Home = () => {
                   alt="Profile Image"
                   className="rounded-full"
                 />
+                {isEditing && (
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-white p-1 rounded-md shadow-md cursor-pointer"
+                  />
+                )}
               </Avatar>
+
               <div className="space-y-2">
                 <h2 className="text-2xl font-semibold text-green-600">
                   {user?.name}
@@ -223,6 +225,12 @@ const Home = () => {
                         value={editData?.age}
                         onChange={handleInputChange}
                         placeholder="Age"
+                      />
+                      <Input
+                        name="bloodgroup"
+                        value={editData?.bloodgroup}
+                        onChange={handleInputChange}
+                        placeholder="Blood Group"
                       />
                       <Input
                         name="occupation"
@@ -240,8 +248,9 @@ const Home = () => {
                   ) : (
                     <>
                       <p className="flex items-center gap-2">
-                        <FaClock className="h-4 w-4" /> {udetails?.age || "18"}{" "}
-                        | Occupation: {udetails?.occupation || "none"}
+                        <FaClock className="h-4 w-4" />{" "}
+                        {details[0]?.age || "18"} | Occupation:{" "}
+                        {details[0]?.occupation || "none"}
                       </p>
                       <p className="flex items-center gap-2">
                         <FiMail className="h-4 w-4" /> {user?.email}
@@ -250,8 +259,12 @@ const Home = () => {
                         <FaPhone className="h-4 w-4" /> {user?.phone}
                       </p>
                       <p className="flex items-center gap-2">
+                        <BloodtypeIcon className="h-4 w-4" />{" "}
+                        {details[0]?.bloodgroup}
+                      </p>
+                      <p className="flex items-center gap-2">
                         <FaMapPin className="h-4 w-4" />{" "}
-                        {udetails?.address || "none"}
+                        {details[0]?.address || "none"}
                       </p>
                     </>
                   )}
@@ -289,48 +302,56 @@ const Home = () => {
                 <Button
                   variant="text"
                   color="primary"
+                  className="h-7"
                   onClick={() => setIsModalOpen(true)}
                 >
                   + Add report
                 </Button>
               </div>
-              <CardContent className="space-y-2">
-                {report.length > 0 ? (
-                  report.map((reportItem) => {
-                    return (
-                      reportItem.healthstatus && (
-                        <div
-                          key={reportItem._id}
-                          className={`h-auto min-h-10 rounded p-2 shadow-sm cursor-pointer ${
-                            reportItem.healthstatus === " 🟢 "
-                              ? "bg-green-100 hover:bg-green-200"
-                              : reportItem.healthstatus === " 🟡 "
-                              ? "bg-yellow-300 hover:bg-yellow-200"
-                              : reportItem.healthstatus === " 🔴 "
-                              ? "bg-red-100 hover:bg-red-200"
-                              : reportItem.healthstatus === " ⚠️ "
-                              ? "bg-red-500 hover:bg-red-400"
-                              : "bg-gray-100"
-                          }`}
-                          onClick={() => handleReportClick(reportItem)}
-                        >
-                          <div className="flex justify-between items-center">
-                            <div className="truncate">
-                              {"Report of " +
-                                new Date(
+              <CardContent className="space-y-4 max-h-32 overflow-y-auto scrollbar-none">
+                {reports.length > 0 ? (
+                  reports
+                    .slice() 
+                    .sort(
+                      (a: Report, b: Report) =>
+                        new Date(b.createdAt).getTime() -
+                        new Date(a.createdAt).getTime()
+                    )
+                    .map((reportItem: Report) => {
+                      return (
+                        reportItem.healthstatus && (
+                          <div
+                            key={reportItem._id}
+                            className={`h-auto min-h-10 rounded p-2 shadow-sm cursor-pointer hover:shadow-md ${
+                              reportItem.healthstatus === " 🟢 "
+                                ? "bg-green-100 hover:bg-green-200"
+                                : reportItem.healthstatus === " 🟡 "
+                                ? "bg-yellow-300 hover:bg-yellow-200"
+                                : reportItem.healthstatus === " 🔴 "
+                                ? "bg-red-100 hover:bg-red-200"
+                                : reportItem.healthstatus === " ⚠️ "
+                                ? "bg-red-500 hover:bg-red-400"
+                                : "bg-gray-100"
+                            }`}
+                            onClick={() => handleReportClick(reportItem)}
+                          >
+                            <div className="flex justify-between items-center">
+                              <div className="truncate">
+                                {"Report of " +
+                                  new Date(
+                                    reportItem.createdAt
+                                  ).toLocaleDateString()}
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                {new Date(
                                   reportItem.createdAt
                                 ).toLocaleDateString()}
-                            </div>
-                            <div className="text-xs text-gray-500">
-                              {new Date(
-                                reportItem.createdAt
-                              ).toLocaleDateString()}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      )
-                    );
-                  })
+                        )
+                      );
+                    })
                 ) : (
                   <p className="text-gray-500 text-sm">No reports available</p>
                 )}
@@ -343,22 +364,40 @@ const Home = () => {
                     <h3 className="text-lg font-semibold">appoiment history</h3>
                   }
                 />
+
                 <Button
                   variant="text"
                   color="primary"
+                  className="h-7"
                   onClick={() => Router.push("/user/doctors")}
                 >
                   + Add Appointment
                 </Button>
               </div>
 
-              <CardContent className="space-y-4">
-                <div className="p-4 bg-gray-50 rounded-lg shadow-sm">
-                  View with doctor
-                </div>
-                <div className="p-4 bg-gray-50 rounded-lg shadow-sm">
-                  View with doctor
-                </div>
+              <CardContent className="space-y-4 max-h-32 overflow-y-auto scrollbar-none">
+                {tokens.length === 0 ? (
+                  <p className="text-gray-500">
+                    Appointments not scheduled. Book one now!
+                  </p>
+                ) : (
+                  tokens
+                 .map(
+                    (appoinment: {
+                      _id: string;
+                      doctorId: { name: string };
+                      date: string;
+                    }) => (
+                      <div
+                        key={appoinment._id}
+                        className="h-10 p-2 bg-gray-50 rounded shadow-sm text-xs md:text-base hover:cursor-pointer hover:bg-green-50 hover:shadow-md "
+                      >
+                        Appointment with {appoinment?.doctorId?.name} on{" "}
+                        {appoinment.date}
+                      </div>
+                    )
+                  )
+                )}
               </CardContent>
             </Card>
           </div>
@@ -368,13 +407,13 @@ const Home = () => {
               title={<h3 className="text-lg font-semibold">Notifications</h3>}
             />
             <CardContent className="space-y-2">
-              {msg.length === 0 ? (
+              {messages.length === 0 ? (
                 <p className="text-gray-500">No messages yet</p>
               ) : (
-                msg.map((msgs) => (
+                messages.map((msgs: Message) => (
                   <div
                     key={msgs._id}
-                    className="h-10 p-2 bg-gray-50 rounded shadow-sm"
+                    className="h-10 p-2 bg-gray-50  rounded shadow-sm text-xs md:text-base"
                   >
                     {msgs.message}
                   </div>

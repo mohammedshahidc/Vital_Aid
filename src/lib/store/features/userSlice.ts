@@ -163,6 +163,7 @@ const userSlice = createSlice({
       state.error = null;
       Cookies.remove("user");
       localStorage.removeItem("userState");
+      
     },
     setType: (state, action) => {
       state.userType = action.payload;

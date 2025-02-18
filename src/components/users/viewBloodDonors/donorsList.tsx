@@ -1,11 +1,20 @@
-
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "@/utils/axios";
-import React, { useState } from "react";
+import React, { JSX, useState } from "react";
 import Image from "next/image";
 import HowItWorks from "./Howitwork";
+import {
+  Box,
+  Pagination,
+  Step,
+  StepLabel,
+  Stepper,
+} from "@mui/material";
+import ContactPhoneOutlinedIcon from "@mui/icons-material/ContactPhoneOutlined";
+import ContentPasteSearchIcon from "@mui/icons-material/ContentPasteSearch";
+import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined";
 
 export interface Donor {
   _id: string;
@@ -22,6 +31,28 @@ export interface DonorResponse {
   totaldonor: number;
   currentPage: number;
 }
+
+interface StepType {
+  label: string;
+  icon: JSX.Element;
+}
+
+const steps: StepType[] = [
+  {
+    label:
+      "Find volunteers by their blood group",
+    icon: <ContentPasteSearchIcon />,
+  },
+  {
+    label:
+      "contact them directly for help",
+    icon: <LocalPhoneOutlinedIcon />,
+  },
+  {
+    label: "In case of urgent contact multiple donors.",
+    icon: <ContactPhoneOutlinedIcon />,
+  },
+];
 
 const fetchDonors = async (page: number): Promise<DonorResponse> => {
   const response = await axiosInstance.get<DonorResponse>(
@@ -55,14 +86,38 @@ const DonorsList: React.FC = () => {
 
   const filteredDonors = data?.donors?.filter((donor) => {
     return (
-      (filter === "" || donor.name.toLowerCase().includes(filter.toLowerCase())) &&
+      (filter === "" ||
+        donor.name.toLowerCase().includes(filter.toLowerCase())) &&
       (selectedBloodGroup === "" || donor.BloodGroup === selectedBloodGroup)
     );
   });
 
   return (
-    <div className="max-w-full mx-auto p-5 w-full">
-     <HowItWorks/>
+    <div className="max-w-full mx-14 p-5">
+      <HowItWorks />
+
+      
+      <Box
+        sx={{
+          width: "100%",
+          textAlign: "center",
+          py: 4,
+        }}
+      >
+        <Stepper alternativeLabel>
+          {steps.map((step, index) => (
+            <Step
+              key={index}
+              sx={{
+                color: "black",
+                "& .MuiStepLabel-label": { color: "black" },
+              }}
+            >
+              <StepLabel icon={step.icon}>{step.label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+      </Box>
 
       <div className="mb-6 flex mt-3 justify-center gap-4">
         <input
@@ -90,11 +145,11 @@ const DonorsList: React.FC = () => {
         </select>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 w-full ">
         {filteredDonors?.map((donor: Donor) => (
           <div
             key={donor._id}
-            className="p-4 bg-white shadow-xl rounded-lg flex space-x-4 items-center border border-gray-200 w-full transition-transform transform hover:scale-105 hover:shadow-2xl"
+            className="p-4 bg-white shadow-xl rounded-lg flex space-x-4 items-center border border-gray-200 w-full hover:shadow-2xl"
           >
             {donor.image.length > 0 ? (
               <Image
@@ -111,8 +166,12 @@ const DonorsList: React.FC = () => {
             )}
 
             <div className="flex flex-col justify-between flex-grow">
-              <h2 className="text-xl font-medium text-gray-900">{donor.name}</h2>
-              <p className="text-sm text-gray-600">Blood Group: {donor.BloodGroup}</p>
+              <h2 className="text-xl font-medium text-gray-900">
+                {donor.name}
+              </h2>
+              <p className="text-sm text-gray-600">
+                Blood Group: {donor.BloodGroup}
+              </p>
 
               <div className="flex items-center justify-between">
                 <p className="text-sm text-gray-500">Phone: {donor.Phone}</p>
@@ -122,34 +181,16 @@ const DonorsList: React.FC = () => {
         ))}
       </div>
 
-      <div className="flex justify-center items-center gap-4 mt-8">
-        <button
-          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-          disabled={page === 1}
-          className="px-6 py-2 bg-blue-500 text-white rounded-md disabled:opacity-50 hover:bg-blue-600 transition"
-        >
-          Prev
-        </button>
-
-        <span className="text-lg font-bold text-gray-800">
-          Page {data?.currentPage ?? 1} of {data?.totalPages ?? 1}
-        </span>
-
-        <button
-          onClick={() =>
-            setPage((prev) =>
-              (data?.currentPage ?? 1) < (data?.totalPages ?? 1)
-                ? prev + 1
-                : prev
-            )
-          }
-          disabled={(data?.currentPage ?? 1) >= (data?.totalPages ?? 1)}
-          className="px-6 py-2 bg-blue-500 text-white rounded-md disabled:opacity-50 hover:bg-blue-600 transition"
-        >
-          Next
-        </button>
-      </div>
-      
+      <Box display="flex" justifyContent="center" sx={{ mt: 3, mb: 3 }}>
+        <Pagination
+          count={data?.totalPages ?? 1}
+          page={data?.currentPage ?? 1}
+          onChange={(event, value: number) => setPage(value)}
+          color="primary"
+          variant="outlined"
+          shape="rounded"
+        />
+      </Box>
 
     </div>
   );

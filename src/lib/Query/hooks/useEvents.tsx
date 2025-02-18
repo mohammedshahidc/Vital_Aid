@@ -4,7 +4,6 @@ import axiosInstance from "@/utils/axios";
 
 const fetchEvents = async () => {
   const response = await axiosInstance('/events/getAllevents');
-  console.log('Fetched Events:', response.data);
   return response.data;
 };
 

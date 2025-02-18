@@ -12,7 +12,7 @@ interface StepType {
 
 const steps: StepType[] = [
   { label: "Browse our volunteers.", icon: <ContentPasteSearchIcon /> },
-  { label: "You can easily reach out to donors and Contact them directly..", icon: <LocalPhoneOutlinedIcon /> },
+  { label: " Contact them directly..", icon: <LocalPhoneOutlinedIcon /> },
   { label: "Get the support you need..", icon: <ContactPhoneOutlinedIcon /> },
  
 ];
@@ -20,7 +20,7 @@ const steps: StepType[] = [
 const HowItWorks: React.FC = () => {
   return (
     <div>
-      <Box sx={{ width: "100%", textAlign: "center", my: 2, p: 3, backgroundColor: "#f5f5f5", borderRadius: 2 }}>
+      <Box sx={{ width: "100%", textAlign: "center", my: 2, p: 3, borderRadius: 2 }}>
       <Typography variant="h6" fontWeight="bold">
         Volunteers Support
       </Typography>
@@ -29,12 +29,9 @@ const HowItWorks: React.FC = () => {
       Need a volunteer? Here is a list of volunteers ready to help. Browse,
       connect, and seek help!
       </Typography>
-      <Typography variant="body2" color="textSecondary" sx={{ mt: 2 }}>
-      This list features volunteers who are ready to help you in times of
-      need.Together, we can save lives! 💖<br/> Here is how you can use this information:
-      </Typography>
+     
     </Box>
-    <Box sx={{ width: "100%", textAlign: "center", py: 4,boxShadow:"0px 4px 10px rgba(0, 0, 0, 0.1) "}}>
+    <Box sx={{ width: "100%", textAlign: "center", py: 4,}}>
       <Typography variant="h5" sx={{ mb: 3 }}>
         How it Works
       </Typography>
