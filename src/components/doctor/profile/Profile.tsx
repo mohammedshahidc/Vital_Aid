@@ -1,18 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { Box } from "@mui/material";
 import { useDoctorProfile } from "@/lib/Query/hooks/useDoctorProfile";
 
 import MoreDetailes from "./moredetailes";
 import DoctorProfile, { DoctorDetails } from "./doctorProfile";
 
+
 const Profile = () => {
-    const { isLoading, data } = useDoctorProfile();
+    const { data } = useDoctorProfile();
     const doctor: DoctorDetails = data?.data;
     
-
-   
 
     return (
         <Box sx={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", p: 2 }}>

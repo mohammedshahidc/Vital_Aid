@@ -14,4 +14,18 @@ export const useDoctorUser=()=>{
      })
      return {doctors}
 }
+
+const fetchDoctorById=async(id:string)=>{
+    const response=await axiosInstance.get(`/doctors/getdetail/${id}`)
+    return response.data
+}
+
+export const useDoctobyId = (id:string) => {
+    return useQuery({
+        queryKey: ["doctor", id],
+        queryFn: () =>fetchDoctorById(id),
+    });
+};
+
+
  

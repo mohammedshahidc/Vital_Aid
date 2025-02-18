@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState, useRef } from "react";
 import { useAppSelector } from "@/lib/store/hooks";
 import axiosInstance from "@/utils/axios";
@@ -24,9 +23,11 @@ interface Message {
 
 const DrMessage = () => {
   const { user: doctor } = useAppSelector((state) => state.auth);
-  console.log(doctor);
+  console.log("hhhhhh",doctor);
   
   const [users, setUsers] = useState<User[]>([]);
+  console.log(users);
+  
   const [search, setSearch] = useState("");
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);

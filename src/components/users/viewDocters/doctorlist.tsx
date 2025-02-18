@@ -63,9 +63,11 @@ function DoctorList() {
               </Link>
 
               <div className="mt-4 w-full">
+                <Link href={`/user/doctors/booking/${doctor.doctor._id}`}>
                 <button className="w-full bg-red-950 hover:bg-red-900 text-white font-semibold py-3 px-7 rounded-md shadow-lg transition-all duration-300">
                   Book Appointment
                 </button>
+                </Link>
               </div>
             </div>
           ))

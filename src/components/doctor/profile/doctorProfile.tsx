@@ -62,7 +62,7 @@ const DoctorProfile: React.FC<Props> = ({ doctor }) => {
                     </Typography>
                 </CardContent>
             </Box>
-
+            
             <Typography variant="body2" color="textSecondary" sx={{ mt: 2, textAlign: "center" }}>
                 {doctor?.description || "No description available."}
             </Typography>

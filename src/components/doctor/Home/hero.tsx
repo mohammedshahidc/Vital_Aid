@@ -1,39 +1,50 @@
+
 'use client'
-import Image from 'next/image';
 import React from 'react';
+import { Box, Grid, Typography } from '@mui/material';
+import Image from 'next/image';
 import Doctor from "../../../../public/Doctor.png";
 
-
-
 function Hero() {
+  // const user = useAppSelector((state) => state.auth)
+  // console.log('gdchsg', user.user?.profileImage?.thumbnail);
+  const username = localStorage.getItem('username');
 
-  // const user=useAppSelector((state)=>state.auth)
-  // console.log('gdchsg',user.user?.profileImage?.thumbnail);
-  const username=localStorage.getItem('username')
-
-  
   return (
-    <div className="bg-white h-screen w-screen flex items-center justify-center shadow-md">
-      <div className="flex flex-col md:flex-row items-center justify-center gap-16 md:gap-72">
-        <div className="text-center md:text-left">
-          <h1 className="text-1xl mt-0 md:text-3xl font-thin font-serif text-green-500">
+    <Box
+      sx={{
+        backgroundColor: 'white',
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        boxShadow: 3,
+      }}
+    >
+      <Grid container spacing={4} alignItems="center" justifyContent="space-between" sx={{ width: '100%', maxWidth: 1200, px: 4 }}>
+        
+        {/* Text container */}
+        <Grid item xs={12} md={6} textAlign={{ xs: 'center', md: 'left' }}>
+          <Typography variant="h4" sx={{ color: 'green', fontWeight: 'lighter' }}>
             Welcome <br />
-           Doctor {username&&username}
-          </h1>
-        </div>
+            {username && username}
+          </Typography>
+        </Grid>
 
-        <div className="mr-4"> 
+        {/* Image container */}
+        <Grid item xs={12} md={6} display="flex" justifyContent="center">
           <Image
             src={Doctor}
             alt="Doctor illustration"
             width={450}
             height={400}
-            className=" mr-20 rounded-lg"
+            className="rounded-lg"
           />
-        </div>
-      </div>
-    </div>
+        </Grid>
+      </Grid>
+    </Box>
   );
 }
 
 export default Hero;
+
