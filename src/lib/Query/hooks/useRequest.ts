@@ -24,3 +24,29 @@ export const useAllRequest = (page: number) => {
         queryFn: () =>fetchallrequest(page),
     });
 };
+
+const fetchloginedcount=async()=>{
+    const response=await axiosInstance.get(`/users/getloginedCount`)
+    return response.data
+}
+
+export const useCountFetch = () => {
+    const { data: count = ""} = useQuery({
+        queryKey: ["login count"],
+        queryFn: () =>fetchloginedcount(),
+    });
+    return {count}
+};
+
+const fetchequipmentcount=async()=>{
+    const response=await axiosInstance.get(`/equipment/getTotalCount`)
+    return response.data.data
+}
+
+export const useEquCountFetch = () => {
+    const { data: eqcount = [] } = useQuery({
+        queryKey: ["equip count"],
+        queryFn: () =>fetchequipmentcount(),
+    });
+    return {eqcount}
+};

@@ -34,11 +34,11 @@ const initialState: DonorsState = {
   totalPages: 0
 };
 
-export const fetchDonors = createAsyncThunk<{ donors: Donor[], totalPages: number }, number, { rejectValue: string }>(
+export const fetchDonors = createAsyncThunk<{ donors: Donor[], totalPages: number }, { page: number, limit: number }, { rejectValue: string }>(
   "donors/fetchDonors",
-  async (page, { rejectWithValue }) => {
+  async ({page,limit}, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(`/donors/getdonors?page=${page}&limit=5`);
+      const response = await axiosInstance.get(`/donors/getdonors?page=${page}&limit=${limit}`);
       return {
         donors: response.data.donors,
         totalPages: response.data.totalPages

@@ -49,7 +49,7 @@ const Listvolunteers = () => {
             dispatch(searchVolunteers(searchQuery));
         } else if (!searchQuery) {
 
-            dispatch(getAllvolunteers(currentPage));
+            dispatch(getAllvolunteers({ page: currentPage, limit: 5 }));
         }
     }, [dispatch, currentPage, searchQuery]);
 
@@ -69,7 +69,7 @@ const Listvolunteers = () => {
         try {
             const response = await axiosInstance.put(`volunteers/delete/${id}`);
             if (response.status == 200) {
-                dispatch(getAllvolunteers(currentPage));
+                dispatch(getAllvolunteers({ page: currentPage, limit: 5 }));
             }
         } catch (error) {
             axiosErrorManager(error);

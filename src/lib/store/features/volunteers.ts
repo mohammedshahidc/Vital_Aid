@@ -43,9 +43,10 @@ export const addVolunteer = createAsyncThunk<
     }
 });
 
-export const getAllvolunteers = createAsyncThunk<{ allVolunteers: Volunteer[], totalPages: number }, number, { rejectValue: string }>('getVolunteers', async (page, { rejectWithValue }) => {
+export const getAllvolunteers = createAsyncThunk<{ allVolunteers: Volunteer[], totalPages: number }, { page: number, limit: number }, { rejectValue: string }
+>('getVolunteers', async ({page,limit}, { rejectWithValue }) => {
     try {
-        const response = await axiosInstance.get(`/volunteers/getall?page=${page}&limit=5`)
+        const response = await axiosInstance.get(`/volunteers/getall?page=${page}&limit=${limit}`)
         console.log(response.data);
         
         return {

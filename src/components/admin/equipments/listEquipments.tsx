@@ -50,7 +50,7 @@ const ListEquipments = () => {
         if (query.length > 1) {
             dispatch(searchEQuipment(query))
         } else {
-            dispatch(getallEquipment(currentPage));
+            dispatch(getallEquipment({ page: currentPage, limit: 3 }));
         }
 
     }, [dispatch, currentPage, query]);
@@ -58,7 +58,7 @@ const ListEquipments = () => {
     const deleteEquipments = async (id: string) => {
         try {
             await axiosInstance.put(`/equipment/deleteEquipment/${id}`);
-            await dispatch(getallEquipment(currentPage));
+            await dispatch(getallEquipment({ page: currentPage, limit: 3 }));
         } catch (error) {
             axiosErrorManager(error);
         }

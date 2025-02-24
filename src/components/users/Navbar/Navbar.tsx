@@ -1,36 +1,58 @@
 "use client";
-import Dropdown from "@/components/admin/navbar/Dropdown";
-import { Button } from "@mui/material";
+
+import { Button, Menu, MenuItem, ListItemIcon, ListItemText, Fade } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-
 import React, { useState } from "react";
-import { FaUser, FaBell } from "react-icons/fa";
-import { HiMenu, HiX } from "react-icons/hi";
 import { IoChatbubblesOutline } from "react-icons/io5";
-import { LuCircleUser } from "react-icons/lu";
+import { HiMenu, HiX } from "react-icons/hi";
+import { MdMedicalServices, MdVolunteerActivism, MdEvent, MdBloodtype, MdMedicalInformation } from 'react-icons/md';
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [click, setClick] = useState<boolean>(false);
-  const handleClick = () => {
-    setClick(!click);
-  };
-  const Route=useRouter()
+  
+  const router = useRouter();
 
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const menuItems = [
+    { text: 'Doctors', href: '/user/doctors', icon: <MdMedicalServices className="text-teal-600" /> },
+    { text: 'Volunteers', href: '/user/volunteers', icon: <MdVolunteerActivism className="text-teal-600" /> },
+    { text: 'Events', href: '/user/events', icon: <MdEvent className="text-teal-600" /> },
+    { text: 'Blood Donors', href: '/user/bloodDonors', icon: <MdBloodtype className="text-teal-600" /> },
+    { text: 'Equipments', href: '/user/equipments', icon: <MdMedicalInformation className="text-teal-600" /> },
+  ];
 
   return (
-    <nav className="bg-white border-b border-gray-200 dark:bg-gray-900 w-full shadow-md">
+    <nav className="fixed top-0 z-50 bg-white border-b border-gray-200 dark:bg-gray-900 w-full shadow-md">
       <div className="container mx-auto flex items-center justify-between py-4 px-6">
         <Link
-          href={"/user"}
+          href="/user"
           className="text-xl font-bold text-gray-900 dark:text-white"
         >
           Vital Aid
         </Link>
 
-        <div className="lg:hidden">
+        <div className="lg:hidden flex gap-2">
+          <Button
+            variant="contained"
+            color="success"
+            size="small"
+            onClick={() => {
+              router.push("/user/donationHome");
+              setMenuOpen(false);
+            }}
+          >
+            Donate
+          </Button>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="text-gray-600 dark:text-gray-300 focus:outline-none"
@@ -39,115 +61,122 @@ export default function Navbar() {
           </button>
         </div>
 
-        <div className={`hidden lg:flex lg:items-center lg:space-x-8`}>
+        <div className="hidden lg:flex lg:items-center lg:space-x-8">
           <Link
             href="/user"
-            className="block text-gray-700 font-serif font-semibold dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition py-2 lg:py-0"
+            className="text-gray-700 font-serif font-semibold dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
           >
             Home
           </Link>
-          <div className="relative">
+
+          <div>
             <button
-              onMouseEnter={() => setDropdownOpen(!dropdownOpen)}
-              className="block text-gray-700 font-serif font-semibold dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition py-2 lg:py-0"
+              onClick={handleMenuOpen}
+              className="text-gray-700 font-serif font-semibold dark:text-gray-300 hover:text-gray-900"
             >
               Services
             </button>
-            {dropdownOpen && (
-              <div className="absolute mt-2 bg-white dark:bg-gray-800 shadow-lg rounded-md py-2 z-10 w-40">
-                <Link
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
-                  href="/user/doctors"
-                  className="block px-4 py-2 font-serif font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleMenuClose}
+              TransitionComponent={Fade}
+              elevation={3}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'center',
+              }}
+              PaperProps={{
+                className: "mt-2 py-2 rounded-lg shadow-lg"
+              }}
+            >
+              {menuItems.map((item) => (
+                <MenuItem 
+                  key={item.text}
+                  onClick={handleMenuClose}
+                  className="hover:bg-gray-50 px-6 py-3"
                 >
-                  Doctors
-                </Link>
-                <Link
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
-                  href="/user/volunteers"
-                  className="block px-4 py-2 font-serif font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  Volunteers
-                </Link>
-                <Link
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
-                  href="/user/events"
-                  className="block px-4 py-2 font-serif font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  Events
-                </Link>
-                <Link
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
-                  href="/user/bloodDonors"
-                  className="block px-4 py-2 font-serif font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  Blood Donors
-                </Link>
-                <Link
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
-                  href="/user/equipments"
-                  className="block px-4 py-2 font-serif font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  Equipments
-                </Link>
-              </div>
-            )}
+                  <Link href={item.href} className="flex items-center gap-3 min-w-[200px]">
+                    <ListItemIcon className="min-w-0">
+                      {item.icon}
+                    </ListItemIcon>
+                    <ListItemText 
+                      primary={item.text}
+                      className="text-gray-700 font-medium"
+                    />
+                  </Link>
+                </MenuItem>
+              ))}
+            </Menu>
           </div>
+
           <Link
-            href="#about-us"
-            className="block text-gray-700 font-serif font-semibold dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition py-2 lg:py-0"
+            href="/about-us"
+            className="text-gray-700 font-serif font-semibold dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
           >
             About Us
           </Link>
         </div>
 
         <div className="hidden lg:flex lg:items-center space-x-4">
-          
-          <Button variant="contained" color="success" onClick={()=>Route.push("/user/donationHome")}
-            className="bg-lime-700 text-white py-2 px-4 rounded h-10 lg:w-auto">
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => router.push("/user/donationHome")}
+          >
             Donate now
           </Button>
-        
-          <button onClick={()=>Route.push("/user/message")} className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition w-full lg:w-auto">
+          <button
+            onClick={() => router.push("/user/message")}
+            className="text-gray-600 dark:text-gray-300 hover:text-gray-900"
+            title="chat with doctors"
+          >
             <IoChatbubblesOutline size={20} />
           </button>
-          <div className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition w-full lg:w-auto">
-            <LuCircleUser size={20} onClick={handleClick} />
-          </div>
-          {click && <Dropdown />}
         </div>
       </div>
 
       {menuOpen && (
-        <div className="lg:hidden bg-sky-50 dark:bg-gray-900 py-4 px-6 absolute z-50 right-1  space-y-4 float-right ">
-          <Link
-            href="/home"
-            className="block text-gray-700 font-serif font-semibold dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition"
-            onClick={() => setMenuOpen(false)}
-          >
-            Home
-          </Link>
+        <div className="lg:hidden bg-white dark:bg-gray-900 py-4 px-6 absolute top-full right-0 w-64 shadow-lg rounded-bl-lg">
+          <div className="flex flex-col space-y-4">
+            <Link
+              href="/user"
+              className="text-gray-700 font-serif font-semibold dark:text-gray-300 hover:text-gray-900"
+              onClick={() => setMenuOpen(false)}
+            >
+              Home
+            </Link>
+            
+            
 
-          <Link
-            href="/about-us"
-            className="block text-gray-700 font-serif font-semibold dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition"
-            onClick={() => setMenuOpen(false)}
-          >
-            About Us
-          </Link>
-          <Button
-            variant="contained"
-            className="bg-lime-700 text-white py-2 px-4 rounded "
-          >
-            Donate now
-          </Button>
-          <div className="flex space-x-4">
-            <button className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">
-              <FaBell size={20} />
-            </button>
-            <button className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">
-              <FaUser size={20} />
-            </button>
+            <Link
+              href="/about-us"
+              className="text-gray-700 font-serif font-semibold dark:text-gray-300 hover:text-gray-900"
+              onClick={() => setMenuOpen(false)}
+            >
+              About Us
+            </Link>
+
+            <Link
+              href="/user/message"
+              className="flex items-center gap-2 text-gray-700 font-serif font-semibold dark:text-gray-300 hover:text-gray-900"
+              onClick={() => setMenuOpen(false)}
+            >
+              <IoChatbubblesOutline size={20} />
+              <span>Chat with doctors</span>
+            </Link>
+
+            <Link
+              href="/user/doctors/allbooking"
+              className="text-gray-700 font-serif font-semibold dark:text-gray-300 hover:text-gray-900"
+              onClick={() => setMenuOpen(false)}
+            >
+              My Appointments
+            </Link>
           </div>
         </div>
       )}

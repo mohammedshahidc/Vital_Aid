@@ -38,7 +38,7 @@ const BlockedUsersList: React.FC = () => {
   const { isLoading, error } = useAppSelector((state) => state.users);
 
   useEffect(() => {
-    dispatch(fetchUsers(1));
+    dispatch(fetchUsers({ page: 1, limit: 7 }));
   }, [dispatch]);
 
   useEffect(() => {
@@ -59,7 +59,7 @@ const BlockedUsersList: React.FC = () => {
   const handleUnblockUser = async (_id: string) => {
     try {
       await axiosInstance.post(`/users/blockUser/${_id}`);
-      dispatch(fetchUsers(1));
+      dispatch(fetchUsers({ page: 1, limit: 7 }));
       setBlockedUsers((prev) => prev.filter((user) => user._id !== _id));
     } catch (error) {
       console.error("Error unblocking user:", error);

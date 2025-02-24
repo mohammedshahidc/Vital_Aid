@@ -46,7 +46,7 @@ function AllDonors() {
   const router = useRouter();
 
   useEffect(() => {
-    dispatch(fetchDonors(currentPage));
+    dispatch(fetchDonors({ page: currentPage, limit: 5}));
   }, [dispatch, currentPage]);
 
   const handlePageChange = (
@@ -66,7 +66,7 @@ function AllDonors() {
     );
     if (confirmDelete) {
       await dispatch(deleteDonor(id));
-      dispatch(fetchDonors(1));
+      dispatch(fetchDonors({ page: 1, limit: 5 }));
     }
   };
 

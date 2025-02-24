@@ -1,16 +1,25 @@
 "use client";
 
-import Image from 'next/image';
-import Link from 'next/link';
-import React, { useState, useEffect } from 'react';
+import Image from "next/image";
+import Link from "next/link";
+import React, { useState, useEffect } from "react";
 
 const Event = () => {
 
-
   const images = [
-    'https://i.pinimg.com/736x/19/30/13/1930135ee96848f42834fa2072b51bcd.jpg',
-    'https://i.pinimg.com/736x/d8/17/31/d817317f9169f9ffab3b24caf25f01fe.jpg',
-    'https://i.pinimg.com/736x/13/43/a0/1343a070c9783291ae1523100e7ea0b5.jpg',
+  
+    {
+      src: "https://vitalaidnsr.s3.ap-south-1.amazonaws.com/uploads/1740141155154-u00vvjb3wkr.png",
+      type: "external"
+    },
+    {
+      src: "https://vitalaidnsr.s3.ap-south-1.amazonaws.com/uploads/1740139673049-uqaajs5o22h.png", 
+      type: "external"
+    },
+    {
+      src: "https://vitalaidnsr.s3.ap-south-1.amazonaws.com/uploads/1740138397693-9magp9x1a3k.jpeg",
+      type: "external"
+    }
   ];
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -22,13 +31,27 @@ const Event = () => {
     return () => clearInterval(interval);
   }, [images.length]);
 
+  const currentImage = images[currentImageIndex];
+
   return (
-    <div className='relative'>
-      <div className='opacity-65' >
-        <Image src={images[currentImageIndex]} alt="Image Slider" width={300} height={300} className='w-full h-[500px]' />
-        <Link href={"/login"} className='absolute bottom-4 right-4 bg-white p-4 rounded-md shadow-md hover:cursor-pointer'>
-          <p className='text-sm font-bold pl-4'>our events</p>
-          <p className='text-sm font-bold border-2 p-3 rounded-md border-lime-700'>Learn More</p>
+    <div className="relative">
+      <div >
+        <Image
+          src={currentImage.src}
+          alt="Image Slider"
+          width={500}
+          height={300}
+          className="w-full h-[600px]"
+          unoptimized={currentImage.type === "external"}
+        />
+        <Link
+          href={"/login"}
+          className="absolute bottom-4 right-4 bg-white p-4 rounded-md shadow-md hover:cursor-pointer"
+        >
+          <p className="text-sm font-bold pl-4">our events</p>
+          <p className="text-sm font-bold border-2 p-3 rounded-md border-lime-700">
+            Learn More
+          </p>
         </Link>
       </div>
     </div>

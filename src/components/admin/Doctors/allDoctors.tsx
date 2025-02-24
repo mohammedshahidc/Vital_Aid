@@ -36,7 +36,7 @@ type Doctor = {
 
 function AllDoctors() {
   const [currentPage, setCurrentPage] = useState(1);
-  const { data, isLoading } = useDoctor(currentPage);
+  const { data, isLoading } = useDoctor(currentPage,7);
 
   const columns = [
     { key: "name", label: "Name" },

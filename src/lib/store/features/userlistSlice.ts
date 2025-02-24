@@ -38,11 +38,11 @@ const initialState: UsersState = {
 
 
 export const fetchUsers = createAsyncThunk<
-  { users: User[]; totalPages: number }, number, { rejectValue: string }>(
+  { users: User[]; totalPages: number }, { page: number; limit: number }, { rejectValue: string }>(
     "users/fetchUsers",
-    async (page, { rejectWithValue }) => {
+    async ({ page, limit }, { rejectWithValue }) => {
       try {
-        const response = await axiosInstance.get(`/users/getUsers?page=${page}&limit=7`);
+        const response = await axiosInstance.get(`/users/getUsers?page=${page}&limit=${limit}`);
         return {
           users: response.data.users,
           totalPages: response.data.totalPages,

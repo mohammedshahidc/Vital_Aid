@@ -16,15 +16,15 @@ interface Doctor {
     doctors: Doctor[];
     specialties: Speciality[];
   }
-const fetchDoctors = async (page: number) => {
-    const response = await axiosInstance.get(`/doctors/getdoctors?page=${page}&limit=5`);
+const fetchDoctors = async (page: number,limit:number) => {
+    const response = await axiosInstance.get(`/doctors/getdoctors?page=${page}&limit=${limit}`);
     return response.data;
 };
 
-export const useDoctor = (page: number) => {
+export const useDoctor = (page: number,limit:number) => {
     return useQuery({
         queryKey: ["doctors", page],
-        queryFn: () => fetchDoctors(page),
+        queryFn: () => fetchDoctors(page,limit),
     });
 };
 

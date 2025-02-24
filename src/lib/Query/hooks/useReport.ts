@@ -35,6 +35,7 @@ export function useFetchDetails(id: string) {
     isLoading,
     isError,
     error,
+    refetch,
   } = useQuery({
     queryKey: ["details", id],
     queryFn: () => fetchDetails(id),
@@ -43,5 +44,5 @@ export function useFetchDetails(id: string) {
     retry: 2,
   });
 
-  return { details, isLoading, isError, error };
+  return { details, isLoading, isError, error ,refetch};
 }

@@ -9,7 +9,7 @@ const createOrder = async (amount: number, userId: string) => {
 
 export const useCreateOrder = () => {
   return useMutation({
-    mutationFn: ({ amount, userId,type }: { amount: number; userId: string ,type:string}) => createOrder(amount, userId),
+    mutationFn: ({ amount, userId }: { amount: number; userId: string ,type:string}) => createOrder(amount, userId),
   });
 };
 
@@ -27,4 +27,18 @@ export const useDonation = () => {
     queryKey: ["donations"],
     queryFn: fetchAllDonation
   });
+};
+
+const getdonation = async () => {
+  const response = await axiosInstance.get("/donation/allDonations");
+  return response.data.data.totalDonations; 
+};
+
+export const useGetDonation = () => {
+  const {data: donation = []} =useQuery({
+    queryKey: ["alldonations"],
+    queryFn: getdonation
+  });
+  return{donation}
+  
 };

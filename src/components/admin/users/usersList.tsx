@@ -37,14 +37,14 @@ function UsersList() {
   const [showBlocked, setShowBlocked] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchUsers(currentPage));
+    dispatch(fetchUsers({ page: currentPage, limit: 7 }));
   }, [dispatch, currentPage]);
 
   const handleBlockUser = async (_id: string) => {
     try {
       const response = await axiosInstance.post(`/users/blockUser/${_id}`);
       console.log(response.data.message);
-      dispatch(fetchUsers(currentPage));
+      dispatch(fetchUsers({ page: currentPage, limit: 7 }));
     } catch (error) {
       console.error("Error blocking/unblocking user:", error);
     }
@@ -110,10 +110,11 @@ function UsersList() {
             margin="dense"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            
           />
           <Button onClick={handleSendMessage}>send</Button>
         </div>
+      </div>
+        
 
       <Box display="flex" justifyContent="space-between" mb={3}>
         <FormControlLabel

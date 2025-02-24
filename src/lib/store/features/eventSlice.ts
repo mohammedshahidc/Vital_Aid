@@ -28,11 +28,11 @@ const initialState: EventsState = {
 };
 
 
-export const fetchEvents = createAsyncThunk<{ events: Event[]; totalPages: number }, number, { rejectValue: string }>(
+export const fetchEvents = createAsyncThunk<{ events: Event[]; totalPages: number }, { page: number, limit: number }, { rejectValue: string }>(
   "events/fetchEvents",
-  async (page, { rejectWithValue }) => {
+  async ({page,limit}, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(`/events/getevents?page=${page}&limit=5`);
+      const response = await axiosInstance.get(`/events/getevents?page=${page}&limit=${limit}`);
       return {
         events: response.data.events,
         totalPages: response.data.totalPages

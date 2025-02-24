@@ -3,8 +3,19 @@
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "@/utils/axios";
 import React, { JSX, useState } from "react";
+import React, { JSX, useState } from "react";
 import Image from "next/image";
 import HowItWorks from "./Howitwork";
+import {
+  Box,
+  Pagination,
+  Step,
+  StepLabel,
+  Stepper,
+} from "@mui/material";
+import ContactPhoneOutlinedIcon from "@mui/icons-material/ContactPhoneOutlined";
+import ContentPasteSearchIcon from "@mui/icons-material/ContentPasteSearch";
+import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined";
 import {
   Box,
   Pagination,
@@ -31,6 +42,28 @@ export interface DonorResponse {
   totaldonor: number;
   currentPage: number;
 }
+
+interface StepType {
+  label: string;
+  icon: JSX.Element;
+}
+
+const steps: StepType[] = [
+  {
+    label:
+      "Find volunteers by their blood group",
+    icon: <ContentPasteSearchIcon />,
+  },
+  {
+    label:
+      "contact them directly for help",
+    icon: <LocalPhoneOutlinedIcon />,
+  },
+  {
+    label: "In case of urgent contact multiple donors.",
+    icon: <ContactPhoneOutlinedIcon />,
+  },
+];
 
 interface StepType {
   label: string;
@@ -93,7 +126,7 @@ const DonorsList: React.FC = () => {
   });
 
   return (
-    <div className="max-w-full mx-14 p-5">
+    <div className="max-w-full mx-auto md:mx-14 p-5">
       <HowItWorks />
 
       
@@ -101,7 +134,7 @@ const DonorsList: React.FC = () => {
         sx={{
           width: "100%",
           textAlign: "center",
-          py: 4,
+          
         }}
       >
         <Stepper alternativeLabel>
@@ -119,11 +152,11 @@ const DonorsList: React.FC = () => {
         </Stepper>
       </Box>
 
-      <div className="mb-6 flex mt-3 justify-center gap-4">
+      <div className="mb-6 flex mt-3 justify-center gap-2 md:gap-4 mx-auto">
         <input
           type="text"
           placeholder="Search by Name"
-          className="px-4 py-2 border border-gray-300 rounded-md"
+          className="px-2 py-2 border border-gray-300 rounded-md"
           value={filter}
           onChange={handleFilterChange}
         />
@@ -131,7 +164,7 @@ const DonorsList: React.FC = () => {
         <select
           value={selectedBloodGroup}
           onChange={handleBloodGroupChange}
-          className="px-4 py-2 border border-gray-300 rounded-md"
+          className="px-2 py-2 border border-gray-300 rounded-md"
         >
           <option value="">All Blood Groups</option>
           <option value="A+">A+</option>
@@ -181,7 +214,7 @@ const DonorsList: React.FC = () => {
         ))}
       </div>
 
-      <Box display="flex" justifyContent="center" sx={{ mt: 3, mb: 3 }}>
+      <Box display="flex" justifyContent="center" sx={{ mt: 3, mb: 8 }}>
         <Pagination
           count={data?.totalPages ?? 1}
           page={data?.currentPage ?? 1}

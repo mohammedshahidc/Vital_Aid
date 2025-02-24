@@ -30,7 +30,7 @@ function AllEvents() {
   const router = useRouter();
 
   useEffect(() => {
-    dispatch(fetchEvents(currentPage));
+    dispatch(fetchEvents({ page: currentPage, limit: 5 }));
   }, [dispatch, currentPage]);
 
   if (loading) {
@@ -63,7 +63,7 @@ function AllEvents() {
     );
     if (confirmDelete) {
       await dispatch(deleteEvent(id));
-      dispatch(fetchEvents(currentPage));
+      dispatch(fetchEvents({ page: currentPage, limit: 5 }));
     }
   };
 

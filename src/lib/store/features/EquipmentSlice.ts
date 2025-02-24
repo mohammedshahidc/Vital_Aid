@@ -18,28 +18,28 @@ export interface Equipment {
 interface EquipmentState {
     equipment: Equipment | null;
     allEquipment: Equipment[] | null
-    searchedEquipments:Equipment[]|null,
+    searchedEquipments: Equipment[] | null,
     isLoading: boolean;
     error: string | null;
-    totalPages:number
+    totalPages: number
 }
 
 const initialState: EquipmentState = {
     equipment: null,
     allEquipment: null,
-    searchedEquipments:null,
+    searchedEquipments: null,
     isLoading: false,
     error: null,
-    totalPages:0
+    totalPages: 0
 };
 
-type formvalue={
+type formvalue = {
     imageUrl: string | null;
     name: string;
     quantity: number | string;
-    image: string| null;
+    image: string | null;
     description: string;
-} 
+}
 
 export const addnewEquipment = createAsyncThunk<
     Equipment,
@@ -48,13 +48,13 @@ export const addnewEquipment = createAsyncThunk<
 >(
     'addequipment',
     async (formvalue, { rejectWithValue }) => {
-        console.log("data",formvalue);
-        
+        console.log("data", formvalue);
+
         try {
             const response = await axiosInstance.post('/equipment/addequipment', formvalue);
             console.log(response.data.data);
             return response.data.data;
-            
+
         } catch (error) {
 
             return rejectWithValue(axiosErrorManager(error));
@@ -66,10 +66,10 @@ export const addnewEquipment = createAsyncThunk<
 
 
 
-export const getallEquipment = createAsyncThunk<{ allEquipment: Equipment[], totalPages: number }, number, { rejectValue: string }>('getequipments', async (page, { rejectWithValue }) => {
+export const getallEquipment = createAsyncThunk<{ allEquipment: Equipment[], totalPages: number }, { page: number; limit: number }, { rejectValue: string }>('getequipments', async({page,limit}, { rejectWithValue }) => {
     try {
-        
-        const response = await axiosInstance.get(`/equipment/getequipments?page=${page}&limit=3`)
+
+        const response = await axiosInstance.get(`/equipment/getequipments?page=${page}&limit=${limit}`)
         return {
             allEquipment: response.data.allEquipment,
             totalPages: response.data.totalPages
@@ -81,26 +81,26 @@ export const getallEquipment = createAsyncThunk<{ allEquipment: Equipment[], tot
 
 
 export const getEquipmentById = createAsyncThunk<
-   Equipment , 
-  string, 
-  { rejectValue: string }
+    Equipment,
+    string,
+    { rejectValue: string }
 >(
-  'getequipmentsById',
-  async (id, { rejectWithValue }) => {
-    try {
-      const response = await axiosInstance.get(`/users/getequipmentbyid/${id}`);
-      return  response.data.data ;
-    } catch (error) {
-      return rejectWithValue(axiosErrorManager(error));
+    'getequipmentsById',
+    async (id, { rejectWithValue }) => {
+        try {
+            const response = await axiosInstance.get(`/users/getequipmentbyid/${id}`);
+            return response.data.data;
+        } catch (error) {
+            return rejectWithValue(axiosErrorManager(error));
+        }
     }
-  }
 );
 
 
 
 export const getallEquipmentforuser = createAsyncThunk<{ allEquipment: Equipment[], totalPages: number }, number, { rejectValue: string }>('getequipmentsforuser', async (page, { rejectWithValue }) => {
     try {
-        
+
         const response = await axiosInstance.get(`/users/getallequipment?page=${page}&limit=6`)
         return {
             allEquipment: response.data.allEquipment,
@@ -114,15 +114,15 @@ export const getallEquipmentforuser = createAsyncThunk<{ allEquipment: Equipment
 
 export const searchEQuipment = createAsyncThunk<
     Equipment[],
-    string, 
+    string,
     { rejectValue: string }
 >('searchVEquipment', async (query, { rejectWithValue }) => {
     try {
         const response = await axiosInstance.get('/admin/searchequipments', {
-            params: { q: query } 
+            params: { q: query }
         });
-       
-        return response.data; 
+
+        return response.data;
     } catch (error) {
         return rejectWithValue(axiosErrorManager(error));
     }
@@ -143,11 +143,11 @@ const equipmentSlice = createSlice({
                 state.isLoading = true
             })
 
-            .addCase(getallEquipment.fulfilled, (state, action: PayloadAction<{allEquipment:Equipment[],totalPages: number}>) => {
+            .addCase(getallEquipment.fulfilled, (state, action: PayloadAction<{ allEquipment: Equipment[], totalPages: number }>) => {
                 state.error = null
                 state.allEquipment = action.payload.allEquipment
                 state.isLoading = false
-                state.totalPages=action.payload.totalPages
+                state.totalPages = action.payload.totalPages
             })
 
             .addCase(getallEquipment.rejected, (state, action) => {
@@ -155,7 +155,7 @@ const equipmentSlice = createSlice({
                 state.isLoading = false
             })
 
-        
+
             .addCase(addnewEquipment.pending, (state) => {
                 state.isLoading = true;
                 state.error = null;
@@ -176,12 +176,12 @@ const equipmentSlice = createSlice({
             .addCase(searchEQuipment.fulfilled, (state, action: PayloadAction<Equipment[]>) => {
                 state.error = null;
                 state.isLoading = false;
-                state.searchedEquipments = action.payload; 
+                state.searchedEquipments = action.payload;
             })
             .addCase(searchEQuipment.rejected, (state, action) => {
                 state.error = action.payload || 'An error occurred';
                 state.isLoading = false;
-                state.searchedEquipments=[]
+                state.searchedEquipments = []
             })
 
             .addCase(getallEquipmentforuser.pending, (state) => {
@@ -189,18 +189,18 @@ const equipmentSlice = createSlice({
                 state.isLoading = true
             })
 
-            .addCase(getallEquipmentforuser.fulfilled, (state, action: PayloadAction<{allEquipment:Equipment[],totalPages: number}>) => {
+            .addCase(getallEquipmentforuser.fulfilled, (state, action: PayloadAction<{ allEquipment: Equipment[], totalPages: number }>) => {
                 state.error = null;
                 if (!state.allEquipment) {
-                  state.allEquipment = action.payload.allEquipment;
+                    state.allEquipment = action.payload.allEquipment;
                 } else {
-                 
-                  state.allEquipment.push(...action.payload.allEquipment);
-                  const deduped = new Map<string, Equipment>();
-                  state.allEquipment.forEach(equipment => {
-                    deduped.set(equipment._id, equipment);
-                  });
-                  state.allEquipment = Array.from(deduped.values());
+
+                    state.allEquipment.push(...action.payload.allEquipment);
+                    const deduped = new Map<string, Equipment>();
+                    state.allEquipment.forEach(equipment => {
+                        deduped.set(equipment._id, equipment);
+                    });
+                    state.allEquipment = Array.from(deduped.values());
                 }
                 state.isLoading = false;
                 state.totalPages = action.payload.totalPages;
@@ -218,12 +218,12 @@ const equipmentSlice = createSlice({
             .addCase(getEquipmentById.fulfilled, (state, action: PayloadAction<Equipment>) => {
                 state.error = null;
                 state.isLoading = false;
-                state.equipment = action.payload; 
+                state.equipment = action.payload;
             })
             .addCase(getEquipmentById.rejected, (state, action) => {
                 state.error = action.payload || 'An error occurred';
                 state.isLoading = false;
-                state.equipment=null
+                state.equipment = null
             })
 
     }

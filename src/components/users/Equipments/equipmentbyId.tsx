@@ -39,7 +39,7 @@ const EquipmentbyId = () => {
     }
 
     return (
-        <div className="flex w-full justify-center items-center sm:mt-7">
+        <div className="flex w-full justify-center items-center sm:mt-7 mb-8 sm:mb-1">
             <div className="flex flex-col sm:flex-row justify-center items-center max-w-5xl bg-white shadow-lg rounded-2xl p-6">
                 <div>
                     <Image

@@ -35,6 +35,7 @@ const fetchtokens = async (id: string) => {
     return response.data;
 };
 
+
 export const useAlltoken = (id: string) => {
     return useQuery({
         queryKey: ["allRequest"],
@@ -108,6 +109,7 @@ export const useAlltokenforuser = (date: string) => {
     });
 };
 
+
 export const cancellToken = async (
     id: string,
     status: string,
@@ -118,31 +120,39 @@ export const cancellToken = async (
 
         await axiosInstance.put(`/users/canceltoken/${id}`, { status: status });
         refetch();
+        console.log("id:", id, "status:", status);
+
+        await axiosInstance.put(`/users/canceltoken/${id}`, { status: status });
+        refetch();
     } catch (error) {
         console.log("error:", error);
         axiosErrorManager(error);
     }
 };
-const getTokensForUsers = async () => {
+
+
+const getTokensForUsers = async (id: string) => {
     try {
-        const response = await axiosInstance.get("/users/getalltokenofuser");
-        return response.data.data;
+        const response = await axiosInstance.get(`/users/getalltokenofuser/${id}`);
+        return response?.data?.data || []; 
     } catch (error) {
         axiosErrorManager(error);
+        return [];
     }
 };
 
-export const useGetTokenForUser = () => {
+export const useGetTokenForUser = (id: string) => {
     const {
-        data: tokens = [],
+        data: tokens = [], 
         isLoading,
         error,
+        refetch
     } = useQuery({
-        queryKey: ["allTokenUser"],
-        queryFn: getTokensForUsers,
+        queryKey: ["allTokenUser", id],
+        queryFn: () => getTokensForUsers(id),
         staleTime: 5 * 60 * 1000,
         retry: 2,
     });
 
-    return { tokens, isLoading, error };
+    return { tokens, isLoading, error ,refetch};
 };
