@@ -23,7 +23,7 @@ const Equipmentsuser = () => {
 
   return (
     <div className="flex flex-col h-3/4 mt-6 w-full items-center space-y-4">
-      {/* Equipment Grid */}
+      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {allEquipment?.map((equipment) => (
           <div key={equipment._id} className="max-w-xs bg-white rounded-xl shadow-md p-4">
@@ -40,7 +40,7 @@ const Equipmentsuser = () => {
         ))}
       </div>
 
-      {/* Pagination Component */}
+     
       <Pagination
         count={totalPages}
         page={currentPage}

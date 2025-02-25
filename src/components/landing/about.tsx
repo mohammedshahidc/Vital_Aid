@@ -1,48 +1,60 @@
-"use client"
+"use client";
 
-import React, { useEffect } from 'react';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+import React from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import CountUp from "react-countup";
+import { FaUser } from "react-icons/fa";
+import {
+  FaHandsHoldingChild,
+  FaKitMedical,
+  FaUserDoctor,
+} from "react-icons/fa6";
 
 function About() {
-
-  useEffect(() => {
-    AOS.init({
-      duration: 1000,  
-    });
-  }, []);
-
+  AOS.init({
+    duration: 1000,
+  });
 
   return (
-    <div className="bg-teal-50  h-auto md:h-[450px] w-full relative pt-6">
-      <div className="flex items-center justify-center bg-white w-full md:h-60 shadow-md sm: h-36" data-aos="fade-up" >
-        <div className="flex flex-row gap-8 md:flex-row md:gap-60 ">
-          <div className="flex flex-col items-center text-center">
-            <span className="text-2xl md:text-5xl font-bold text-lime-700">50+</span>
-            <span className="md:text-xl font-semibold text-lime-700">Blood Donors</span>
-          </div>
-          <div className="flex flex-col items-center text-center">
-            <span className="text-2xl md:text-5xl font-bold text-lime-700">150+</span>
-            <span className="text-sm md:text-xl text-lime-700  font-semibold">Patient Support</span>
-          </div>
-          <div className="flex flex-col items-center text-center">
-            <span className="text-2xl md:text-5xl font-bold text-lime-700">20+</span>
-            <span className="md:text-xl text-lime-700  font-semibold">Doctors</span>
-          </div>
-          <div className="flex flex-col items-center text-center">
-            <span className="text-2xl md:text-5xl font-bold text-lime-700">100+</span>
-            <span className="md:text-xl text-lime-700 font-semibold">Volunteers</span>
-          </div>
+    <div className="bg-teal-50 h-[160px] md:h-[290px] w-full relative pt-6">
+      <div
+        className="flex items-center justify-center bg-white w-full h-28 md:h-60 shadow-md sm:h-36"
+        data-aos="fade-up"
+      >
+        <div className="flex flex-row gap-8 md:flex-row md:gap-60">
+          {[
+            { icon: <FaUser size={25} />, value: 120, label: "Active Users" },
+            {
+              icon: <FaUserDoctor size={25} />,
+              value: 30,
+              label: "Doctor support",
+            },
+            {
+              icon: <FaKitMedical size={25} />,
+              value: 75,
+              label: "equipments",
+            },
+            {
+              icon: <FaHandsHoldingChild size={25} />,
+              value: 100,
+              label: "Volunteers",
+            },
+          ].map((item, index) => (
+            <div key={index} className="flex flex-col items-center text-center">
+              <div className="flex items-center mb-2">{item.icon}</div>
+              <CountUp
+                start={0}
+                end={item.value}
+                duration={2}
+                className="text-xl md:text-5xl font-bold text-green-800"
+              />
+              <span className="text-xs md:text-base font-medium text-gray-600">
+                {item.label}
+              </span>
+            </div>
+          ))}
         </div>
-      </div>
-      <div className='flex items-center justify-center mx-14 my-14 pb-4'>
-        <div className='text-lime-700 md:text-2xl font-serif' data-aos="fade-up">
-        it is charitable health organization dedicated to bridging the gap between those in need and those
-        who can help. Our mission is to provide timely medical support, connect patients with blood donors,
-        supply essential medical equipment, and offer expert guidance from qualified doctors. With the compassionate
-        assistance of our volunteers, we ensure that help reaches those who need it
-        </div>
-       
       </div>
     </div>
   );

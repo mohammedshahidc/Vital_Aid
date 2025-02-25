@@ -1,11 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 
-const Event = () => {
 
+const Event = () => {
+  const Router= useRouter()
   const images = [
   
     {
@@ -44,15 +45,13 @@ const Event = () => {
           className="w-full h-[600px]"
           unoptimized={currentImage.type === "external"}
         />
-        <Link
-          href={"/login"}
+        <div onClick={()=>Router.push("/login")}
           className="absolute bottom-4 right-4 bg-white p-4 rounded-md shadow-md hover:cursor-pointer"
         >
-          <p className="text-sm font-bold pl-4">our events</p>
           <p className="text-sm font-bold border-2 p-3 rounded-md border-lime-700">
-            Learn More
+            Learn More!
           </p>
-        </Link>
+        </div>
       </div>
     </div>
   );

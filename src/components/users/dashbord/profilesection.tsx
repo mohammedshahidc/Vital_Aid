@@ -3,16 +3,6 @@ import { useFetchDetails } from "@/lib/Query/hooks/useReport";
 import { useAppSelector } from "@/lib/store/hooks";
 import axiosInstance from "@/utils/axios";
 import axiosErrorManager from "@/utils/axiosErrormanager";
-import {
-  Button,
-  Card,
-  Chip,
-  Input,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
-} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FaClock, FaMapPin, FaRegAddressCard } from "react-icons/fa";
@@ -23,6 +13,16 @@ import BloodtypeIcon from "@mui/icons-material/Bloodtype";
 import Image from "next/image";
 import { SelectChangeEvent } from "@mui/material";
 import { GrUserWorker } from "react-icons/gr"
+import {
+  Button,
+  Card,
+  Chip,
+  Input,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
+} from "@mui/material";
 
 type UserDetails = {
   age: string;
@@ -35,7 +35,7 @@ type UserDetails = {
 
 function Profilesection() {
   const { user } = useAppSelector((state) => state.auth);
-  const { details } = useFetchDetails(user?.id ?? "");
+  const { details ,refetch} = useFetchDetails(user?.id ?? "");
   const [isEditing, setIsEditing] = useState(false);
   const [showProfileTooltip, setShowProfileTooltip] = useState(false);
   const [formData, setFormData] = useState<UserDetails & { id?: string }>({
@@ -124,6 +124,7 @@ function Profilesection() {
         await axiosInstance.post(`/users/addDetails/${user?.id}`, formData);
         toast.success("Profile details added successfully");
       }
+      refetch()
       setIsEditing(false);
     } catch (error) {
       axiosErrorManager(error);

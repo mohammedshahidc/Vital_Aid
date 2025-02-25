@@ -7,6 +7,9 @@ import React, { useState } from "react";
 import { IoChatbubblesOutline } from "react-icons/io5";
 import { HiMenu, HiX } from "react-icons/hi";
 import { MdMedicalServices, MdVolunteerActivism, MdEvent, MdBloodtype, MdMedicalInformation } from 'react-icons/md';
+import axiosInstance from "@/utils/axios";
+import axiosErrorManager from "@/utils/axiosErrormanager";
+import { AiOutlineLogout } from "react-icons/ai";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -22,6 +25,15 @@ export default function Navbar() {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
+  const logOut = async () => {
+    try {
+        await axiosInstance.delete('/auth/logout')
+        router.push('/')
+    } catch (error) {
+        console.error("Logout failed", error)
+        axiosErrorManager(error)
+    }
+};
 
   const menuItems = [
     { text: 'Doctors', href: '/user/doctors', icon: <MdMedicalServices className="text-teal-600" /> },
@@ -136,6 +148,13 @@ export default function Navbar() {
             title="chat with doctors"
           >
             <IoChatbubblesOutline size={20} />
+          </button>
+          <button
+            onClick={() => logOut()}
+            className="text-gray-600 dark:text-gray-300 hover:text-gray-900"
+            title="logout"
+          >
+            <AiOutlineLogout size={20} />
           </button>
         </div>
       </div>

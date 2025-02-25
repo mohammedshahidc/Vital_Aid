@@ -50,3 +50,4 @@ export const useEquCountFetch = () => {
     });
     return {eqcount}
 };
+
