@@ -117,7 +117,7 @@ const DonatePage = () => {
                 );
 
                 if (verifyRes.data.success) {
-                  router.push('/user/donationHome')
+                  router.push('/user/donationRecipt')
                   toast.success("Payment successful! 🎉");
         
                 } else {

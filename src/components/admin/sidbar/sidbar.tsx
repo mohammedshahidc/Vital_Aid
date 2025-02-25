@@ -9,6 +9,7 @@ import {
   List,
   ListItemIcon,
 } from "@mui/material";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 
 import PeopleIcon from "@mui/icons-material/People";
 import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
@@ -149,6 +150,18 @@ const Sidebar = () => {
                 </AccordionSummary>
               </Link>
             </Accordion>
+          </List>
+          <List>
+          <Accordion>
+  <Link href={"/admin/allDonations"}>
+    <AccordionSummary>
+      <ListItemIcon>
+        <MonetizationOnIcon /> {/* Use an appropriate icon for donations */}
+      </ListItemIcon>
+      <Typography>Donations</Typography>
+    </AccordionSummary>
+  </Link>
+</Accordion>
           </List>
         </Card>
       </div>

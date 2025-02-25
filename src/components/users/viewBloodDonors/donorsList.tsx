@@ -3,7 +3,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "@/utils/axios";
 import React, { JSX, useState } from "react";
-import React, { JSX, useState } from "react";
 import Image from "next/image";
 import HowItWorks from "./Howitwork";
 import {
@@ -16,16 +15,7 @@ import {
 import ContactPhoneOutlinedIcon from "@mui/icons-material/ContactPhoneOutlined";
 import ContentPasteSearchIcon from "@mui/icons-material/ContentPasteSearch";
 import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined";
-import {
-  Box,
-  Pagination,
-  Step,
-  StepLabel,
-  Stepper,
-} from "@mui/material";
-import ContactPhoneOutlinedIcon from "@mui/icons-material/ContactPhoneOutlined";
-import ContentPasteSearchIcon from "@mui/icons-material/ContentPasteSearch";
-import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined";
+
 
 export interface Donor {
   _id: string;
@@ -70,22 +60,7 @@ interface StepType {
   icon: JSX.Element;
 }
 
-const steps: StepType[] = [
-  {
-    label:
-      "Find volunteers by their blood group",
-    icon: <ContentPasteSearchIcon />,
-  },
-  {
-    label:
-      "contact them directly for help",
-    icon: <LocalPhoneOutlinedIcon />,
-  },
-  {
-    label: "In case of urgent contact multiple donors.",
-    icon: <ContactPhoneOutlinedIcon />,
-  },
-];
+
 
 const fetchDonors = async (page: number): Promise<DonorResponse> => {
   const response = await axiosInstance.get<DonorResponse>(
@@ -126,7 +101,7 @@ const DonorsList: React.FC = () => {
   });
 
   return (
-    <div className="max-w-full mx-auto md:mx-14 p-5">
+    <div className=" max-w-full mx-auto md:mx-14 p-5">
       <HowItWorks />
 
       

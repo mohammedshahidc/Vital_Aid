@@ -115,8 +115,8 @@ export default function Navbar() {
           </div>
 
           <Link
-            href="/about-us"
-            className="text-gray-700 font-serif font-semibold dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+            href="/user/about-us"
+            className="block text-gray-700 font-serif font-semibold dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition py-2 lg:py-0"
           >
             About Us
           </Link>

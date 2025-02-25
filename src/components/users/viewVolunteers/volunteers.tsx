@@ -5,7 +5,6 @@ import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import HowItWorks from "./howitWork";
 import { Box, Pagination } from "@mui/material";
-import { Box, Pagination } from "@mui/material";
 
 interface Volunteer {
   _id: string;
