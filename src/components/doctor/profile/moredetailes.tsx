@@ -9,11 +9,9 @@ import { DoctorDetails } from "./doctorProfile";
 import axiosInstance from "@/utils/axios";
 import axiosErrorManager from "@/utils/axiosErrormanager";
 import { Dayjs } from "dayjs";
-// import { useDoctorSlots } from "@/lib/Query/hooks/useDoctorProfile";
-// import { io } from "socket.io-client";
-// import { Token } from "@/components/users/Token/addToken";
 import toast from "react-hot-toast";
-// import { socket } from "@/lib/socket/socketinstanc";
+
+
 
 
 export interface Appointment {
@@ -31,34 +29,13 @@ interface MoreDetailsProps {
 }
 
 
-const MoreDetailes: React.FC<MoreDetailsProps> = ({ doctor }) => {
+const MoreDetailes: React.FC<MoreDetailsProps> = ({doctor}) => {
+    
     
    
     const [selectedStartingTime, setSelectedStartingTime] = useState<Dayjs | null>(null);
     const [selectedEndingTime, setSelectedEndingTimt] = useState<Dayjs | null>(null);
-    // const fetchToken=async()=>{
-    //     const response=await axiosInstance.get("/doctors/alltoken")
-    //     console.log('alltoken:',response.data.data);
-    //     return response.data.data
-    // }
-    // useEffect(() => {
-    //     fetchToken(); 
-    
-      
-    //     const handleTokenUpdate = (newToken: Token) => {
-    //       console.log("⚡ Token updated:", newToken);
-    //       fetchToken();
-    //     };
-    
-    //     socket.on("tokenUpdated", handleTokenUpdate);
-    
-    //     return () => {
-    //       socket.off("tokenUpdated", handleTokenUpdate); 
-    //     };
-    //   }, []);
-    
-    // const { data,refetch } = useDoctorSlots();
-    // const slots: Appointment[] = data?.data || [];
+   
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -76,12 +53,12 @@ const MoreDetailes: React.FC<MoreDetailsProps> = ({ doctor }) => {
             console.log(error);
         }
     };
-console.log('time:',doctor);
+
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Card sx={{ p: 4, boxShadow: 4, borderRadius: 3, mt: 4, width: "100%", maxWidth: "900px" }}>
-            
+
 
                 {/* Add Slots Section */}
                 <Typography variant="h5" sx={{ mt: 4, mb: 3, fontWeight: "bold", color: "green" }}>

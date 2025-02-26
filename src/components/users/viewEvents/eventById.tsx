@@ -10,7 +10,6 @@ const EventById: React.FC = () => {
   const { id } = useParams<{ id: string }>(); 
   const { data: event, isLoading, error } = useEventById(id);
 
-  console.log("event", event?.event?.image);
 
   if (isLoading)
     return <p className="text-center text-blue-500">Loading event...</p>;

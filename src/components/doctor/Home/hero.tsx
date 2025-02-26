@@ -1,4 +1,5 @@
 
+
 'use client'
 import React from 'react';
 import { Box, Grid, Typography } from '@mui/material';
@@ -6,22 +7,21 @@ import Image from 'next/image';
 import Doctor from "../../../../public/Doctor.png";
 
 function Hero() {
+  const username = typeof window !== "undefined" ? localStorage.getItem('username') : '';
 
-  const username=localStorage.getItem('username')
-
-  
   return (
     <Box
       sx={{
         backgroundColor: 'white',
-        height: '100vh',
+        height: '85vh',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        boxShadow: 3,
+        marginLeft: { md: "160px", xs: "0" }, 
+        width: { md: "calc(100% - 260px)", xs: "100%" }, 
       }}
     >
-      <Grid container spacing={4} alignItems="center" justifyContent="space-between" sx={{ width: '100%', maxWidth: 1200, px: 4 }}>
+      <Grid container spacing={4} alignItems="center" justifyContent="space-between" sx={{ px: 4 }}>
         
         {/* Text container */}
         <Grid item xs={12} md={6} textAlign={{ xs: 'center', md: 'left' }}>
@@ -47,4 +47,3 @@ function Hero() {
 }
 
 export default Hero;
-

@@ -8,6 +8,7 @@ import TextField from "@mui/material/TextField";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const EquipmentbyId = () => {
     const { equipment } = useAppSelector((state) => state.equipments)
@@ -15,21 +16,17 @@ const EquipmentbyId = () => {
     const[adress,setAdress]=useState<string>('')
     const { id } = useParams() 
     useEffect(() => {
-        if (typeof id === 'string') {
-            dispatch(getEquipmentById(id))
-        }
+        dispatch(getEquipmentById(id as string))
     }, [dispatch, id])
 
     const makeRequest=async()=>{
-        console.log("adress:",adress);
         
         try {
-            const response=await axiosInstance.post("/users/addrequest",{
+          await axiosInstance.post("/users/addrequest",{
                 equipment:id,
                 location:adress
             })
-            console.log("req response:",response);
-            
+            toast.success('Equipment Requested+')
         } catch (error) {
             console.log("req error:",error);
             axiosErrorManager(error)

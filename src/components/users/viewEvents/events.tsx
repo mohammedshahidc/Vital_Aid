@@ -22,7 +22,7 @@ const Events: React.FC = () => {
   if (error || events?.error === "true")
     return <p className="text-center text-red-500">Error loading events!</p>;
 
-  let eventList: Event[] = Array.isArray(events?.events) ? events.events : [];
+  const eventList: Event[] = Array.isArray(events?.events) ? events.events : [];
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);

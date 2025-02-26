@@ -1,12 +1,11 @@
-"use client";
 
+"use client"
 import React from "react";
 import { Box } from "@mui/material";
 import { useDoctorProfile } from "@/lib/Query/hooks/useDoctorProfile";
 
 import MoreDetailes from "./moredetailes";
 import DoctorProfile, { DoctorDetails } from "./doctorProfile";
-
 
 const Profile = () => {
   const { data } = useDoctorProfile();

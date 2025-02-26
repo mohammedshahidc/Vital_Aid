@@ -12,6 +12,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { Token } from '@/components/users/Token/addToken'
 import Image from 'next/image'
 import { socket } from '@/lib/socket/socketinstanc'
+import Link from 'next/link'
 
 
 
@@ -22,11 +23,26 @@ const AllTokens = () => {
 
 
   useEffect(() => {
-    const handleTokenUpdate = () => refetch();
-    socket.on("tokenUpdated", handleTokenUpdate);
-    return () => socket.off("tokenUpdated", handleTokenUpdate);
-  }, [refetch]);
 
+  if (!socket.connected) {
+    socket.connect(); 
+  }
+    
+    const handleTokenUpdate = () => {
+      
+      refetch();
+    };
+    socket.on("connect", () => console.log("✅ Socket connected:", socket.id));
+
+    
+    socket.on("otpVerified", handleTokenUpdate);
+  
+    return () => {
+
+      socket.off("tokenUpdated", handleTokenUpdate);
+      socket.off("otpVerified", handleTokenUpdate);
+    };
+  }, [refetch]);
   const tokens: Token[] = data?.data || [];
 
   return (
@@ -78,6 +94,8 @@ const AllTokens = () => {
         <Typography color="error" textAlign="center">Failed to load appointments.</Typography>
       ) : tokens.length > 0 ? (
         tokens.map((appointment, index) => (
+          <Link key={index} href={`/doctor/patient/${appointment.patientId._id}`}>
+
           <Card
             key={index}
             sx={{
@@ -130,10 +148,10 @@ const AllTokens = () => {
                   }
                 }}
                 style={{
-                  position: "absolute", // Position it absolutely
-                  top: 10, // Adjust the top margin
-                  right: 10, // Adjust the right margin
-                  zIndex: 1, // Ensure it's above the content
+                  position: "absolute", 
+                  top: 10, 
+                  right: 10,
+                  zIndex: 1, 
                 }}
               >
                 <option value="Edit status">Edit status</option>
@@ -160,7 +178,7 @@ const AllTokens = () => {
                   sx={{
                     color: appointment.status === "Completed" ? "green" :
                       appointment.status === "cancelled" ? "red" :
-                        appointment.status === "pending" ? "yellow" : "inherit"
+                        appointment.status === "pending" ? "orange" : "inherit"
                   }}
                 >
                   <strong>Status:</strong> {appointment.status || "N/A"}
@@ -171,7 +189,7 @@ const AllTokens = () => {
               </CardContent>
             </Box>
           </Card>
-
+</Link>
 
         ))
       ) : (

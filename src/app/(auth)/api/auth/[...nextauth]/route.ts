@@ -9,6 +9,7 @@ const authOptions = {
         clientSecret: process.env.authClientsecret || "",
       }),
     ],
+    
   };
   
   const handler = NextAuth(authOptions);

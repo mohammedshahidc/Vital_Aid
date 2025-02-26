@@ -16,7 +16,6 @@ import ContactPhoneOutlinedIcon from "@mui/icons-material/ContactPhoneOutlined";
 import ContentPasteSearchIcon from "@mui/icons-material/ContentPasteSearch";
 import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined";
 
-
 export interface Donor {
   _id: string;
   name: string;

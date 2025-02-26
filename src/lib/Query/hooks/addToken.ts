@@ -28,6 +28,7 @@ export interface TokenType {
     date: string;
     tokenNumber: number;
     status: string;
+    isVerified:true
 }
 
 const fetchtokens = async (id: string) => {

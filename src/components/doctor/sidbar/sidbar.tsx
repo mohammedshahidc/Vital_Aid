@@ -1,57 +1,104 @@
 "use client";
-import React, { useState } from "react";
-import { FaEnvelope, FaCalendarCheck, FaBars } from "react-icons/fa";
-import { IoClose } from "react-icons/io5";
 
-function Sidebar() {
-  const [isOpen, setIsOpen] = useState(false);
+import { useEffect } from "react";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+import { Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, IconButton, Typography, Box, Divider, useMediaQuery } from "@mui/material";
+import { Menu, Message, Event, RateReview, AccountCircle } from "@mui/icons-material";
+
+interface SidebarProps {
+  sidebarOpen: boolean;
+  toggleSidebar: () => void;
+}
+
+export default function Sidebar({ sidebarOpen, toggleSidebar }: SidebarProps) {
+  const pathname = usePathname();
+  const isSmallScreen = useMediaQuery("(max-width: 768px)");
+
+  
+  const showSidebar = pathname !== "/doctor/message";
+
+  useEffect(() => {
+    if (pathname === "/doctor/message") {
+      toggleSidebar(); // Hide sidebar when entering message page
+    }
+  }, [pathname]);
 
   return (
     <>
-      <button
-        className="sm:hidden absolute h-10 top-2 left-4 z-50 bg-transparent text-gray-500 p-2 rounded-md shadow-lg"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        {isOpen ? <IoClose size={24} /> : <FaBars size={24} />}
-      </button>
-
-      <div
-        className={`fixed sm:static inset-y-0 left-0 bg-sky-50 border-r border-gray-200 dark:bg-gray-900 shadow-md transform transition-transform duration-300 z-40 w-64 flex flex-col ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        } sm:translate-x-0`}
-      >
-        <nav className="flex-1 px-4">
-          <ul className="space-y-4">
-            <li className="flex items-center mt-16 space-x-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 p-2 rounded-lg transition">
-              <FaEnvelope size={20} />
-              <span className="text-lg">Messages</span>
-            </li>
-            <li className="flex items-center space-x-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 p-2 rounded-lg transition">
-              <FaCalendarCheck size={20} />
-              <span className="text-lg">Appointments</span>
-            </li>
-            <li className="flex items-center space-x-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 p-2 rounded-lg transition">
-              <span className="text-lg">Reviews</span>
-            </li>
-          </ul>
-        </nav>
-
-        <div className="p-4 border-t border-gray-200 dark:border-gray-800">
-          <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
-            &copy; 2025 Vital Aid. All rights reserved.
-          </p>
-        </div>
-      </div>
-
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-30 sm:hidden"
-          onClick={() => setIsOpen(false)}
-        ></div>
+      {/* Sidebar Toggle Button (Small Screens) */}
+      {isSmallScreen && showSidebar && (
+        <IconButton
+          onClick={toggleSidebar}
+          sx={{
+            position: "absolute",
+            top: 15,
+            left: 15,
+            bgcolor: "#e3f2fd",
+            color: "#0277bd",
+            "&:hover": { bgcolor: "#bbdefb" },
+          }}
+        >
+          <Menu />
+        </IconButton>
       )}
+
+      {/* Sidebar Drawer */}
+      <Drawer
+        variant={isSmallScreen ? "temporary" : "persistent"}
+        anchor="left"
+        open={showSidebar && sidebarOpen}
+        onClose={toggleSidebar}
+        sx={{
+          "& .MuiDrawer-paper": {
+            width: 260,
+            bgcolor: "#e3f2fd",
+            color: "#0277bd",
+            position: "fixed",
+            top: isSmallScreen ? 0 : "64px",
+            height: isSmallScreen ? "100%" : "calc(100% - 64px)",
+            borderRadius: isSmallScreen ? "0px" : "0px 15px 15px 0px",
+            boxShadow: "4px 0px 10px rgba(0, 0, 0, 0.1)",
+          },
+        }}
+      >
+        {/* Profile Section */}
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 1, py: 3 }}>
+          <AccountCircle sx={{ fontSize: 32, color: "#0277bd" }} />
+          <Typography variant="h6" fontWeight="bold">Doctor Panel</Typography>
+        </Box>
+
+        <Divider sx={{ bgcolor: "#90caf9", mx: 2 }} />
+
+        {/* Sidebar List */}
+        <List>
+          {[
+            { text: "Profile", icon: <AccountCircle />, url: "/doctor/profile" },
+            { text: "Messages", icon: <Message />, url: "/doctor/message" },
+            { text: "Appointments", icon: <Event />, url: "/doctor/tokens" },
+            { text: "Reviews", icon: <RateReview />, url: "/doctor/reviews" },
+          ].map((item, index) => (
+            <ListItem key={index} disablePadding>
+              <Link href={item.url} passHref style={{ width: "100%", textDecoration: "none", color: "inherit" }}>
+                <ListItemButton
+                  onClick={() => isSmallScreen && toggleSidebar()}
+                  sx={{
+                    borderRadius: 2,
+                    mx: 2,
+                    my: 1,
+                    bgcolor: pathname === item.url ? "#bbdefb" : "transparent",
+                    color: pathname === item.url ? "#01579b" : "inherit",
+                    "&:hover": { bgcolor: "#bbdefb", color: "#01579b" },
+                  }}
+                >
+                  <ListItemIcon sx={{ color: "#0277bd" }}>{item.icon}</ListItemIcon>
+                  <ListItemText primary={item.text} sx={{ fontWeight: "bold" }} />
+                </ListItemButton>
+              </Link>
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
     </>
   );
 }
-
-export default Sidebar;
-
