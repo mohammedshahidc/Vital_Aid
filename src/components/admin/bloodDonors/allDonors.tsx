@@ -41,7 +41,7 @@ function AllDonors() {
       const filterddonor = donors.filter((donor) => donor.BloodGroup == group)
       setDonorsbygroup(filterddonor)
     }
-  }, [group])
+  },[group,donors])
   const dispatch = useAppDispatch();
   const router = useRouter();
 

@@ -100,7 +100,7 @@ const DonorsList: React.FC = () => {
   });
 
   return (
-    <div className="max-w-full mx-auto md:mx-14 p-5">
+    <div className=" max-w-full mx-auto md:mx-14 p-5">
       <HowItWorks />
 
       

@@ -45,54 +45,6 @@ const Vlounteers = () => {
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [imageUrl, setImageUrl] = useState<string | null>(null);
 
-    useEffect(() => {
-        if (volunteerid) {
-            const selectvolunteer = allVolunteers?.find((vol) => vol._id === volunteerid) ?? null;
-            setVolunteer(selectvolunteer)
-            if (selectvolunteer) {
-                setImagePreview(selectvolunteer.image)
-                setFieldValue("image", selectvolunteer.image)
-
-
-            }
-
-        }
-    }, [allVolunteers, volunteerid])
-
-
-    const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-
-        if (file) {
-            setImagePreview(URL.createObjectURL(file));
-
-            try {
-                const response = await axiosInstance.get(`/auth/generate-signed-url`, {
-                    params: { fileType: file.type },
-                });
-
-                const { signedUrl, fileName } = response.data;
-                console.log("dddd", signedUrl);
-
-
-                await fetch(signedUrl, {
-                    method: "PUT",
-                    body: file,
-                    headers: { "Content-Type": file.type },
-                });
-
-                const uploadedUrl = `https://vitalaidnsr.s3.${process.env.NEXT_PUBLIC_AWS_REGION}.amazonaws.com/${fileName}`;
-                setImageUrl(uploadedUrl);
-                setFieldValue("image", uploadedUrl);
-
-                console.log("Uploaded Image URL:", uploadedUrl);
-            } catch (error) {
-                console.error("Error uploading image:", error);
-            }
-        }
-    };
-
- 
 
     const { values, errors, handleChange, handleBlur, handleSubmit, touched, setFieldValue } = useFormik({
 
@@ -138,6 +90,53 @@ const Vlounteers = () => {
             }
         }
     });
+
+    useEffect(() => {
+        if (volunteerid) {
+            const selectvolunteer = allVolunteers?.find((vol) => vol._id === volunteerid) ?? null;
+            setVolunteer(selectvolunteer)
+            if (selectvolunteer) {
+                setImagePreview(selectvolunteer.image)
+                setFieldValue("image", selectvolunteer.image)
+
+
+            }
+
+        }
+    }, [allVolunteers, volunteerid, setFieldValue])
+
+
+    const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+
+        if (file) {
+            setImagePreview(URL.createObjectURL(file));
+
+            try {
+                const response = await axiosInstance.get(`/auth/generate-signed-url`, {
+                    params: { fileType: file.type },
+                });
+
+                const { signedUrl, fileName } = response.data;
+                console.log("dddd", signedUrl);
+
+
+                await fetch(signedUrl, {
+                    method: "PUT",
+                    body: file,
+                    headers: { "Content-Type": file.type },
+                });
+
+                const uploadedUrl = `https://vitalaidnsr.s3.${process.env.NEXT_PUBLIC_AWS_REGION}.amazonaws.com/${fileName}`;
+                setImageUrl(uploadedUrl);
+                setFieldValue("image", uploadedUrl);
+
+                console.log("Uploaded Image URL:", uploadedUrl);
+            } catch (error) {
+                console.error("Error uploading image:", error);
+            }
+        }
+    };
 
     useEffect(() => {
         if (volunteer) {
@@ -218,7 +217,7 @@ const Vlounteers = () => {
                                 <div className="text-red-500 text-sm">{errors.phone}</div>
                             )}
                             {/* Buttons */}
-                            <div className="flex hidden flex-col sm:flex-row space-x-4 mx-32 justify-center mt-8 sm:block md:block ">
+                            <div className="hidden flex-col sm:flex-row space-x-4 mx-32 justify-center mt-8 sm:block md:block ">
                                 <button
                                     type="submit"
                                     className="px-6 py-2 border-2 border-green-600 text-green-600 rounded-md hover:bg-green-600 hover:text-white w-full sm:w-auto"

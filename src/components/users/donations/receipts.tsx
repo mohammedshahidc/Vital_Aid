@@ -43,6 +43,7 @@ interface ReceiptContentProps {
   donation: Donation;
 }
 
+// eslint-disable-next-line react/display-name
 const ReceiptContent = forwardRef<HTMLDivElement, ReceiptContentProps>(
   ({ donation }, ref) => (
     <div

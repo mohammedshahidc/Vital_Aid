@@ -17,7 +17,6 @@ import {
     FormControl,
     Box,
     Pagination,
-    TextField,
 } from "@mui/material";
 import { useAllRequest } from '@/lib/Query/hooks/useRequest';
 import axiosInstance from '@/utils/axios';
@@ -26,7 +25,7 @@ import axiosErrorManager from '@/utils/axiosErrormanager';
 const EquipmentRequest = () => {
     const [currentPage, setCurrentPage] = useState<number>(1)
     const [filteredRequest, setfilteredRequest] = useState<Request[]| null>(null)
-    const [status, setStaus] = useState<string>('')
+    // const [status, setStaus] = useState<string>('')
     const [selector, setSelector] = useState<string>('')
     const { data, isLoading, error, refetch } = useAllRequest(currentPage)
     const allrequest: Request[] = data?.data
@@ -40,7 +39,7 @@ const EquipmentRequest = () => {
     const handlestatus = async (e: React.ChangeEvent<HTMLSelectElement>, id: string) => {
         try {
             const newStatus = e.target.value
-            setStaus(newStatus)
+            // setStaus(newStatus)
             await axiosInstance.put(`/admin/updateequipmentrequest/${id}`, { status: newStatus })
             refetch()
         } catch (error) {
@@ -48,7 +47,6 @@ const EquipmentRequest = () => {
             axiosErrorManager(error)
         }
     }
-    console.log('status:', allrequest);
     useEffect(() => {
         if(allrequest){
             if(selector=="all"){
@@ -60,7 +58,7 @@ const EquipmentRequest = () => {
           
         }
       
-    }, [selector])
+    }, [selector,allrequest])
 
     return (
         <div>

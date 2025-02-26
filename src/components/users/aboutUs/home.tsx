@@ -25,7 +25,7 @@ const About = () => {
     }, 70);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [ targetCounts.doctors,targetCounts.users,targetCounts.volunteers]);
 
   return (
     <div className="bg-gray-50">
@@ -101,7 +101,7 @@ const About = () => {
             Our Mission
           </h2>
           <p className="text-gray-700 text-lg leading-relaxed text-center">
-            Vital Aid is more than just a healthcare platform—it's a movement
+            Vital Aid is more than just a healthcare platform—it&apos;s a movement
             dedicated to bridging the gap between technology and humanitarian
             support. Through AI-driven health assessments, we empower
             individuals to check their health status and receive personalized

@@ -40,6 +40,47 @@ const Equipments = () => {
     
 
 
+
+    
+    const { errors, touched, handleBlur, handleChange, handleSubmit, handleReset, values, setFieldValue } = useFormik({
+        initialValues: initialValues,
+        validationSchema: equipmentSchema,
+        onSubmit: async (e) => {
+            try {
+                const formData = new FormData();
+                formData.append('name', values.name);
+                formData.append('quantity', values.quantity.toString());
+                formData.append('description', values.description);
+
+                if (values.image) {
+                    formData.append('image', values.image);
+                }
+               const formvalue:formvalue = {
+                    ...values, imageUrl
+                }
+
+                setImagePreview(null);
+
+                if (!equipmentid) {
+                    await dispatch(addnewEquipment(formvalue));
+                    router.push('/admin/equipments/list')
+                    await handleReset(e);
+                } else {
+                    try {
+                        await axiosInstance.put(`/equipment/editEquipment/${equipmentid}`, formData);
+                        router.push('/admin/equipments/list')
+                    } catch (error) {
+                        axiosErrorManager(error);
+                    }
+                }
+            } catch (error) {
+                console.log('Form error:', error);
+                axiosErrorManager(error);
+            }
+        }
+    });
+
+    
     useEffect(() => {
         if (equipmentid) {
             const foundItem = allEquipment?.find((eq) => eq._id === equipmentid) ?? null;
@@ -50,7 +91,7 @@ const Equipments = () => {
                 setFieldValue("image", foundItem.image);
             }
         }
-    }, [equipmentid, allEquipment]);
+    }, [equipmentid, allEquipment,setFieldValue]);
    
     
 
@@ -93,44 +134,6 @@ const Equipments = () => {
         image: string| null;
         description: string;
     } 
-
-    const { errors, touched, handleBlur, handleChange, handleSubmit, handleReset, values, setFieldValue } = useFormik({
-        initialValues: initialValues,
-        validationSchema: equipmentSchema,
-        onSubmit: async (e) => {
-            try {
-                const formData = new FormData();
-                formData.append('name', values.name);
-                formData.append('quantity', values.quantity.toString());
-                formData.append('description', values.description);
-
-                if (values.image) {
-                    formData.append('image', values.image);
-                }
-               const formvalue:formvalue = {
-                    ...values, imageUrl
-                }
-
-                setImagePreview(null);
-
-                if (!equipmentid) {
-                    await dispatch(addnewEquipment(formvalue));
-                    router.push('/admin/equipments/list')
-                    await handleReset(e);
-                } else {
-                    try {
-                        await axiosInstance.put(`/equipment/editEquipment/${equipmentid}`, formData);
-                        router.push('/admin/equipments/list')
-                    } catch (error) {
-                        axiosErrorManager(error);
-                    }
-                }
-            } catch (error) {
-                console.log('Form error:', error);
-                axiosErrorManager(error);
-            }
-        }
-    });
 
     useEffect(() => {
         if (item) {

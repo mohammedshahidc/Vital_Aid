@@ -7,6 +7,7 @@ import { FiFolder } from "react-icons/fi";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axiosInstance from "@/utils/axios";
+import Image from "next/image";
 
 interface DonorFormData {
   name: string;
@@ -82,32 +83,88 @@ const EditDonor = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center">Edit Donor</h2>
+      <h2 className="text-2xl font-bold mb-4 text-gray-800 text-center">
+        Edit Donor
+      </h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <input type="text" placeholder="Full Name" {...register("name", { required: true })} className="w-full p-3 border rounded-lg focus:ring focus:ring-green-300 bg-sky-50" />
+        <input
+          type="text"
+          placeholder="Full Name"
+          {...register("name", { required: true })}
+          className="w-full p-3 border rounded-lg focus:ring focus:ring-green-300 bg-sky-50"
+        />
         <div className="grid grid-cols-2 gap-4">
-          <input type="text" placeholder="Blood Group" {...register("BloodGroup", { required: true })} className="w-full p-3 border rounded-lg focus:ring bg-sky-50" />
-          <input type="text" placeholder="Phone Number" {...register("Phone", { required: true })} className="w-full p-3 border rounded-lg focus:ring bg-sky-50" />
+          <input
+            type="text"
+            placeholder="Blood Group"
+            {...register("BloodGroup", { required: true })}
+            className="w-full p-3 border rounded-lg focus:ring bg-sky-50"
+          />
+          <input
+            type="text"
+            placeholder="Phone Number"
+            {...register("Phone", { required: true })}
+            className="w-full p-3 border rounded-lg focus:ring bg-sky-50"
+          />
         </div>
         <div className="grid grid-cols-2 gap-4">
-          <select {...register("Gender", { required: true })} className="w-full p-3 border rounded-lg focus:ring bg-sky-50">
+          <select
+            {...register("Gender", { required: true })}
+            className="w-full p-3 border rounded-lg focus:ring bg-sky-50"
+          >
             <option value="">Select Gender</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
             <option value="Other">Other</option>
           </select>
-          <input type="number" placeholder="Age" {...register("Age", { required: true })} className="w-full p-3 border rounded-lg focus:ring focus:ring-red-300 bg-sky-50" />
+          <input
+            type="number"
+            placeholder="Age"
+            {...register("Age", { required: true })}
+            className="w-full p-3 border rounded-lg focus:ring focus:ring-red-300 bg-sky-50"
+          />
         </div>
-        <input type="text" placeholder="Address" {...register("Address", { required: true })} className="w-full p-3 border rounded-lg focus:ring bg-sky-50" />
+        <input
+          type="text"
+          placeholder="Address"
+          {...register("Address", { required: true })}
+          className="w-full p-3 border rounded-lg focus:ring bg-sky-50"
+        />
         <label className="w-full flex items-center justify-center p-3 border rounded-lg cursor-pointer hover:opacity-80 transition focus:ring-green-300 bg-gradient-to-r from-green-100 to-green-200 min-h-[50px]">
-          <input type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
+          <input
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleImageChange}
+          />
           <FiFolder className="mr-2 text-xl" />
           <span className="text-sm">Choose an Image</span>
         </label>
-        {imagePreview && <img src={imagePreview} alt="Preview" className="w-full h-40 object-cover rounded-lg" />}
+        {imagePreview && (
+          <div className="relative w-full h-40 rounded-lg">
+            <Image
+              src={imagePreview}
+              alt="Preview"
+              layout="fill"
+              objectFit="cover"
+              className="rounded-lg"
+            />
+          </div>
+        )}
         <div className="flex justify-end space-x-3">
-          <button type="button" onClick={() => router.push("/admin/allDonors")} className="px-4 py-2 text-gray-600 border border-gray-400 rounded-lg hover:bg-gray-200 transition">Cancel</button>
-          <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">Update Donor</button>
+          <button
+            type="button"
+            onClick={() => router.push("/admin/allDonors")}
+            className="px-4 py-2 text-gray-600 border border-gray-400 rounded-lg hover:bg-gray-200 transition"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+          >
+            Update Donor
+          </button>
         </div>
       </form>
     </div>
