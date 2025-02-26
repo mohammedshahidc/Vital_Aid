@@ -1,19 +1,15 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { cancellToken, useAlltokenforuser } from "@/lib/Query/hooks/addToken";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import {
-  Box,
-  Typography,
-  CardContent,
-  Card,
-  CircularProgress,
-  Button,
-} from "@mui/material";
+import { Card, CardContent } from "@mui/material";
 import dayjs, { Dayjs } from "dayjs";
 import { TokenType } from "@/lib/Query/hooks/addToken";
+import { FaCalendarAlt, FaUserMd } from "react-icons/fa";
+import { MdRefresh } from "react-icons/md";
 
 const AllToken = () => {
   const today = dayjs();
@@ -29,163 +25,119 @@ const AllToken = () => {
   const allToken: TokenType[] = data?.data || [];
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        minHeight: "100vh",
-      }}
-    >
-      <Box
-        sx={{
-          maxWidth: 900,
-          p: 2,
-          borderRadius: 2,
-          mt: 3,
-          boxShadow: "0px 2px 8px rgba(0,0,0,0.1)",
-          backgroundColor: "#ffffff",
-          width: "100%",
-        }}
-      >
-        <Typography
-          variant="h6"
-          color="primary"
-          fontWeight="bold"
-          mb={2}
-          textAlign="center"
-        >
-          My Appointments
-        </Typography>
-
-        {/* Date Picker */}
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
-            <DatePicker
-              label="Select Date"
-              value={date}
-              onChange={(newDate) => setDate(newDate)}
-              slotProps={{
-                textField: {
-                  sx: { width: "50%" },
-                },
-              }}
-            />
-          </Box>
-        </LocalizationProvider>
-
-        {isLoading ? (
-          <Box sx={{ display: "flex", justifyContent: "center", height: 100 }}>
-            <CircularProgress color="primary" />
-          </Box>
-        ) : isError ? (
-          <Typography color="error" textAlign="center">
-            Failed to load appointments.
-          </Typography>
-        ) : allToken.length > 0 ? (
-          allToken.map((appointment, index) => (
-            <Card
-              key={index}
-              sx={{
-                mb: 2,
-                backgroundColor: "#E3F2FD",
-                borderRadius: 2,
-                transition: "0.3s",
-                p: 2,
-                display: "flex",
-                alignItems: "center",
-                minHeight: 100,
-                position: "relative",
-                "&:hover": {
-                  backgroundColor: "#BBDEFB",
-                  transform: "scale(1.02)",
-                  boxShadow: "0px 4px 12px rgba(0,0,0,0.2)",
-                },
-              }}
-            >
-              {/* Profile Image */}
-              {appointment.doctorId?.drDetails?.profileImage && (
-                <Box
-                  sx={{
-                    width: 60,
-                    height: 60,
-                    borderRadius: "50%",
-                    overflow: "hidden",
-                    mr: 2,
-                    flexShrink: 0,
+    <div className="flex justify-center min-h-fit">
+      <div className="max-w-7xl p-4 mt-6 rounded-xl shadow-lg bg-white w-full">
+        <Card className="shadow-lg rounded-xl overflow-hidden border-t-4 border-blue-400">
+          <div className="flex justify-between px-6 py-4 bg-gradient-to-r from--50 to-white">
+            <h3 className="text-lg font-semibold text-gray-500 flex items-center">
+              <FaCalendarAlt className="mr-2 h-4 w-4" />
+              My Appointments
+            </h3>
+            <MdRefresh size={29} className="text-blue-500 cursor-pointer" onClick={() => refetch()} />
+          </div>
+          
+          <CardContent className="p-4">
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <div className="flex justify-end mb-4">
+                <DatePicker
+                  label="Select Date"
+                  value={date}
+                  onChange={(newDate) => setDate(newDate)}
+                  slotProps={{
+                    textField: {
+                      sx: { width: "180px" },
+                    },
                   }}
-                >
-                  <Image
-                    src={appointment.doctorId.drDetails.profileImage}
-                    alt="Doctor Profile"
-                    width={60}
-                    height={60}
-                  />
-                </Box>
+                />
+              </div>
+            </LocalizationProvider>
+
+            <div className="space-y-3">
+              {isLoading ? (
+                <div className="flex justify-center py-10">
+                  <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500"></div>
+                </div>
+              ) : isError ? (
+                <div className="p-3 bg-red-50 text-red-500 rounded-lg text-center">
+                  Failed to load appointments.
+                </div>
+              ) : allToken.length > 0 ? (
+                allToken.map((appointment, index) => (
+                  <div
+                    key={index}
+                    className="p-3 bg-gradient-to-r from-blue-50 to-white rounded-lg shadow-sm border border-blue-100 transition-all hover:shadow-md hover:scale-[1.01]"
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0">
+                        {appointment.doctorId?.drDetails?.profileImage ? (
+                          <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-gray-200">
+                            <Image
+                              src={appointment.doctorId.drDetails.profileImage}
+                              alt="Doctor Profile"
+                              width={56}
+                              height={56}
+                              className="object-cover w-full h-full"
+                            />
+                          </div>
+                        ) : (
+                          <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-blue-500">
+                            <FaUserMd size={24} />
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="flex-1">
+                        <div className="flex justify-between">
+                          <h4 className="font-medium text-gray-800">
+                            Dr. {appointment.doctorId?.name || "N/A"}
+                          </h4>
+                          <span 
+                            className={`text-sm font-medium px-2.5 py-0.5 rounded-full ${
+                              appointment.status === "Completed" 
+                                ? "bg-green-100 text-green-700" 
+                                : appointment.status === "cancelled" 
+                                ? "bg-red-100 text-red-700" 
+                                : "bg-yellow-100 text-yellow-700"
+                            }`}
+                          >
+                            {appointment.status || "N/A"}
+                          </span>
+                        </div>
+                        
+                        <div className="mt-1 grid grid-cols-2 gap-x-2 gap-y-1 text-sm text-gray-600">
+                          <div>
+                            <span className="font-medium">Token:</span> {appointment.tokenNumber || "N/A"}
+                          </div>
+                          <div>
+                            <span className="font-medium">Time:</span> {appointment.doctorId?.drDetails?.availability || "N/A"}
+                          </div>
+                          <div>
+                            <span className="font-medium">Phone:</span> {appointment.doctorId?.phone || "N/A"}
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {appointment.status !== "cancelled" && appointment.status !== "Completed" && (
+                        <button
+                          onClick={() => cancellToken(appointment._id, "cancelled", refetch)}
+                          className="ml-2 bg-red-500 hover:bg-red-600 text-white text-xs font-medium px-3 py-1 rounded transition-colors"
+                        >
+                          Cancel
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="p-3 bg-gradient-to-r from-gray-50 to-white rounded-lg shadow-sm border border-gray-100 h-14 flex items-center justify-center text-gray-400">
+                  No appointments found for this date.
+                </div>
               )}
-
-              {/* Appointment Details */}
-              <Box sx={{ display: "flex", width: "100%", position: "relative" }}>
-                {/* Cancel Button (only if not cancelled) */}
-                {appointment.status !== "cancelled" && (
-                  <Button
-                    variant="contained"
-                    color="error"
-                    size="small"
-                    sx={{
-                      position: "absolute",
-                      top: 10,
-                      right: 10,
-                      fontSize: "12px",
-                      textTransform: "none",
-                    }}
-                    onClick={() => {
-                      if (appointment.status !== "Completed") {
-                        cancellToken(appointment._id, "cancelled", refetch);
-                      }
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                )}
-
-                <CardContent sx={{ flex: 1 }}>
-                  <Typography variant="body1">
-                    <strong>Doctor Name:</strong> {appointment.doctorId?.name || "N/A"}
-                  </Typography>
-                  <Typography variant="body1">
-                    <strong>Token Number:</strong> {appointment.tokenNumber || "N/A"}
-                  </Typography>
-                  <Typography variant="body1">
-                    <strong>Time:</strong>{" "}
-                    {appointment.doctorId?.drDetails?.availability || "N/A"}
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      color:
-                        appointment.status === "Completed"
-                          ? "green"
-                          : appointment.status === "cancelled"
-                          ? "red"
-                          : appointment.status === "pending"
-                          ? "orange"
-                          : "inherit",
-                    }}
-                  >
-                    <strong>Status:</strong> {appointment.status || "N/A"}
-                  </Typography>
-                  <Typography variant="body1" color="primary">
-                    <strong>Phone:</strong> {appointment.doctorId?.phone || "N/A"}
-                  </Typography>
-                </CardContent>
-              </Box>
-            </Card>
-          ))
-        ) : (
-          <Typography textAlign="center">No appointments found for this date.</Typography>
-        )}
-      </Box>
-    </Box>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
   );
 };
 

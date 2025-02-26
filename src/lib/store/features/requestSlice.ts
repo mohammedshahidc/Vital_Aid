@@ -1,6 +1,5 @@
-import axiosErrorManager from "@/utils/axiosErrormanager";
-import axiosInstance from "@/utils/axios";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+
+import { createSlice } from "@reduxjs/toolkit";
 
 
 type RequestStatus = "pending" | "accepted" | "delivered" | "cancelled" | null;
@@ -42,28 +41,14 @@ export interface User {
     error:null
   }
 
-//   export const getallRequest = createAsyncThunk<{ allRequest: Request[], totalPages: number }, number, { rejectValue: string }>('getallRequest', async (page, { rejectWithValue }) => {
-//     try {
-        
-//         const response = await axiosInstance.get(`/users/userrequest?page=${page}&limit=3`)
-//         return {
-//             allRequest: response.data.allEquipment,
-//             totalPages: response.data.totalPages
-//         }
-//     } catch (error) {
-//         return rejectWithValue(axiosErrorManager(error));
-//     }
-// })
+
 
 
   const RequestSlice=createSlice({
     name:'request',
     initialState,
     reducers:{},
-    // extraReducers:(builders)=>{
-        
-       
-    // }
+  
   })
 
 

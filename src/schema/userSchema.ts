@@ -6,7 +6,7 @@ export const userSchema = Yup.object().shape({
     phone: Yup.string()
     .matches(/^\d{10}$/, "Phone number must be exactly 10 digits")
     .required("Phone number is required"),
-    password: Yup.string().min(6).required('Password is required'),
+    password: Yup.string().min(5).required('Password is required'),
     conformPassword: Yup.string().oneOf([Yup.ref('password')], 'Password is not matching')
   });
   

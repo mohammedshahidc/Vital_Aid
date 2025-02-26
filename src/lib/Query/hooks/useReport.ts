@@ -9,12 +9,12 @@ const fetchReports = async (id: string) => {
 };
 
 export function useFetchreport(id: string) {
-  const { data: reports = [] ,refetch} = useQuery({
+  const { data: reports = [], refetch } = useQuery({
     queryKey: ["report", id],
     queryFn: () => fetchReports(id),
     enabled: !!id,
   });
-  return { reports ,refetch};
+  return { reports, refetch };
 }
 
 const fetchDetails = async (id: string) => {
@@ -44,5 +44,21 @@ export function useFetchDetails(id: string) {
     retry: 2,
   });
 
-  return { details, isLoading, isError, error ,refetch};
+  return { details, isLoading, isError, error, refetch };
 }
+
+const fetchusersREviews = async () => {
+  const response = await axiosInstance.get("/users/getuserreview");
+  console.log("resp:", response.data?.data);
+
+  return response.data?.data;
+};
+
+export const useReviews=()=>{
+  const { data: userReviews, refetch } = useQuery({
+    queryKey: ["user"],
+    queryFn: () => fetchusersREviews(),
+  });
+  return {userReviews,refetch}
+}
+

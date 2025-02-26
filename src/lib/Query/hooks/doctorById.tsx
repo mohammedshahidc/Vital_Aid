@@ -21,21 +21,16 @@ export interface IReview {
 
 export const fetchDoctorById = async (id: string) => {
     if (!id) throw new Error("Doctor ID is required");
-    
-    
     const response = await axiosInstance.get(`/doctors/getdetail/${id}`);
-  
-
     if (!response.data || !response.data.data || response.data.data.length === 0) {
         throw new Error("Doctor not found");
     }
-
     return response.data.data[0]; 
 };
 
 
 const fetchReviews=async(id:string)=>{
-   const response= await axiosInstance.get(`users/getallreview/${id}`)
+   const response= await axiosInstance.get(`/users/getallreview/${id}`)
    console.log("sdhfsgyftye",response.data);
    
     return response.data?.data

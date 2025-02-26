@@ -2,34 +2,35 @@
 
 import React from "react";
 import BloodtypeIcon from "@mui/icons-material/Bloodtype";
-import ReceiptLongIcon from "@mui/icons-material/ReceiptLong"; 
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 import EventIcon from "@mui/icons-material/Event";
 import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism";
 import { Button, Card, CardContent, Chip, Fade } from "@mui/material";
-import { FaStethoscope, FaRegBell } from "react-icons/fa";
+import { FaStethoscope, FaRegBell, FaClipboardList } from "react-icons/fa";
 import { useAppSelector } from "@/lib/store/hooks";
 import { useRouter } from "next/navigation";
 import { useFetchMessages } from "@/lib/Query/hooks/useMessage";
 import Profilesection from "./profilesection";
 import Reportsection from "./reportsection";
 import Appoinmentsctn from "./appoinmentsctn";
+import ReviewSection from "./reviewSection";
 
 type Message = {
   _id: string;
   message: string;
 };
+
+
 const Home = () => {
   const { user } = useAppSelector((state) => state.auth);
   const Router = useRouter();
-
   const { messages } = useFetchMessages();
-  
+
 
   return (
     <div className="w-full mx-auto p-6 space-y-8 bg-gradient-to-b from-gray-50 to-gray-100 min-h-screen">
       <div className="flex flex-col sm:flex-row gap-6">
-        
         <div className="w-72 bg-white shadow-xl rounded-xl p-6 hidden sm:block border border-gray-100">
           <div className="flex flex-col items-center pb-4 border-b border-gray-200">
             <h2 className="text-xl font-bold text-gray-800 mb-2">
@@ -121,12 +122,29 @@ const Home = () => {
               <MedicalServicesIcon /> My Requests
             </Button>
             <Button
-      onClick={() => Router.push("/user/donationDetails")}
-      variant="contained"
-      className="w-full flex items-center gap-3 bg-blue-500 hover:bg-blue-600 text-white py-2"
-    >
-      <ReceiptLongIcon /> View Donation Details
-    </Button>
+              onClick={() => Router.push("/user/donationDetails")}
+              variant="contained"
+              className="w-full flex items-center gap-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white py-3 rounded-lg shadow-md hover:shadow-lg transition-all"
+              style={{
+                textTransform: "none",
+                justifyContent: "flex-start",
+                padding: "10px 16px",
+              }}
+            >
+              <ReceiptLongIcon /> My Recipts
+            </Button>
+            <Button
+              onClick={() => Router.push("/user/doctors/allbooking")}
+              variant="contained"
+              className="w-full flex items-center gap-3 bg-gradient-to-r from-teal-500 to-teal-600 text-white py-3 rounded-lg shadow-md hover:shadow-lg transition-all"
+              style={{
+                textTransform: "none",
+                justifyContent: "flex-start",
+                padding: "10px 16px",
+              }}
+            >
+              <FaClipboardList /> my appointments
+            </Button>
           </div>
         </div>
 
@@ -135,7 +153,7 @@ const Home = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Reportsection />
-            <Appoinmentsctn/>
+            <Appoinmentsctn />
           </div>
           <Card className="shadow-lg rounded-xl overflow-hidden border-t-4  border-teal-400">
             <div className="flex justify-between items-center px-6 py-4 bg-gradient-to-r from-teal-50 to-white">
@@ -171,25 +189,9 @@ const Home = () => {
             </CardContent>
           </Card>
 
-          <Card className="shadow-lg rounded-xl overflow-hidden border-t-4 border-teal-400">
-            <div className="px-6 py-4 bg-gradient-to-r from--50 to-white">
-              <h3 className="text-lg font-semibold text-gray-500 flex items-center">
-                <FaStethoscope className="mr-2 h-4 w-4" />
-                Review from doctor
-              </h3>
-            </div>
-            <CardContent className="space-y-3 p-4">
-              <div className="p-3 bg-gradient-to-r from-gray-50 to-white rounded-lg shadow-sm border border-gray-100 h-14 flex items-center justify-center text-gray-400">
-                No reviews yet
-              </div>
-              <div className="p-3 bg-gradient-to-r from-gray-50 to-white rounded-lg shadow-sm border border-gray-100 h-14 flex items-center justify-center text-gray-400">
-                Reviews will appear after your appointment
-              </div>
-            </CardContent>
-          </Card>
+          <ReviewSection/>
         </div>
       </div>
-
     </div>
   );
 };
