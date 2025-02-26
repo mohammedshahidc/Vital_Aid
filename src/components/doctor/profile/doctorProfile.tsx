@@ -88,7 +88,7 @@ const DoctorProfile: React.FC<Props> = ({ doctor }) => {
                         onMouseLeave={handleUnhover}
                         className="flex items-center justify-between w-1/5"
                     >
-                        <Typography variant="body2" className="flex items-center">
+                        <Typography variant="body2" component="div" className="flex items-center">
                             {!edit ? (
                                 <>
                                     <strong>Token/day:</strong> {totalToken?.data?.tokenPerDay}
@@ -98,14 +98,14 @@ const DoctorProfile: React.FC<Props> = ({ doctor }) => {
                                     <TextField
                                         id="tokens"
                                         type="number"
-                                        value={numberOfToken}
-                                        defaultValue={totalToken?.data?.tokenPerDay}
+                                        value={numberOfToken ?? ""}
                                         onChange={(e) => setNumberOfToken(e.target.value)}
                                         className="border p-1 rounded"
                                         variant="outlined"
                                         size="small"
                                         sx={{ width: '80px' }}
                                     />
+
 
                                     <Button onClick={() => {
                                         updateTokenNumber(Number(numberOfToken), refetch);

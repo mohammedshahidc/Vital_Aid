@@ -40,15 +40,14 @@ export function middleware(req: NextRequest) {
   }
 
   if (
-    token &&
-    userType === "User" &&
+    userType === "user" &&
     (pathName === "/login" || pathName === "/register" || pathName === "/")
   ) {
     url.pathname = "/user";
     return NextResponse.redirect(url);
   }
 
-  if (userType === "User") {
+  if (userType === "user") {
     if (isAdminRoute(pathName) || isDoctorProtectedRoute(pathName)) {
       
       url.pathname = "/";
@@ -63,7 +62,7 @@ export function middleware(req: NextRequest) {
   }
 
   if (
-    token &&
+  
     userType === "Doctor" &&
     (pathName === "/login" || pathName === "/register" || pathName === "/")
   ) {

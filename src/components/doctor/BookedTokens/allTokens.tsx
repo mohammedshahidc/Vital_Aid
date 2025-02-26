@@ -94,7 +94,6 @@ const AllTokens = () => {
         <Typography color="error" textAlign="center">Failed to load appointments.</Typography>
       ) : tokens.length > 0 ? (
         tokens.map((appointment, index) => (
-          <Link key={index} href={`/doctor/patient/${appointment.patientId._id}`}>
 
           <Card
             key={index}
@@ -107,7 +106,7 @@ const AllTokens = () => {
               display: "flex",
               alignItems: "center",
               minHeight: 100,
-              position: "relative", // Add this line
+              position: "relative", 
               '&:hover': {
                 backgroundColor: "#BBDEFB",
                 transform: "scale(1.02)",
@@ -115,6 +114,7 @@ const AllTokens = () => {
               }
             }}
           >
+
             {/* Profile Image */}
             {appointment.patientId?.profileImage?.originalProfile && (
               <Box
@@ -139,7 +139,7 @@ const AllTokens = () => {
             {/* Appointment Details (Centered Vertically) */}
             <Box sx={{ display: "flex", width: "100%" }}>
               {/* Status Dropdown - Positioned Top-Right */}
-              <select
+             {appointment.status!=="Completed"&& <select
                 id="status"
                 value={appointment.status}
                 onChange={(e) => {
@@ -156,7 +156,8 @@ const AllTokens = () => {
               >
                 <option value="Edit status">Edit status</option>
                 <option value="Completed">Completed</option>
-              </select>
+              </select>}
+              <Link href={`/doctor/patient/${appointment.patientId._id}`}>
 
               <CardContent
                 sx={{
@@ -187,9 +188,10 @@ const AllTokens = () => {
                   <strong>Phone:</strong> {appointment.patientId?.phone || "N/A"}
                 </Typography>
               </CardContent>
+              </Link>
             </Box>
+            
           </Card>
-</Link>
 
         ))
       ) : (

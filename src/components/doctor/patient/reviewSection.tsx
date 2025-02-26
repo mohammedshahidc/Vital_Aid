@@ -33,7 +33,7 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ reviews, userId,refetch }
 
       {/* Review List */}
       <CardContent>
-        {reviews.length > 0 ? (
+        {reviews?.length > 0 ? (
           reviews.map((review) => {
             const isExpanded = expandedReviews[review._id] || false;
             const previewText = review.reviewText.slice(0, 100);
@@ -44,7 +44,7 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ reviews, userId,refetch }
                 <Box display="flex" alignItems="center" gap={2}>
                   <Avatar src={review.doctorId.profileImage || "https://i.pinimg.com/736x/ed/fe/67/edfe6702e44cfd7715a92390c7d8a418.jpg"} alt={review.doctorId.name} />
                   <Typography variant="body1" fontWeight="bold">
-                    {review.doctorId.name}
+                    {review?.doctorId?.name}
                   </Typography>
                 </Box>
                 <Typography variant="body2" color="textPrimary" mt={1}>

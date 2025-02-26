@@ -60,7 +60,8 @@ export default function Doctor() {
   });
 
   const [open, setOpen] = useState(false);
-  const { data: DoctorReviews, refetch } = useDoctorReview(id as string);
+  const { data: DoctorReviews, refetch } = useDoctorReview(id as string)
+console.log('sfyu:',id);
 
   if (isLoading)
     return (
@@ -137,11 +138,7 @@ export default function Doctor() {
             </Typography>
 
             <Link href={`/user/doctors/booking/${data?.doctor?._id}`} passHref>
-              <Button
-                variant="contained"
-                color="error"
-                sx={{ mt: 3, px: 4, py: 1, fontSize: 16, bgcolor: "#450a0a" }}
-              >
+              <Button variant="contained" color="error" sx={{ mt: 3, px: 4, py: 1, fontSize: 16, bgcolor: "#450a0a" }}>
                 Book Appointment
               </Button>
             </Link>
@@ -196,30 +193,17 @@ export default function Doctor() {
             Additional Information
           </Typography>
           <List dense>
+
             <ListItem>
-              <ListItemText
-                primary={`Consultation Fee: ${data?.consultationFee || "Free"}`}
-              />
+              <ListItemText primary={`Consultation Fee: ${data?.consultationFee || 'Free'}`} />
             </ListItem>
             <ListItem>
               <ListItemText primary={`Availability: ${data?.availability}`} />
             </ListItem>
           </List>
-          <Box
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            py={4}
-            px={2}
-          >
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              width="100%"
-              maxWidth={900}
-              mt={3}
-            >
+          <Box display="flex" flexDirection="column" alignItems="center" py={4} px={2}>
+            {/* Reviews Header with Pencil Icon */}
+            <Box display="flex" justifyContent="space-between" alignItems="center" width="100%" maxWidth={900} mt={3}>
               <Typography variant="h6" fontWeight="bold" color="text.primary">
                 Reviews
               </Typography>
@@ -231,11 +215,12 @@ export default function Doctor() {
                     "&:hover": { color: "black" },
                     fontSize: 24,
                   }}
-                  onClick={() => setOpen(true)}
+                  onClick={() => setOpen(true)} 
                 />
               </Tooltip>
             </Box>
 
+            {/* Reviews Box */}
             <Box
               sx={{
                 maxHeight: "250px",
@@ -247,43 +232,32 @@ export default function Doctor() {
                 bgcolor: "#f9f9f9",
                 width: "100%",
                 maxWidth: 900,
-                scrollbarWidth: "none",
+                scrollbarWidth: "none"
               }}
             >
               {DoctorReviews?.length ? (
                 DoctorReviews.map((review: IReview, index: number) => (
-                  <ListItem
-                    key={index}
-                    alignItems="flex-start"
-                    sx={{ borderBottom: "1px solid #ddd", pb: 1, mb: 1 }}
-                  >
-                    <Box flex={1}>
-                      <Box display="flex" alignItems="center" mb={1}>
-                        <Image
-                          src={
-                            review?.userId?.profileImage ||
-                            "https://i.pinimg.com/736x/ed/fe/67/edfe6702e44cfd7715a92390c7d8a418.jpg"
-                          }
-                          alt={review?.userId?.name}
-                          width={50}
-                          height={50}
-                          style={{
-                            borderRadius: "50%",
-                            marginRight: "12px",
-                            backgroundColor: "#1976d2",
-                            objectFit: "cover",
-                          }}
-                        />
-                        <Typography variant="subtitle1" fontWeight="bold">
-                          {review.userId.name}
-                        </Typography>
-                      </Box>
-                      <Rating
-                        value={review.rating}
-                        precision={0.5}
-                        readOnly
-                        size="small"
-                      />
+                  <ListItem key={index} alignItems="flex-start" sx={{ borderBottom: "1px solid #ddd", pb: 1, mb: 1 }}>
+
+                    <Box flex={1} >
+                    <Box display="flex" alignItems="center" mb={1}>
+                                <Image
+                                    src={review?.userId?.profileImage || "https://i.pinimg.com/736x/ed/fe/67/edfe6702e44cfd7715a92390c7d8a418.jpg"}
+                                    alt={review?.userId?.name}
+                                    width={50}
+                                    height={50}
+                                    style={{
+                                        borderRadius: "50%",
+                                        marginRight: "12px",
+                                        backgroundColor: "#1976d2",
+                                        objectFit: "cover",
+                                    }}
+                                />
+                                <Typography variant="subtitle1" fontWeight="bold">
+                                    {review.userId.name}
+                                </Typography>
+                            </Box>
+                      <Rating value={review.rating} precision={0.5} readOnly size="small" />
                       <Typography variant="body2" color="text.secondary">
                         {review.comment}
                       </Typography>
@@ -291,29 +265,17 @@ export default function Doctor() {
                   </ListItem>
                 ))
               ) : (
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  textAlign="center"
-                >
+                <Typography variant="body2" color="text.secondary" textAlign="center">
                   No reviews yet.
                 </Typography>
               )}
             </Box>
 
-            <Dialog
-              open={open}
-              onClose={() => setOpen(false)}
-              maxWidth="sm"
-              fullWidth
-            >
+            {/* Dialog Box for Adding Review */}
+            <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm" fullWidth>
               <DialogTitle textAlign="center">Add a Review</DialogTitle>
               <DialogContent>
-                <ReviewForm
-                  doctorId={id as string}
-                  refetch={refetch}
-                  setOpen={setOpen}
-                />
+                <ReviewForm doctorId={id as string} refetch={refetch} setOpen={setOpen} />
               </DialogContent>
               <DialogActions>
                 <Button onClick={() => setOpen(false)} color="error">

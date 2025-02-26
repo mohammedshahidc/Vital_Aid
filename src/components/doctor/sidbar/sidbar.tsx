@@ -43,7 +43,6 @@ export default function Sidebar({ sidebarOpen, toggleSidebar }: SidebarProps) {
         </IconButton>
       )}
 
-      {/* Sidebar Drawer */}
       <Drawer
         variant={isSmallScreen ? "temporary" : "persistent"}
         anchor="left"
@@ -52,7 +51,6 @@ export default function Sidebar({ sidebarOpen, toggleSidebar }: SidebarProps) {
         sx={{
           "& .MuiDrawer-paper": {
             width: 260,
-            bgcolor: "#e3f2fd",
             color: "#0277bd",
             position: "fixed",
             top: isSmallScreen ? 0 : "64px",
@@ -62,7 +60,7 @@ export default function Sidebar({ sidebarOpen, toggleSidebar }: SidebarProps) {
           },
         }}
       >
-        {/* Profile Section */}
+
         <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 1, py: 3 }}>
           <AccountCircle sx={{ fontSize: 32, color: "#0277bd" }} />
           <Typography variant="h6" fontWeight="bold">Doctor Panel</Typography>
@@ -70,7 +68,7 @@ export default function Sidebar({ sidebarOpen, toggleSidebar }: SidebarProps) {
 
         <Divider sx={{ bgcolor: "#90caf9", mx: 2 }} />
 
-        {/* Sidebar List */}
+    
         <List>
           {[
             { text: "Profile", icon: <AccountCircle />, url: "/doctor/profile" },
