@@ -136,7 +136,7 @@ export default function Navbar() {
 
         <div className="hidden lg:flex lg:items-center space-x-4">
           <Button
-            variant="contained"
+            variant="outlined"
             color="success"
             onClick={() => router.push("/user/donationHome")}
           >

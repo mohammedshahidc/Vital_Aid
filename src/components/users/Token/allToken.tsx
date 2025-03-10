@@ -20,7 +20,7 @@ const AllToken = () => {
 
   useEffect(() => {
     refetch();
-  }, [date]);
+  }, [date,refetch]);
 
   const allToken: TokenType[] = data?.data || [];
 

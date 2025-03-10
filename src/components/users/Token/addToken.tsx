@@ -61,10 +61,11 @@ const AddToken = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const today = dayjs();
   const daysInMonth = today.daysInMonth();
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [selectedDate, setSelectedDate] = useState<string | null>(today.format("DD-MM-YYYY"));
   const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
   const [selectedSlot, setSelectedSlot] = useState<number | null>(null);
   const[open,setOpen]=useState<boolean>(false)
+console.log("bb",today.format("DD-MM-YYYY"));
 
 
   const doctor: DoctorData = data?.data?.[0]
@@ -113,12 +114,12 @@ const AddToken = () => {
     setOpen(false)
   }
   return (
-    <div className="w-screen mt-10">
+    <div className="w-screen mt-32">
      
       <Box
         p={2}
         sx={{
-          maxWidth: isMobile ? "90%" : 850,
+          maxWidth: isMobile ? "90%" : 950,
           margin: "auto",
           bgcolor: "#f9f9f9",
           borderRadius: 2,
@@ -126,7 +127,7 @@ const AddToken = () => {
           minHeight: isMobile ? 600 : "auto",
         }}
       >
-        {/* Date Picker */}
+        
         <Box
           display="flex"
           gap={1}
@@ -173,7 +174,6 @@ const AddToken = () => {
           })}
         </Box>
 
-        {/* Doctor Profile */}
         <Box
           display="flex"
           flexDirection={isMobile ? "column" : "row"}
@@ -191,9 +191,6 @@ const AddToken = () => {
               border: "2px solid gray",
             }}
           />
-          {/* {doctor.map((doctors:DoctorData[])=>(
-
-          ))} */}
           <Box>
             <Typography variant="h6" fontWeight="bold">{doctor?.doctor?.name}</Typography>
             <Typography variant="body2" color="gray">{doctor?.specialization[0]}</Typography>
@@ -208,7 +205,6 @@ const AddToken = () => {
           </Box>
         </Box>
 
-        {/* Available Slots */}
         <Box mt={2}>
           <Typography fontWeight="bold" color="green">Available Tokens</Typography>
           <Box
@@ -249,8 +245,6 @@ const AddToken = () => {
             })}
           </Box>
         </Box>
-
-        {/* Confirm Button */}
         <Box display="flex" justifyContent="center" mt={2}>
           <Button
             variant="contained"

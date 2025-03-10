@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Box, Card, CardContent, IconButton, Typography, Avatar, Button } from "@mui/material";
 import { Edit as EditIcon } from "@mui/icons-material"; 
 import AddReview from "./addReview";
-import { ReviewType } from "./patient";
+import { ReviewType } from "../../users/dashbord/reviewSection";
 
 interface ReviewSectionProps {
   reviews: ReviewType[];

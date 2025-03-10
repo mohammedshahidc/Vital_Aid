@@ -8,28 +8,29 @@ import {
   Box,
   Card,
   CardContent,
-  Avatar,
   Typography,
   Button,
   CircularProgress,
   Alert,
   Grid,
-  Divider,
-  List,
-  ListItem,
-  ListItemText,
-  Rating,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-  Tooltip,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Container,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import Link from "next/link";
 import { IReview } from "@/lib/Query/hooks/doctorById";
-import { Edit } from "@mui/icons-material";
+import { LocationOn, Phone, Email, School, VerifiedUser, Star } from "@mui/icons-material";
 import ReviewForm from "../Reviews/addReview";
 import Image from "next/image";
+
 interface DoctorInfo {
   email: string;
   name: string;
@@ -52,6 +53,9 @@ export interface DoctorData {
 
 export default function Doctor() {
   const { id } = useParams();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
 
   const { data, error, isLoading } = useQuery<DoctorData>({
     queryKey: ["doctor", id],
@@ -60,232 +64,359 @@ export default function Doctor() {
   });
 
   const [open, setOpen] = useState(false);
-  const { data: DoctorReviews, refetch } = useDoctorReview(id as string)
-console.log('sfyu:',id);
+  const { data: doctorReviews, refetch } = useDoctorReview(id as string);
 
-  if (isLoading)
+  if (isLoading) {
     return (
-      <Box textAlign="center" py={10}>
-        <CircularProgress />
-        <Typography variant="h6" mt={2}>
-          Loading doctor details...
-        </Typography>
-      </Box>
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight="50vh">
+          <CircularProgress size={40} />
+          <Typography variant="h6" mt={2}>
+            Loading doctor details...
+          </Typography>
+        </Box>
+      </Container>
     );
+  }
 
-  if (error)
+  if (error) {
     return (
-      <Box textAlign="center" py={10}>
-        <Alert severity="error">
-          Error fetching doctor details: {(error as Error).message}
-        </Alert>
-      </Box>
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Box display="flex" justifyContent="center" minHeight="50vh">
+          <Alert severity="error" sx={{ maxWidth: 600 }}>
+            Error fetching doctor details: {(error as Error).message}
+          </Alert>
+        </Box>
+      </Container>
     );
+  }
 
-  if (!data)
+  if (!data) {
     return (
-      <Box textAlign="center" py={10}>
-        <Typography variant="h6" color="gray">
-          No doctor details found
-        </Typography>
-      </Box>
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Box display="flex" justifyContent="center" minHeight="50vh">
+          <Typography variant="h6" color="gray">
+            No doctor details found
+          </Typography>
+        </Box>
+      </Container>
     );
+  }
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      py={4}
-      px={2}
-    >
-      <Card
-        sx={{
-          maxWidth: 900,
-          width: "100%",
-          p: 3,
-          borderRadius: 3,
-          boxShadow: 3,
-        }}
-      >
-        <Grid container spacing={3} alignItems="center">
-          <Grid item xs={12} md={4} display="flex" justifyContent="center">
-            <Avatar
-              src={data.profileImage || "/doctor.jpg"}
-              alt="Doctor Profile"
-              sx={{ width: 140, height: 140, border: "3px solid #e0e0e0" }}
-            />
+    <Container maxWidth={false} sx={{ py: { xs: 2, md: 4 } }}>
+      <Box sx={{ maxWidth: "100%", mx: "auto", p: 3, bgcolor: "#f5f9fc"}}>
+        {/* Doctor Profile Card */}
+        <Card sx={{ mb: { xs: 2, md: 4 }, boxShadow: "0 4px 12px rgba(0,0,0,0.05)", borderRadius: 2 }}>
+          <CardContent sx={{ p: { xs: 2, md: 3 } }}>
+            <Typography 
+              variant="overline" 
+              sx={{ color: "#94a3b8", letterSpacing: 1.5, fontWeight: 500, mb: 1, display: "block" }}
+            >
+              DOCTOR PROFILE
+            </Typography>
+            
+            <Grid container spacing={3} alignItems="center">
+              <Grid item xs={12} sm={4} md={3}>
+                <Box
+                  component="img"
+                  src={data.profileImage || "/doctor.jpg"}
+                  alt={data.doctor.name}
+                  sx={{
+                    width: "100%",
+                    height: { xs: 200, sm: 220, md: 240 },
+                    borderRadius: 2,
+                    objectFit: "cover",
+                  }}
+                />
+              </Grid>
+              
+              <Grid item xs={12} sm={8} md={9}>
+                <Typography variant="h4" fontWeight="700" color="#334155" sx={{ fontSize: { xs: '1.5rem', md: '2rem' } }}>
+                  Dr. {data.doctor.name}
+                </Typography>
+                
+                <Typography variant="h6" color="#64748b" sx={{ mb: 2, fontSize: { xs: '1rem', md: '1.25rem' } }}>
+                  {data.specialization?.join(", ")}
+                </Typography>
+                
+                <Box sx={{ display: "flex", flexDirection: "column", gap: 1, mb: 3 }}>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <LocationOn sx={{ color: "#64748b", fontSize: 18 }} />
+                    <Typography variant="body2" color="#64748b">
+                      {data.address}
+                    </Typography>
+                  </Box>
+                  
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <Phone sx={{ color: "#64748b", fontSize: 18 }} />
+                    <Typography variant="body2" color="#64748b">
+                      {data.doctor.phone}
+                    </Typography>
+                  </Box>
+                  
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <Email sx={{ color: "#64748b", fontSize: 18 }} />
+                    <Typography variant="body2" color="#64748b">
+                      {data.doctor.email}
+                    </Typography>
+                  </Box>
+                </Box>
+                
+                <Link href={`/user/doctors/booking/${data.doctor._id}`} passHref>
+                  <Button
+                    variant="contained"
+                    fullWidth={isMobile}
+                    sx={{
+                      bgcolor: "#0284c7",
+                      "&:hover": { bgcolor: "#0369a1" },
+                      px: 3,
+                      py: 1,
+                      borderRadius: 1.5
+                    }}
+                  >
+                    Book Appointment
+                  </Button>
+                </Link>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+        
+        {/* Biography and Details Section */}
+        <Grid container spacing={{ xs: 2, md: 4 }}>
+          <Grid item xs={12} md={7}>
+            <Card sx={{ height: "100%", boxShadow: "0 4px 12px rgba(0,0,0,0.05)", borderRadius: 2 }}>
+              <CardContent sx={{ p: { xs: 2, md: 3 } }}>
+                <Typography variant="h6" fontWeight="700" color="#334155" sx={{ mb: 2 }}>
+                  Biography
+                </Typography>
+                <Typography variant="body2" color="#64748b" paragraph>
+                  {data.description}
+                </Typography>
+              </CardContent>
+            </Card>
           </Grid>
-
-          <Grid item xs={12} md={8}>
-            <Typography variant="h4" fontWeight="bold">
-              {data?.doctor?.name}
-            </Typography>
-            <Typography variant="h6" color="primary" fontWeight="500" mt={1}>
-              {data?.specialization?.join(", ")}
-            </Typography>
-            <Typography variant="body1" color="text.secondary">
-              {data?.hospital}
-            </Typography>
-            <Typography variant="body2" color="text.secondary" mt={1}>
-              📍 {data?.address}
-            </Typography>
-            <Typography variant="body2" color="text.secondary" mt={1}>
-              📞 {data?.doctor?.phone}
-            </Typography>
-            <Typography variant="body2" color="text.secondary" mt={1}>
-              ✉️ {data?.doctor?.email}
-            </Typography>
-
-            <Link href={`/user/doctors/booking/${data?.doctor?._id}`} passHref>
-              <Button variant="contained" color="error" sx={{ mt: 3, px: 4, py: 1, fontSize: 16, bgcolor: "#450a0a" }}>
-                Book Appointment
-              </Button>
-            </Link>
+          
+          <Grid item xs={12} md={5}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Card sx={{ boxShadow: "0 4px 12px rgba(0,0,0,0.05)", borderRadius: 2 }}>
+                  <CardContent sx={{ p: { xs: 2, md: 3 } }}>
+                    <Typography variant="h6" fontWeight="700" color="#334155" sx={{ mb: 2 }}>
+                      Education
+                    </Typography>
+                    
+                    <List disablePadding>
+                      {data.qualification?.map((qual, index) => (
+                        <ListItem key={index} disablePadding sx={{ mb: 1.5 }}>
+                          <ListItemIcon sx={{ minWidth: 40 }}>
+                            <School sx={{ color: "#64748b" }} />
+                          </ListItemIcon>
+                          <ListItemText 
+                            primary={qual}
+                            primaryTypographyProps={{ 
+                              variant: "body2", 
+                              color: "#334155",
+                              fontWeight: "500"
+                            }}
+                          />
+                        </ListItem>
+                      ))}
+                    </List>
+                  </CardContent>
+                </Card>
+              </Grid>
+              
+              <Grid item xs={12}>
+                <Card sx={{ boxShadow: "0 4px 12px rgba(0,0,0,0.05)", borderRadius: 2 }}>
+                  <CardContent sx={{ p: { xs: 2, md: 3 } }}>
+                    <Typography variant="h6" fontWeight="700" color="#334155" sx={{ mb: 2 }}>
+                      Certification & Information
+                    </Typography>
+                    
+                    <List disablePadding>
+                      <ListItem disablePadding sx={{ mb: 1.5 }}>
+                        <ListItemIcon sx={{ minWidth: 40 }}>
+                          <VerifiedUser sx={{ color: "#64748b" }} />
+                        </ListItemIcon>
+                        <ListItemText 
+                          primary={`Experience: ${data.experience || "2 years"}`}
+                          primaryTypographyProps={{ 
+                            variant: "body2", 
+                            color: "#334155",
+                            fontWeight: "500"
+                          }}
+                        />
+                      </ListItem>
+                      
+                      <ListItem disablePadding sx={{ mb: 1.5 }}>
+                        <ListItemIcon sx={{ minWidth: 40 }}>
+                          <VerifiedUser sx={{ color: "#64748b" }} />
+                        </ListItemIcon>
+                        <ListItemText 
+                          primary={`Consultation Fee: ${data.consultationFee || "Free"}`}
+                          primaryTypographyProps={{ 
+                            variant: "body2", 
+                            color: "#334155",
+                            fontWeight: "500"
+                          }}
+                        />
+                      </ListItem>
+                      
+                      <ListItem disablePadding>
+                        <ListItemIcon sx={{ minWidth: 40 }}>
+                          <VerifiedUser sx={{ color: "#64748b" }} />
+                        </ListItemIcon>
+                        <ListItemText 
+                          primary={`Availability: ${data.availability}`}
+                          primaryTypographyProps={{ 
+                            variant: "body2", 
+                            color: "#334155",
+                            fontWeight: "500"
+                          }}
+                        />
+                      </ListItem>
+                    </List>
+                  </CardContent>
+                </Card>
+              </Grid>
+            </Grid>
+          </Grid>
+          
+          {/* Reviews Section */}
+          <Grid item xs={12}>
+            <Card sx={{ boxShadow: "0 4px 12px rgba(0,0,0,0.05)", borderRadius: 2 }}>
+              <CardContent sx={{ p: { xs: 2, md: 3 } }}>
+                <Box
+                  display="flex"
+                  flexDirection={isMobile ? "column" : "row"}
+                  justifyContent="space-between"
+                  alignItems={isMobile ? "flex-start" : "center"}
+                  gap={isMobile ? 2 : 0}
+                  mb={2}
+                >
+                  <Typography variant="h6" fontWeight="700" color="#334155">
+                    Patient Reviews
+                  </Typography>
+                  <Button 
+                    variant="outlined" 
+                    size="small"
+                    startIcon={<Star />}
+                    onClick={() => setOpen(true)}
+                    sx={{ 
+                      borderColor: "#64748b", 
+                      color: "#64748b",
+                      "&:hover": { borderColor: "#334155", color: "#334155" }
+                    }}
+                  >
+                    Add Review
+                  </Button>
+                </Box>
+                
+                <Card className="scrollbar-none"
+                  
+                  sx={{
+                    maxHeight: "250px",
+                    overflowY: "auto",
+                    p: 0
+                  }}
+                  
+                >
+                  {doctorReviews?.length ? (
+                    doctorReviews.map((review: IReview, index: number) => (
+                      <Box 
+                        key={index}
+                        sx={{ 
+                          p: { xs: 1.5, md: 2 }, 
+                          mb: 2, 
+                          bgcolor: "#f8fafc", 
+                          borderRadius: 2,
+                          border: "1px solid #e2e8f0"
+                        }}
+                      >
+                        <Box display="flex" alignItems="center" mb={1}>
+                          <Image
+                            src={
+                              review?.userId?.profileImage ||
+                              "https://i.pinimg.com/736x/ed/fe/67/edfe6702e44cfd7715a92390c7d8a418.jpg"
+                            }
+                            alt={review?.userId?.name}
+                            width={40}
+                            height={40}
+                            style={{
+                              borderRadius: "50%",
+                              marginRight: "12px",
+                              objectFit: "cover",
+                            }}
+                          />
+                          <Typography variant="subtitle2" fontWeight="500" color="#334155">
+                            {review.userId.name}
+                          </Typography>
+                        </Box>
+                        <Typography variant="body2" color="#64748b">
+                          {review.comment}
+                        </Typography>
+                      </Box>
+                    ))
+                  ) : (
+                    <Typography
+                      variant="body2"
+                      color="#94a3b8"
+                      textAlign="center"
+                      sx={{ py: 4 }}
+                    >
+                      No reviews yet. Be the first to add a review!
+                    </Typography>
+                  )}
+                </Card>
+              </CardContent>
+            </Card>
           </Grid>
         </Grid>
-      </Card>
-
-      <Card
-        sx={{
-          maxWidth: 900,
-          width: "100%",
-          mt: 4,
-          p: 3,
-          borderRadius: 3,
-          boxShadow: 3,
+      </Box>
+      
+      {/* Review Dialog */}
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        maxWidth="sm"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: 2,
+            p: { xs: 1, md: 2 }
+          }
         }}
       >
-        <CardContent>
-          <Typography variant="h5" fontWeight="bold" gutterBottom>
-            About
-          </Typography>
-          <Typography variant="body1" color="text.secondary" paragraph>
-            {data?.description}
-          </Typography>
-
-          <Divider sx={{ my: 2 }} />
-
-          <Typography
-            variant="h6"
-            fontWeight="bold"
-            color="text.primary"
-            mt={2}
+        <DialogTitle 
+          textAlign="center"
+          sx={{ 
+            fontSize: { xs: 18, md: 20 }, 
+            fontWeight: 600,
+            color: "#334155"
+          }}
+        >
+          Add a Review for Dr. {data.doctor.name}
+        </DialogTitle>
+        <DialogContent>
+          <ReviewForm
+            doctorId={id as string}
+            refetch={refetch}
+            setOpen={setOpen}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button 
+            onClick={() => setOpen(false)} 
+            color="error"
+            variant="outlined"
+            sx={{ borderRadius: 1.5 }}
           >
-            Qualifications
-          </Typography>
-          <List dense>
-            {data?.qualification?.map((qual, index) => (
-              <ListItem key={index}>
-                <ListItemText primary={qual} />
-              </ListItem>
-            ))}
-          </List>
-
-          <Divider sx={{ my: 2 }} />
-
-          <Typography
-            variant="h6"
-            fontWeight="bold"
-            color="text.primary"
-            mt={2}
-          >
-            Additional Information
-          </Typography>
-          <List dense>
-
-            <ListItem>
-              <ListItemText primary={`Consultation Fee: ${data?.consultationFee || 'Free'}`} />
-            </ListItem>
-            <ListItem>
-              <ListItemText primary={`Availability: ${data?.availability}`} />
-            </ListItem>
-          </List>
-          <Box display="flex" flexDirection="column" alignItems="center" py={4} px={2}>
-            {/* Reviews Header with Pencil Icon */}
-            <Box display="flex" justifyContent="space-between" alignItems="center" width="100%" maxWidth={900} mt={3}>
-              <Typography variant="h6" fontWeight="bold" color="text.primary">
-                Reviews
-              </Typography>
-              <Tooltip title="Add a Review" placement="bottom">
-                <Edit
-                  sx={{
-                    cursor: "pointer",
-                    color: "gray",
-                    "&:hover": { color: "black" },
-                    fontSize: 24,
-                  }}
-                  onClick={() => setOpen(true)} 
-                />
-              </Tooltip>
-            </Box>
-
-            {/* Reviews Box */}
-            <Box
-              sx={{
-                maxHeight: "250px",
-                overflowY: "auto",
-                mt: 2,
-                p: 2,
-                border: "1px solid #e0e0e0",
-                borderRadius: 2,
-                bgcolor: "#f9f9f9",
-                width: "100%",
-                maxWidth: 900,
-                scrollbarWidth: "none"
-              }}
-            >
-              {DoctorReviews?.length ? (
-                DoctorReviews.map((review: IReview, index: number) => (
-                  <ListItem key={index} alignItems="flex-start" sx={{ borderBottom: "1px solid #ddd", pb: 1, mb: 1 }}>
-
-                    <Box flex={1} >
-                    <Box display="flex" alignItems="center" mb={1}>
-                                <Image
-                                    src={review?.userId?.profileImage || "https://i.pinimg.com/736x/ed/fe/67/edfe6702e44cfd7715a92390c7d8a418.jpg"}
-                                    alt={review?.userId?.name}
-                                    width={50}
-                                    height={50}
-                                    style={{
-                                        borderRadius: "50%",
-                                        marginRight: "12px",
-                                        backgroundColor: "#1976d2",
-                                        objectFit: "cover",
-                                    }}
-                                />
-                                <Typography variant="subtitle1" fontWeight="bold">
-                                    {review.userId.name}
-                                </Typography>
-                            </Box>
-                      <Rating value={review.rating} precision={0.5} readOnly size="small" />
-                      <Typography variant="body2" color="text.secondary">
-                        {review.comment}
-                      </Typography>
-                    </Box>
-                  </ListItem>
-                ))
-              ) : (
-                <Typography variant="body2" color="text.secondary" textAlign="center">
-                  No reviews yet.
-                </Typography>
-              )}
-            </Box>
-
-            {/* Dialog Box for Adding Review */}
-            <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm" fullWidth>
-              <DialogTitle textAlign="center">Add a Review</DialogTitle>
-              <DialogContent>
-                <ReviewForm doctorId={id as string} refetch={refetch} setOpen={setOpen} />
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={() => setOpen(false)} color="error">
-                  Cancel
-                </Button>
-              </DialogActions>
-            </Dialog>
-          </Box>
-        </CardContent>
-      </Card>
-    </Box>
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Container>
   );
 }

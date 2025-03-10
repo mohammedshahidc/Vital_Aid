@@ -4,7 +4,6 @@ import Image from "next/image";
 import React from "react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import heroimg from "../../../public/heroimg-removebg-preview.png";
 import { useRouter } from "next/navigation";
 
 function Hero() {
@@ -87,7 +86,7 @@ function Hero() {
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div data-aos="fade-left">
                     <Image
-                      src={heroimg}
+                      src="/heroimg-removebg-preview.png"
                       alt="Description of the image"
                       width={450}
                       height={400}

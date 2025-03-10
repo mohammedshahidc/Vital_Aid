@@ -22,7 +22,7 @@ export default function Sidebar({ sidebarOpen, toggleSidebar }: SidebarProps) {
     if (pathname === "/doctor/message") {
       toggleSidebar(); // Hide sidebar when entering message page
     }
-  }, [pathname]);
+  }, [pathname,toggleSidebar]);
 
   return (
     <>

@@ -1,6 +1,6 @@
 "use client"
 import React, { useState,useEffect } from 'react'
-import { Request } from '@/lib/store/features/requestSlice'
+import type { Request } from '@/lib/store/features/requestSlice'
 import { useRequest } from '@/lib/Query/hooks/useRequest'
 import { IoIosArrowDropdownCircle } from "react-icons/io";
 import { Button, CircularProgress } from '@mui/material'
@@ -18,8 +18,8 @@ const Request = () => {
     if (data?.data) {
       setAllRequests((prevRequests) => {
         const existingIds = new Set(prevRequests.map((req) => req._id));
-        const newRequests = data.data.filter((req) => !existingIds.has(req._id));
-        return [...prevRequests, ...newRequests]; // Append new requests without duplication
+        const newRequests = data.data.filter((req: Request) => !existingIds.has(req._id));
+        return [...prevRequests, ...newRequests]; 
       });
     }
   }, [data, currentPage]);

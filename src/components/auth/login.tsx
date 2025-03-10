@@ -12,7 +12,6 @@ import {
 } from "@/lib/store/features/userSlice";
 import LoginModal from "../ui/loginModal";
 import Image from "next/image";
-import DRpng from "../../../public/Doctor.png";
 import { toast } from "react-hot-toast";
 
 const Login: React.FC = () => {
@@ -192,7 +191,7 @@ const Login: React.FC = () => {
                 <p className="text-white text-2xl sm:text-xl font-medium font-serif">
                   Welcome Doctor
                 </p>
-                <Image src={DRpng} alt="drimg" />
+                <Image src="/Doctor.png" alt="drimg" width={200} height={200}/>
               </div>
             ) : (
               <p className="text-white text-2xl sm:text-xl font-medium font-serif mb-4">
