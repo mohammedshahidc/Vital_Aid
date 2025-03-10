@@ -6,6 +6,8 @@ import axiosErrorManager from "@/utils/axiosErrormanager";
 import toast from "react-hot-toast";
 
 interface UserState {
+  accessToken:string|null
+  refreshToken:string|null
   user: {
     email: string | null;
     id: string | null;
@@ -34,6 +36,7 @@ type LoginFulfilledType = {
   email: string;
   id: string;
   token: string;
+  refreshToken:string
   role: string;
   profileImage: { originalProfile: string; thumbnail: string };
   phone: string;
@@ -78,12 +81,15 @@ export const loginUser = createAsyncThunk<
     });
 
     const { data } = response;
+    console.log('agsdy',data);
+    
     toast.success("welcome to Vital Aid");
     return {
       name: data.user.name,
       email: data.user.email,
       id: data.user.id,
       token: data.accessToken,
+      refreshToken:data.refreshToken,
       role: data.user.role,
       profileImage: data.user.profileImage,
       phone: data.user.phone,
@@ -116,6 +122,7 @@ export const loginDoctor = createAsyncThunk<
       email: data.user.email,
       id: data.user.id,
       token: data.accessToken,
+      refreshToken:data.refreshToken,
       role: data.user.role,
       profileImage: data.user.profileImage,
       phone: data.user.phone,
@@ -145,6 +152,7 @@ export const loginadmin = createAsyncThunk<
       email: data.user.email,
       id: data.user.id,
       token: data.accessToken,
+      refreshToken:data.refreshToken,
       role: data.user.role,
       profileImage: data.user.profileImage,
       phone: data.user.phone,
@@ -163,7 +171,9 @@ const userSlice = createSlice({
       state.error = null;
       Cookies.remove("user");
       localStorage.removeItem("userState");
-      
+      Cookies.remove("accessToken")
+      Cookies.remove("refreshToken")
+
     },
     setType: (state, action) => {
       state.userType = action.payload;
@@ -183,6 +193,10 @@ const userSlice = createSlice({
           localStorage.setItem("user", action.payload.role);
           localStorage.setItem("username", action.payload.name);
           localStorage.setItem("userState", JSON.stringify(state));
+          Cookies.set("accessToken",action.payload.token)
+          Cookies.set("refreshToken",action.payload.refreshToken)
+          Cookies.set("user",action.payload.role)
+
           state.error = null;
         }
       )
@@ -210,6 +224,9 @@ const userSlice = createSlice({
           localStorage.setItem("user", action.payload.role);
           localStorage.setItem("username", action.payload.name);
           localStorage.setItem("userState", JSON.stringify(state));
+          Cookies.set("accessToken",action.payload.token)
+          Cookies.set("refreshToken",action.payload.refreshToken)
+          Cookies.set("user",action.payload.role)
           state.error = null;
         }
       )
@@ -233,6 +250,9 @@ const userSlice = createSlice({
           state.user = action.payload;
           localStorage.setItem("user", action.payload.role);
           localStorage.setItem("username", action.payload.name);
+          Cookies.set("accessToken",action.payload.token)
+          Cookies.set("refreshToken",action.payload.refreshToken)
+          Cookies.set("user",action.payload.role)
           state.error = null;
         }
       )
