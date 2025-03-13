@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Aos from "aos";
 import "aos/dist/aos.css";
+import Spinner from "@/components/ui/spinner";
 
 interface Doctor {
   description: string;
@@ -22,7 +23,7 @@ interface Doctor {
 }
 
 function DoctorList() {
-  const { doctors } = useDoctorUser();
+  const { doctors ,isLoading} = useDoctorUser();
   console.log(doctors, "Fetched Doctors");
 
 
@@ -36,6 +37,10 @@ function DoctorList() {
       Aos.init({ duration: 1000, once: true });
     }
   }, []);
+
+  if(isLoading){
+    return <Spinner/>
+  }
 
   return (
     <div className="max-w-full mx-auto md:mx-11 p-6">

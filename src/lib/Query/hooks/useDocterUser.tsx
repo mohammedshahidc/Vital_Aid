@@ -7,11 +7,11 @@ const fetchDoctors = async () => {
 };
 
 export const useDoctorUser=()=>{
-     const {data:doctors}=useQuery({
+     const {data:doctors,isLoading}=useQuery({
         queryKey:["doctor"],
         queryFn:fetchDoctors
      })
-     return {doctors}
+     return {doctors,isLoading}
 }
 
 const fetchDoctorById=async(id:string)=>{

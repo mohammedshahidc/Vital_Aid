@@ -15,6 +15,7 @@ import {
 import ContactPhoneOutlinedIcon from "@mui/icons-material/ContactPhoneOutlined";
 import ContentPasteSearchIcon from "@mui/icons-material/ContentPasteSearch";
 import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined";
+import Spinner from "@/components/ui/spinner";
 
 export interface Donor {
   _id: string;
@@ -87,7 +88,7 @@ const DonorsList: React.FC = () => {
     setSelectedBloodGroup(e.target.value);
   };
 
-  if (isLoading) return <p className="text-center text-blue-500">Loading...</p>;
+  if (isLoading) return <Spinner/>
   if (error)
     return <p className="text-center text-red-500">Error fetching donors</p>;
 

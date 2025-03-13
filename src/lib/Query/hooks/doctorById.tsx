@@ -31,9 +31,7 @@ export const fetchDoctorById = async (id: string) => {
 
 const fetchReviews=async(id:string)=>{
    const response= await axiosInstance.get(`/users/getallreview/${id}`)
-
    console.log("sdhfsgyftye",response.data);
-
    
     return response.data?.data
 }

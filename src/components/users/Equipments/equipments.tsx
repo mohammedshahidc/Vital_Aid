@@ -11,10 +11,11 @@ import Link from "next/link";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import HowItWorks from "./howItWork";
+import Spinner from "@/components/ui/spinner";
 
 const Equipmentsuser = () => {
   const dispatch = useAppDispatch();
-  const { allEquipment, totalPages } = useAppSelector(
+  const { allEquipment, totalPages ,isLoading} = useAppSelector(
     (state) => state.equipments
   );
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -32,6 +33,9 @@ const Equipmentsuser = () => {
       setCurrentPage((prevPage) => prevPage + 1);
     }
   };
+  if(isLoading){
+    return <Spinner/>
+  }
 
   return (
     <div className="mx-auto md:mx-11">

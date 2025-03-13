@@ -20,17 +20,7 @@ const steps: StepType[] = [
 const HowItWorks: React.FC = () => {
   return (
     <div>
-      <Box sx={{ width: "100%", textAlign: "center", my: 2, p: 3, borderRadius: 2 }}>
-      <Typography variant="h6" fontWeight="bold">
-        Volunteers Support
-      </Typography>
-     
-      <Typography variant="body1" color="textSecondary" sx={{ mt: 1 }}>
-      Need a volunteer? Here is a list of volunteers ready to help. Browse,
-      connect, and seek help!
-      </Typography>
-     
-    </Box>
+      
     <Box sx={{ width: "100%", textAlign: "center", py: 4,}}>
       <Typography variant="h5" sx={{ mb: 3 }}>
         How it Works

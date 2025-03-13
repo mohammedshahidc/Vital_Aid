@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import useEventById from "@/lib/Query/hooks/useEventsById";
 import Image from "next/image";
 import { FaMapMarkerAlt, FaCalendarAlt, FaBuilding } from "react-icons/fa";
+import Spinner from "@/components/ui/spinner";
 
 
 const EventById: React.FC = () => {
@@ -12,7 +13,7 @@ const EventById: React.FC = () => {
 
 
   if (isLoading)
-    return <p className="text-center text-blue-500">Loading event...</p>;
+    return <Spinner/>
   if (error)
     return <p className="text-center text-red-500">Error fetching event!</p>;
   if (!event || event.isDeleted)

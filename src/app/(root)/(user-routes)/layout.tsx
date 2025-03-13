@@ -2,6 +2,7 @@
 import React, { ReactNode } from "react";
 import Navbar from "@/components/users/Navbar/Navbar";
 import QuickActions from "@/components/ui/quickActions";
+import Footer from "@/components/ui/footer";
 
 
 
@@ -17,6 +18,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <Navbar />
 
       <main className="mt-16">{children}</main>
+      <Footer/>
       <QuickActions/>
     </>
   );
