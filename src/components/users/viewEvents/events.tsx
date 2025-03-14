@@ -2,6 +2,7 @@
 import React from "react";
 import useEvents from "@/lib/Query/hooks/useEvents";
 import Image from "next/image";
+import Spinner from "@/components/ui/spinner";
 
 type Event = {
   _id: string;
@@ -17,7 +18,7 @@ const Events: React.FC = () => {
   const { events, isLoading, error } = useEvents();
 
   if (isLoading)
-    return <p className="text-center text-blue-500">Loading events...</p>;
+    return <Spinner/>
 
   if (error || events?.error === "true")
     return <p className="text-center text-red-500">Error loading events!</p>;

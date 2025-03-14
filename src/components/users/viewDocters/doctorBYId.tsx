@@ -10,7 +10,6 @@ import {
   CardContent,
   Typography,
   Button,
-  CircularProgress,
   Alert,
   Grid,
   Dialog,
@@ -30,6 +29,7 @@ import { IReview } from "@/lib/Query/hooks/doctorById";
 import { LocationOn, Phone, Email, School, VerifiedUser, Star } from "@mui/icons-material";
 import ReviewForm from "../Reviews/addReview";
 import Image from "next/image";
+import Spinner from "@/components/ui/spinner";
 
 interface DoctorInfo {
   email: string;
@@ -67,16 +67,7 @@ export default function Doctor() {
   const { data: doctorReviews, refetch } = useDoctorReview(id as string);
 
   if (isLoading) {
-    return (
-      <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" minHeight="50vh">
-          <CircularProgress size={40} />
-          <Typography variant="h6" mt={2}>
-            Loading doctor details...
-          </Typography>
-        </Box>
-      </Container>
-    );
+    return <Spinner/>
   }
 
   if (error) {

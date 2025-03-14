@@ -1,19 +1,33 @@
 "use client";
 
-import { Button, Menu, MenuItem, ListItemIcon, ListItemText, Fade } from "@mui/material";
+import {
+  Button,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  ListItemText,
+  Fade,
+} from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { IoChatbubblesOutline } from "react-icons/io5";
 import { HiMenu, HiX } from "react-icons/hi";
-import { MdMedicalServices, MdVolunteerActivism, MdEvent, MdBloodtype, MdMedicalInformation } from 'react-icons/md';
+import {
+  MdMedicalServices,
+  MdVolunteerActivism,
+  MdEvent,
+  MdBloodtype,
+  MdMedicalInformation,
+} from "react-icons/md";
 import axiosInstance from "@/utils/axios";
 import axiosErrorManager from "@/utils/axiosErrormanager";
 import { AiOutlineLogout } from "react-icons/ai";
+import Image from "next/image";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  
+
   const router = useRouter();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -27,31 +41,48 @@ export default function Navbar() {
   };
   const logOut = async () => {
     try {
-        await axiosInstance.delete('/auth/logout')
-        router.push('/')
+      await axiosInstance.delete("/auth/logout");
+      router.push("/");
     } catch (error) {
-        console.error("Logout failed", error)
-        axiosErrorManager(error)
+      console.error("Logout failed", error);
+      axiosErrorManager(error);
     }
-};
+  };
 
   const menuItems = [
-    { text: 'Doctors', href: '/user/doctors', icon: <MdMedicalServices className="text-teal-600" /> },
-    { text: 'Volunteers', href: '/user/volunteers', icon: <MdVolunteerActivism className="text-teal-600" /> },
-    { text: 'Events', href: '/user/events', icon: <MdEvent className="text-teal-600" /> },
-    { text: 'Blood Donors', href: '/user/bloodDonors', icon: <MdBloodtype className="text-teal-600" /> },
-    { text: 'Equipments', href: '/user/equipments', icon: <MdMedicalInformation className="text-teal-600" /> },
+    {
+      text: "Doctors",
+      href: "/user/doctors",
+      icon: <MdMedicalServices className="text-teal-600" />,
+    },
+    {
+      text: "Volunteers",
+      href: "/user/volunteers",
+      icon: <MdVolunteerActivism className="text-teal-600" />,
+    },
+    {
+      text: "Events",
+      href: "/user/events",
+      icon: <MdEvent className="text-teal-600" />,
+    },
+    {
+      text: "Blood Donors",
+      href: "/user/bloodDonors",
+      icon: <MdBloodtype className="text-teal-600" />,
+    },
+    {
+      text: "Equipments",
+      href: "/user/equipments",
+      icon: <MdMedicalInformation className="text-teal-600" />,
+    },
   ];
 
   return (
     <nav className="fixed top-0 z-50 bg-white border-b border-gray-200 dark:bg-gray-900 w-full shadow-md">
       <div className="container mx-auto flex items-center justify-between py-4 px-6">
-        <Link
-          href="/user"
-          className="text-xl font-bold text-gray-900 dark:text-white"
-        >
-          Vital Aid
-        </Link>
+        <div className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">
+          <Image src={"/VitalAid.png"} width={100} height={100} alt="lo" />
+        </div>
 
         <div className="lg:hidden flex gap-2">
           <Button
@@ -95,28 +126,29 @@ export default function Navbar() {
               TransitionComponent={Fade}
               elevation={3}
               anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'center',
+                vertical: "bottom",
+                horizontal: "center",
               }}
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'center',
+                vertical: "top",
+                horizontal: "center",
               }}
               PaperProps={{
-                className: "mt-2 py-2 rounded-lg shadow-lg"
+                className: "mt-2 py-2 rounded-lg shadow-lg",
               }}
             >
               {menuItems.map((item) => (
-                <MenuItem 
+                <MenuItem
                   key={item.text}
                   onClick={handleMenuClose}
                   className="hover:bg-gray-50 px-6 py-3"
                 >
-                  <Link href={item.href} className="flex items-center gap-3 min-w-[200px]">
-                    <ListItemIcon className="min-w-0">
-                      {item.icon}
-                    </ListItemIcon>
-                    <ListItemText 
+                  <Link
+                    href={item.href}
+                    className="flex items-center gap-3 min-w-[200px]"
+                  >
+                    <ListItemIcon className="min-w-0">{item.icon}</ListItemIcon>
+                    <ListItemText
                       primary={item.text}
                       className="text-gray-700 font-medium"
                     />
@@ -169,8 +201,6 @@ export default function Navbar() {
             >
               Home
             </Link>
-            
-            
 
             <Link
               href="/about-us"

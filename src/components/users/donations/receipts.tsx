@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAppSelector } from "@/lib/store/hooks";
 import axiosInstance from "@/utils/axios";
 import { useRouter } from "next/navigation";
+import Spinner from "@/components/ui/spinner";
 
 interface DonationUser {
   _id: string;
@@ -173,7 +174,7 @@ const Receipt = () => {
     }
   };
 
-  if (isLoading) return <p className="text-center mt-8">Loading...</p>;
+  if (isLoading) return <Spinner/>
   if (error)
     return (
       <p className="text-center mt-8">

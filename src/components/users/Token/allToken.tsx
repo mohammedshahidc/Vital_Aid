@@ -10,6 +10,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { TokenType } from "@/lib/Query/hooks/addToken";
 import { FaCalendarAlt, FaUserMd } from "react-icons/fa";
 import { MdRefresh } from "react-icons/md";
+import Spinner from "@/components/ui/spinner";
 
 const AllToken = () => {
   const today = dayjs();
@@ -54,9 +55,7 @@ const AllToken = () => {
 
             <div className="space-y-3">
               {isLoading ? (
-                <div className="flex justify-center py-10">
-                  <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500"></div>
-                </div>
+                <Spinner/>
               ) : isError ? (
                 <div className="p-3 bg-red-50 text-red-500 rounded-lg text-center">
                   Failed to load appointments.

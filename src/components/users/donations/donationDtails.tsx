@@ -3,6 +3,7 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "@/utils/axios";
 import { useAppSelector } from "@/lib/store/hooks";
+import Spinner from "@/components/ui/spinner";
 
 interface Donation {
   _id: string;
@@ -34,7 +35,7 @@ function DonationDetails() {
     enabled: Boolean(userId),
   });
 
-  if (isLoading) return <p className="text-center mt-8 text-lg">Loading donations...</p>;
+  if (isLoading) return <Spinner/>
   if (error) return <p className="text-center mt-8 text-lg">Error: {(error as Error).message}</p>;
 
   return (

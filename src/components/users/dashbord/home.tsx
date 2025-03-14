@@ -143,7 +143,7 @@ const Home = () => {
                 padding: "10px 16px",
               }}
             >
-              <FaClipboardList /> my appointments
+              <FaClipboardList size={20} /> my appointments
             </Button>
           </div>
         </div>

@@ -14,13 +14,13 @@ const Footer = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  if (!isVisible) return null; // Hide footer for 500ms
+  if (!isVisible) return null; 
 
   return (
-    <footer className="bg-gray-900 text-gray-300 py-8">
+    <footer className="bg-gray-700 text-gray-300 py-8">
       <div className="container mx-auto px-6 md:px-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* About Section */}
+          
           <div>
             <h2 className="text-xl font-semibold text-white">About Us</h2>
             <p className="mt-2 text-sm">
@@ -28,18 +28,18 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* Quick Links */}
+          
           <div>
             <h2 className="text-xl font-semibold text-white">Quick Links</h2>
             <ul className="mt-2 space-y-2 text-sm">
-              <li><Link href="/about" className="hover:text-white">About</Link></li>
+              <li><Link href="/user/about-us" className="hover:text-white">About</Link></li>
               <li><Link href="/services" className="hover:text-white">Services</Link></li>
-              <li><Link href="/donate" className="hover:text-white">Donate</Link></li>
-              <li><Link href="/contact" className="hover:text-white">Contact</Link></li>
+              <li><Link href="/user/donationHome" className="hover:text-white">Donate</Link></li>
+              <li><Link href="/user/about-us" className="hover:text-white">Contact</Link></li>
             </ul>
           </div>
 
-          {/* Contact Section */}
+          
           <div>
             <h2 className="text-xl font-semibold text-white">Contact</h2>
             <p className="mt-2 text-sm">Email: vitalaidnsr@gmail.com</p>
@@ -53,7 +53,7 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Copyright Section */}
+        
         <div className="text-center text-sm mt-6 border-t border-gray-700 pt-4">
           <p>© {new Date().getFullYear()} VitalAid. All rights reserved.</p>
         </div>
