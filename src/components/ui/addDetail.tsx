@@ -53,7 +53,7 @@ const AddReportModal: React.FC<AddReportModalProps> = ({ open, onClose }) => {
     const { name, value } = e.target;
     setReportData((prev) => ({
       ...prev,
-      [name]: name === "age" ? Number(value) : value, // Convert age to a number
+      [name]: name === "age" ? Number(value) : value, 
     }));
   };
 
@@ -108,7 +108,7 @@ const AddReportModal: React.FC<AddReportModalProps> = ({ open, onClose }) => {
             fullWidth
             label="Age"
             name="age"
-            type="number" // Ensure age input is numeric
+            type="number" 
             variant="outlined"
             value={reportData.age}
             onChange={handleChange}
@@ -198,6 +198,7 @@ const AddReportModal: React.FC<AddReportModalProps> = ({ open, onClose }) => {
           color="primary"
           variant="contained"
           disabled={Loading}
+          sx={{ textTransform: "none" }}
         >
           {Loading ? "Analyzing Data..." : "Generate Medical Report"}
         </Button>

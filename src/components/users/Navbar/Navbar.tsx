@@ -24,6 +24,7 @@ import axiosInstance from "@/utils/axios";
 import axiosErrorManager from "@/utils/axiosErrormanager";
 import { AiOutlineLogout } from "react-icons/ai";
 import Image from "next/image";
+import { signOut } from "next-auth/react";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -42,7 +43,9 @@ export default function Navbar() {
   const logOut = async () => {
     try {
       await axiosInstance.delete("/auth/logout");
+
       router.push("/");
+      signOut({ callbackUrl: "/" });
     } catch (error) {
       console.error("Logout failed", error);
       axiosErrorManager(error);

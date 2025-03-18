@@ -12,7 +12,6 @@ function Appoinmentsctn() {
 
   const { user } = useAppSelector((state) => state.auth);
   const { tokens ,refetch} = useGetTokenForUser(user?.id ?? "");
-  console.log(tokens);
   
   return (
     <>
@@ -30,6 +29,7 @@ function Appoinmentsctn() {
             color="success"
             size="small"
             onClick={() => Router.push("/user/doctors")}
+            sx={{ textTransform: "none" }}
           >
             + New Appointment
           </Button>
@@ -52,6 +52,7 @@ function Appoinmentsctn() {
                 color="success"
                 className="mt-2"
                 onClick={() => Router.push("/user/doctors")}
+                sx={{ textTransform: "none" }}
               >
                 Book your first appointment
               </Button>

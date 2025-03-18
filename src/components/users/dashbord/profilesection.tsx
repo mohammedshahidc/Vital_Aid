@@ -398,6 +398,7 @@ function Profilesection() {
                       variant="text"
                       color="primary"
                       startIcon={<FiEdit />}
+                      sx={{ textTransform: "none" }}
                     >
                       {hasExistingDetails
                         ? "Edit Profile"

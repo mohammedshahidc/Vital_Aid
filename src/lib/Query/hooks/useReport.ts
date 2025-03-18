@@ -20,8 +20,6 @@ export function useFetchreport(id: string) {
 const fetchDetails = async (id: string) => {
   try {
     const response = await axiosInstance.get(`/users/getdetails/${id}`);
-    console.log(response);
-
     return response.data;
   } catch (error) {
     axiosErrorManager(error);
@@ -49,8 +47,6 @@ export function useFetchDetails(id: string) {
 
 const fetchusersREviews = async () => {
   const response = await axiosInstance.get("/users/getuserreview");
-  console.log("resp:", response.data?.data);
-
   return response.data?.data;
 };
 

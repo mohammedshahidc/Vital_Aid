@@ -8,19 +8,19 @@ import volunteerSlice from "./features/volunteers";
 import eventsReducer from "./features/eventSlice";
 import donorsReducer from "./features/donorsSlice";
 
-// 🔹 Define persist config
+
 const authPersistConfig = {
   key: "auth",
   storage,
 };
 
-// 🔹 Wrap auth reducer with persistReducer
+
 const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
-      auth: persistedAuthReducer, // Use persisted reducer
+      auth: persistedAuthReducer,
       users: userReducer,
       equipments: EquipmentSlice,
       volunteers: volunteerSlice,

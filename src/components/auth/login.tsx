@@ -13,14 +13,40 @@ import {
 import LoginModal from "../ui/loginModal";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
+import { signIn, useSession } from "next-auth/react";
+import { FcGoogle } from "react-icons/fc";
+import axiosErrorManager from "@/utils/axiosErrormanager";
+interface GoogleUser {
+  email?: string | null | undefined;
+  name?: string | null | undefined;
+  image?: string | null | undefined;
+}
+
+interface Session {
+  user?: GoogleUser;
+}
 
 const Login: React.FC = () => {
-  const { admin } = useParams();
-  const dispatch = useAppDispatch();
-  const { isLoading, error, userType } = useAppSelector((state) => state.auth);
-  const router = useRouter();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { admin } = useParams();
+  const { isLoading, error, userType } = useAppSelector((state) => state.auth);
+  const { data :session} = useSession();
+  const router = useRouter();
+  const role = localStorage.getItem("user");
+  const dispatch = useAppDispatch();
+   const [googleRegistered, setGoogleRegistered] = useState(false);
+
+  const btnColor =
+    userType == "Admin" ? "info" : userType == "Doctor" ? "primary" : "success";
+
+  const gradientColor =
+    userType === "Admin"
+      ? "from-purple-300 via-purple-400 to-purple-500"
+      : userType === "Doctor"
+      ? "from-blue-300 via-blue-400 to-blue-500"
+      : " from-custom-green-100 via-custom-green-200 to-custom-green-300";
 
   useEffect(() => {
     if (admin) {
@@ -28,7 +54,16 @@ const Login: React.FC = () => {
     }
   }, [dispatch, admin]);
 
+  useEffect(() => {
+    if (session && !googleRegistered) {
+      if (session) {
+        googleLogin(session);
+      }
+      setGoogleRegistered(true);
+    }
+  }, [session, googleRegistered]);
 
+  const handleCloseModal = () => setIsModalOpen(false);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -36,13 +71,12 @@ const Login: React.FC = () => {
       userType == "User"
         ? await dispatch(loginUser({ email, password }))
         : userType == "Admin"
-          ? await dispatch(loginadmin({ email, password }))
-          : await dispatch(loginDoctor({ email, password }));
+        ? await dispatch(loginadmin({ email, password }))
+        : await dispatch(loginDoctor({ email, password }));
 
     if (error) {
       toast.error(error);
     }
-    const role = localStorage.getItem("user");
 
     if (result.meta.requestStatus == "fulfilled") {
       if (role && role === "User") {
@@ -59,37 +93,38 @@ const Login: React.FC = () => {
   if (error) {
     toast.error(error);
   }
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleCloseModal = () => setIsModalOpen(false);
-
-  const btnColor =
-    userType == "Admin"
-      ? "info"
-      : userType == "Doctor"
-        ? "primary"
-        : "success";
-
-  const gradientColor =
-    userType === "Admin"
-      ? "from-purple-300 via-purple-400 to-purple-500"
-      : userType === "Doctor"
-        ? "from-blue-300 via-blue-400 to-blue-500"
-        : " from-custom-green-100 via-custom-green-200 to-custom-green-300";
 
   const handleClick = async () => {
     await dispatch(setType("Doctor"));
   };
+
+
+
+ 
+  const googleLogin = async (session: Session) => {
+    try {
+      if (!session?.user) return;
+      const googleUser = session.user;
+      const dispatchResult = await dispatch(
+        loginUser({ email: googleUser.email, password: googleUser.name })
+      );
+
+      if (dispatchResult.meta.requestStatus === "fulfilled") {
+        if (role && role === "User") {
+          router.push("/user");
+        }
+      } else {
+        toast.error("Login failed, please try again.");
+      }
+    } catch (error) {
+      axiosErrorManager(error);
+    }
+  };
+
   return (
     <div
       className={`relative flex h-screen items-center justify-center bg-gray-100`}
     >
-      {/* <div className="absolute top-36 md:top-6 space-x-4 mt-7  ">
-        <Button onClick={handleOpenModal} variant="text" color="success">
-          Login as
-        </Button>
-      </div> */}
-
       <div className="flex w-full  max-w-4xl sm:h-5/12 bg-gray-50 shadow-lg flex-col sm:flex-row rounded-lg">
         <div className="w-full md:pt-20 sm:w-1/2 px-8 py-12 sm:p-8">
           <h2 className="text-xl font-bold text-center text-gray-700 mb-2">
@@ -142,10 +177,23 @@ const Login: React.FC = () => {
               variant="contained"
               color={`${btnColor}`}
               className={`w-3/4 ${btnColor}`}
-
             >
               {isLoading ? "Loading..." : `Login as ${userType}`}
             </Button>
+            <button
+              type="button"
+              className="w-3/4 bg-white border border-gray-300 text-black py-2 rounded-full hover:bg-gray-100 text-sm"
+              onClick={ () => {
+                signIn("google");
+                
+              }}
+            >
+              <FcGoogle size={25} className="inline-block mr-2" />
+              Continue with Google
+            </button>
+
+        
+
             <div className="my-4 w-ful">
               {userType == "User" && (
                 <Link
@@ -153,7 +201,7 @@ const Login: React.FC = () => {
                   className="text-blue-700 end-3 "
                   onClick={handleClick}
                 >
-                  Are you a doctor? Click here to log in.
+                  login as a doctor
                 </Link>
               )}
             </div>
@@ -191,7 +239,7 @@ const Login: React.FC = () => {
                 <p className="text-white text-2xl sm:text-xl font-medium font-serif">
                   Welcome Doctor
                 </p>
-                <Image src="/Doctor.png" alt="drimg" width={200} height={200}/>
+                <Image src="/Doctor.png" alt="drimg" width={200} height={200} />
               </div>
             ) : (
               <p className="text-white text-2xl sm:text-xl font-medium font-serif mb-4">

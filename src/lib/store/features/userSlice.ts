@@ -13,10 +13,6 @@ interface UserState {
     id: string | null;
     token: string | null;
     role: string | null;
-    profileImage: {
-      originalProfile: string;
-      thumbnail: string;
-    } | null;
     phone: string | null;
     name: string | null;
   } | null;
@@ -26,9 +22,9 @@ interface UserState {
 }
 
 interface userRegistrationdata {
-  name: string | null;
-  email: string | null;
-  phone: string | null;
+  name: string | null|undefined;
+  email: string | null|undefined;
+  phone: string | null|undefined;
   password: string | null;
 }
 
@@ -38,11 +34,10 @@ type LoginFulfilledType = {
   token: string;
   refreshToken:string
   role: string;
-  profileImage: { originalProfile: string; thumbnail: string };
   phone: string;
   name: string;
 };
-type LoginArgumentType = { email: string; password: string };
+type LoginArgumentType = { email: string|null|undefined; password: string|null|undefined };
 type LoginRejectValueType = string;
 
 const storedUser = localStorage.getItem("userState");
@@ -81,8 +76,6 @@ export const loginUser = createAsyncThunk<
     });
 
     const { data } = response;
-    console.log('agsdy',data);
-    
     toast.success("welcome to Vital Aid");
     return {
       name: data.user.name,
@@ -91,7 +84,6 @@ export const loginUser = createAsyncThunk<
       token: data.accessToken,
       refreshToken:data.refreshToken,
       role: data.user.role,
-      profileImage: data.user.profileImage,
       phone: data.user.phone,
     };
   } catch (error) {
@@ -124,7 +116,6 @@ export const loginDoctor = createAsyncThunk<
       token: data.accessToken,
       refreshToken:data.refreshToken,
       role: data.user.role,
-      profileImage: data.user.profileImage,
       phone: data.user.phone,
     };
   } catch (error) {
@@ -154,7 +145,7 @@ export const loginadmin = createAsyncThunk<
       token: data.accessToken,
       refreshToken:data.refreshToken,
       role: data.user.role,
-      profileImage: data.user.profileImage,
+  
       phone: data.user.phone,
     };
   } catch (error) {

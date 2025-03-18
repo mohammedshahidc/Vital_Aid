@@ -60,8 +60,9 @@ function Reportsection() {
               color="success"
               size="small"
               onClick={() => setIsModalOpen(true)}
+              sx={{ textTransform: "none" }}
             >
-              + Add Report
+              +add Report
             </Button>
             <MdRefresh  size={29} className="text-teal-500" onClick={()=>refetch()}/>
           </div>
@@ -108,9 +109,10 @@ function Reportsection() {
               <Button
                 variant="text"
                 size="small"
-                color="primary"
+                color="success"
                 className="mt-2"
                 onClick={() => setIsModalOpen(true)}
+                sx={{ textTransform: "none" }}
               >
                 Create your first report
               </Button>

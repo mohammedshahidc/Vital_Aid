@@ -18,7 +18,6 @@ export interface ReviewType {
 
 function ReviewSection() {
   const { userReviews, refetch } = useReviews();
-  console.log("ddd", userReviews);
   
   const [expandedReviews, setExpandedReviews] = useState<
     Record<string, boolean>

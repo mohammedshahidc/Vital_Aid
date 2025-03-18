@@ -16,7 +16,6 @@ type ReportModalProps = {
 };
 
 const ReportModal: React.FC<ReportModalProps> = ({ open, onClose, report }) => {
-    console.log("object", report);
     const handleDownloadPDF = () => {
         if (!report) return;
 
