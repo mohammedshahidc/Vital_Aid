@@ -184,6 +184,7 @@ const userSlice = createSlice({
           localStorage.setItem("user", action.payload.role);
           localStorage.setItem("username", action.payload.name);
           localStorage.setItem("userState", JSON.stringify(state));
+          localStorage.setItem("accessToken", action.payload.token);
           Cookies.set("accessToken",action.payload.token)
           Cookies.set("refreshToken",action.payload.refreshToken)
           Cookies.set("user",action.payload.role)
