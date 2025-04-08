@@ -43,7 +43,7 @@ export default function Navbar() {
   const logOut = async () => {
     try {
       await axiosInstance.delete("/auth/logout");
-
+      localStorage.clear()
       router.push("/");
       signOut({ callbackUrl: "/" });
     } catch (error) {

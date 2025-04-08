@@ -97,7 +97,7 @@ export default function Doctor() {
   return (
     <Container maxWidth={false} sx={{ py: { xs: 2, md: 4 } }}>
       <Box sx={{ maxWidth: "100%", mx: "auto", p: 3, bgcolor: "#f5f9fc"}}>
-        {/* Doctor Profile Card */}
+        
         <Card sx={{ mb: { xs: 2, md: 4 }, boxShadow: "0 4px 12px rgba(0,0,0,0.05)", borderRadius: 2 }}>
           <CardContent sx={{ p: { xs: 2, md: 3 } }}>
             <Typography 

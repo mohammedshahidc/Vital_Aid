@@ -12,7 +12,9 @@ function Navbar() {
   const logOut = async () => {
     try {
         await axiosInstance.delete('/auth/logout')
+        localStorage.clear()
         router.push('/')
+       
     } catch (error) {
         console.error("Logout failed", error)
         axiosErrorManager(error)

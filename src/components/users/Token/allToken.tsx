@@ -26,7 +26,7 @@ const AllToken = () => {
   const allToken: TokenType[] = data?.data || [];
 
   return (
-    <div className="flex justify-center min-h-fit">
+    <div className="flex justify-center min-h-fit  ">
       <div className="max-w-7xl p-4 mt-6 rounded-xl shadow-lg bg-white w-full">
         <Card className="shadow-lg rounded-xl overflow-hidden border-t-4 border-blue-400">
           <div className="flex justify-between px-6 py-4 bg-gradient-to-r from--50 to-white">
@@ -37,7 +37,7 @@ const AllToken = () => {
             <MdRefresh size={29} className="text-blue-500 cursor-pointer" onClick={() => refetch()} />
           </div>
           
-          <CardContent className="p-4">
+          <CardContent className="p-4 pb-5">
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <div className="flex justify-end mb-4">
                 <DatePicker

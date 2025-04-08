@@ -114,7 +114,7 @@ console.log("bb",today.format("DD-MM-YYYY"));
     setOpen(false)
   }
   return (
-    <div className="w-screen mt-32">
+    <div className="w-screen mt-32 overflow-hidden">
      
       <Box
         p={2}
@@ -131,7 +131,7 @@ console.log("bb",today.format("DD-MM-YYYY"));
         <Box
           display="flex"
           gap={1}
-          overflow="auto"
+          overflow="hidden"
           p={1}
           sx={{
             scrollbarWidth: "thin",

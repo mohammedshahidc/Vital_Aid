@@ -16,6 +16,7 @@ import { FaSearch } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { fetchDoctorById } from "@/lib/Query/hooks/doctorById";
 import Image from "next/image";
+import Link from "next/link";
 
 interface Doctor {
   doctor: {
@@ -159,12 +160,16 @@ const Message = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50 mt-16">
+    <div className="flex h-screen bg-gray-50 -mt-16">
       <div className="w-1/4 bg-white border-r border-gray-200 shadow-sm overflow-hidden flex flex-col">
         <div className="p-4 border-b border-gray-200">
+          <div className="flex justify-between">
           <h2 className="text-xl font-semibold text-green-600 mb-4">
             Chat with Doctors
           </h2>
+          <Link href={"/user"}>Back</Link>
+          </div>
+          
           <div className="relative">
             <input
               type="text"

@@ -57,7 +57,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(!isSmallScreen);
 
-  // Ensure sidebar closes on small screens when route changes
   useEffect(() => {
     if (isSmallScreen) {
       setSidebarOpen(false);
@@ -68,22 +67,22 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     setSidebarOpen((prev) => !prev);
   };
 
-  // Hide sidebar on /doctor/message page
+ 
   const showSidebar = pathname !== "/doctor/message";
 
   return (
     <div className="flex">
-      {/* Sidebar: Only show if not on /doctor/message page */}
+  
       {showSidebar && <Sidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />}
 
-      {/* Main Content: Adjust margin when sidebar is open */}
+      
       <div
         className={`flex-1 transition-all duration-300 ${showSidebar && sidebarOpen ? "ml-[260px]" : "ml-0"}`}
       >
-        {/* Navbar */}
+    
         <Navbar toggleSidebar={toggleSidebar} />
 
-        {/* Page Content */}
+        
         <main className="mt-16 p-4">{children}</main>
       </div>
     </div>
