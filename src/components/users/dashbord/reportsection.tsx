@@ -1,12 +1,12 @@
-import AddReportModal from "@/components/ui/addDetail";
 import ReportModal from "@/components/ui/report";
 import { useFetchreport } from "@/lib/Query/hooks/useReport";
 import { useAppSelector } from "@/lib/store/hooks";
 import { Button, Card, CardContent } from "@mui/material";
 import React, { useState } from "react";
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
-import { MdRefresh } from "react-icons/md";
-type Report = {
+import { useRouter } from "next/navigation";
+
+export type Report = {
   _id: string;
   User: string;
   report: string;
@@ -18,11 +18,10 @@ type Report = {
 
 function Reportsection() {
   const { user } = useAppSelector((state) => state.auth);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
-  const { reports,refetch } = useFetchreport(user?.id ?? "");
-
+  const { reports } = useFetchreport(user?.id ?? "");
+  const Route=useRouter()
   const handleReportClick = (report: Report) => {
     setSelectedReport(report);
     setIsReportModalOpen(true);
@@ -59,12 +58,12 @@ function Reportsection() {
               variant="outlined"
               color="success"
               size="small"
-              onClick={() => setIsModalOpen(true)}
+              onClick={() => Route.push("/user/report")}
               sx={{ textTransform: "none" }}
             >
               +add Report
             </Button>
-            <MdRefresh  size={29} className="text-teal-500" onClick={()=>refetch()}/>
+          
           </div>
         </div>
         <CardContent className="space-y-3 max-h-48 overflow-y-auto scrollbar-none p-4">
@@ -111,7 +110,7 @@ function Reportsection() {
                 size="small"
                 color="success"
                 className="mt-2"
-                onClick={() => setIsModalOpen(true)}
+                onClick={() =>Route.push("/user/report")}
                 sx={{ textTransform: "none" }}
               >
                 Create your first report
@@ -120,10 +119,7 @@ function Reportsection() {
           )}
         </CardContent>
       </Card>
-      <AddReportModal
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
+     
       <ReportModal
         open={isReportModalOpen}
         onClose={() => setIsReportModalOpen(false)}

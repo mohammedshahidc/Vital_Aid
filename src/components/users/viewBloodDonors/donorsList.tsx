@@ -2,19 +2,30 @@
 
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "@/utils/axios";
-import React, { JSX, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
-import HowItWorks from "./Howitwork";
 import {
   Box,
   Pagination,
   Step,
   StepLabel,
   Stepper,
+  Container,
+  Typography,
+  TextField,
+  MenuItem,
+  Grid,
+  Card,
+  CardContent,
+  CardActions,
+  Button,
+  useMediaQuery,
+  useTheme
 } from "@mui/material";
-import ContactPhoneOutlinedIcon from "@mui/icons-material/ContactPhoneOutlined";
 import ContentPasteSearchIcon from "@mui/icons-material/ContentPasteSearch";
 import LocalPhoneOutlinedIcon from "@mui/icons-material/LocalPhoneOutlined";
+import ContactPhoneOutlinedIcon from "@mui/icons-material/ContactPhoneOutlined";
+import PhoneIcon from "@mui/icons-material/Phone";
 import Spinner from "@/components/ui/spinner";
 
 export interface Donor {
@@ -35,32 +46,35 @@ export interface DonorResponse {
 
 interface StepType {
   label: string;
-  icon: JSX.Element;
+  icon: React.ReactNode;
 }
 
 const steps: StepType[] = [
   {
-    label:
-      "Find volunteers by their blood group",
+    label: "Find volunteers by their blood group",
     icon: <ContentPasteSearchIcon />,
   },
   {
-    label:
-      "contact them directly for help",
+    label: "Contact them directly for help",
     icon: <LocalPhoneOutlinedIcon />,
   },
   {
-    label: "In case of urgent contact multiple donors.",
+    label: "In case of urgent, contact multiple donors",
     icon: <ContactPhoneOutlinedIcon />,
   },
 ];
 
-interface StepType {
-  label: string;
-  icon: JSX.Element;
-}
-
-
+const bloodGroups = [
+  { value: "", label: "All Blood Groups" },
+  { value: "A+", label: "A+" },
+  { value: "B+", label: "B+" },
+  { value: "O+", label: "O+" },
+  { value: "AB+", label: "AB+" },
+  { value: "A-", label: "A-" },
+  { value: "B-", label: "B-" },
+  { value: "O-", label: "O-" },
+  { value: "AB-", label: "AB-" },
+];
 
 const fetchDonors = async (page: number): Promise<DonorResponse> => {
   const response = await axiosInstance.get<DonorResponse>(
@@ -70,9 +84,12 @@ const fetchDonors = async (page: number): Promise<DonorResponse> => {
 };
 
 const DonorsList: React.FC = () => {
-  const [page, setPage] = useState<number>(1);
-  const [filter, setFilter] = useState<string>("");
-  const [selectedBloodGroup, setSelectedBloodGroup] = useState<string>("");
+  const [page, setPage] = useState(1);
+  const [filter, setFilter] = useState("");
+  const [selectedBloodGroup, setSelectedBloodGroup] = useState("");
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTablet = useMediaQuery(theme.breakpoints.down("md"));
 
   const { data, isLoading, error } = useQuery<DonorResponse, Error>({
     queryKey: ["donors", page],
@@ -84,123 +101,246 @@ const DonorsList: React.FC = () => {
     setFilter(e.target.value);
   };
 
-  const handleBloodGroupChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleBloodGroupChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedBloodGroup(e.target.value);
   };
 
-  if (isLoading) return <Spinner/>
-  if (error)
-    return <p className="text-center text-red-500">Error fetching donors</p>;
+  const handleCall = (phoneNumber: number) => {
+    window.location.href = `tel:${phoneNumber}`;
+  };
 
   const filteredDonors = data?.donors?.filter((donor) => {
-    return (
-      (filter === "" ||
-        donor.name.toLowerCase().includes(filter.toLowerCase())) &&
-      (selectedBloodGroup === "" || donor.BloodGroup === selectedBloodGroup)
-    );
+    const matchesName = donor.name.toLowerCase().includes(filter.toLowerCase());
+    const matchesGroup =
+      selectedBloodGroup === "" ||
+      donor.BloodGroup.trim().toUpperCase() === selectedBloodGroup.toUpperCase();
+    return matchesName && matchesGroup;
   });
 
+  if (isLoading) return <Spinner />;
+  if (error)
+    return (
+      <Container>
+        <Typography variant="body1" color="error" align="center" sx={{ my: 4 }}>
+          Error fetching donors: {error.message}
+        </Typography>
+      </Container>
+    );
+
   return (
-    <div className=" max-w-full mx-auto md:mx-14 p-5">
-      <HowItWorks />
-
-      
-      <Box
-        sx={{
-          width: "100%",
-          textAlign: "center",
-          
-        }}
-      >
-        <Stepper alternativeLabel>
-          {steps.map((step, index) => (
-            <Step
-              key={index}
-              sx={{
-                color: "black",
-                "& .MuiStepLabel-label": { color: "black" },
-              }}
-            >
-              <StepLabel icon={step.icon}>{step.label}</StepLabel>
-            </Step>
-          ))}
-        </Stepper>
-      </Box>
-
-      <div className="mb-6 flex mt-3 justify-center gap-2 md:gap-4 mx-auto">
-        <input
-          type="text"
-          placeholder="Search by Name"
-          className="px-2 py-2 border border-gray-300 rounded-md"
-          value={filter}
-          onChange={handleFilterChange}
+    <Box component="main">
+      <Box position="relative" width="100%" height={{ xs: 300, sm: 400, md: 500, lg: 600 }}>
+        <Image
+          src="https://i.pinimg.com/736x/b9/17/70/b917706f5b29e3b37c6b6009609d9e04.jpg"
+          alt="Blood donors Banner"
+          fill
+          priority
+          style={{ objectFit: "cover" }}
         />
-
-        <select
-          value={selectedBloodGroup}
-          onChange={handleBloodGroupChange}
-          className="px-2 py-2 border border-gray-300 rounded-md"
+        <Box
+          position="absolute"
+          top={0}
+          left={0}
+          right={0}
+          bottom={0}
+          bgcolor="rgba(0, 0, 0, 0.5)"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
         >
-          <option value="">All Blood Groups</option>
-          <option value="A+">A+</option>
-          <option value="B+">B+</option>
-          <option value="O+">O+</option>
-          <option value="AB+">AB+</option>
-          <option value="A-">A-</option>
-          <option value="B-">B-</option>
-          <option value="O-">O-</option>
-          <option value="AB-">AB-</option>
-        </select>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6 w-full ">
-        {filteredDonors?.map((donor: Donor) => (
-          <div
-            key={donor._id}
-            className="p-4 bg-white shadow-xl rounded-lg flex space-x-4 items-center border border-gray-200 w-full hover:shadow-2xl"
-          >
-            {donor.image.length > 0 ? (
-              <Image
-                src={donor.image[0]}
-                alt={donor.name}
-                width={64}
-                height={64}
-                className="w-16 h-16 object-cover rounded-full"
-              />
-            ) : (
-              <div className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center">
-                <span className="text-gray-500">No Image</span>
-              </div>
-            )}
-
-            <div className="flex flex-col justify-between flex-grow">
-              <h2 className="text-xl font-medium text-gray-900">
-                {donor.name}
-              </h2>
-              <p className="text-sm text-gray-600">
-                Blood Group: {donor.BloodGroup}
-              </p>
-
-              <div className="flex items-center justify-between">
-                <p className="text-sm text-gray-500">Phone: {donor.Phone}</p>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <Box display="flex" justifyContent="center" sx={{ mt: 3, mb: 8 }}>
-        <Pagination
-          count={data?.totalPages ?? 1}
-          page={data?.currentPage ?? 1}
-          onChange={(event, value: number) => setPage(value)}
-          color="primary"
-          variant="outlined"
-          shape="rounded"
-        />
+          <Box textAlign="center" px={2}>
+            <Typography
+              variant={isMobile ? "h4" : isTablet ? "h3" : "h2"}
+              component="h1"
+              fontWeight="bold"
+              color="white"
+              gutterBottom
+            >
+              Our Blood Donors
+            </Typography>
+            <Typography
+              variant={isMobile ? "body1" : "h6"}
+              color="white"
+              maxWidth="md"
+              mx="auto"
+            >
+              Meet the dedicated individuals who Donate Blood for Free
+            </Typography>
+          </Box>
+        </Box>
       </Box>
 
-    </div>
+      <Container maxWidth="lg">
+        
+        <Typography variant="h5" align="center" sx={{ mt: 5, mb: 3 }}>
+          How it Works
+        </Typography>
+        
+        <Box sx={{ width: "100%", mb: 6 }}>
+          <Stepper 
+            activeStep={-1} 
+            alternativeLabel
+            orientation={isMobile ? "vertical" : "horizontal"}
+          >
+            {steps.map((step, index) => (
+              <Step key={index} active={true}>
+                <StepLabel icon={step.icon}>{step.label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            gap: 2,
+            mb: 5,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <TextField
+            label="Search by Name"
+            variant="outlined"
+            size="small"
+            fullWidth={isMobile}
+            value={filter}
+            onChange={handleFilterChange}
+            sx={{ width: { xs: "100%", sm: "auto", minWidth: { sm: 200 } } }}
+          />
+          
+          <TextField
+            select
+            label="Blood Group"
+            variant="outlined"
+            size="small"
+            fullWidth={isMobile}
+            value={selectedBloodGroup}
+            onChange={handleBloodGroupChange}
+            sx={{ width: { xs: "100%", sm: "auto", minWidth: { sm: 200 } } }}
+          >
+            {bloodGroups.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Box>
+
+        <Grid container spacing={3} sx={{ mb: 5 }}>
+          {filteredDonors && filteredDonors.length > 0 ? (
+            filteredDonors.map((donor) => (
+              <Grid item xs={12} sm={6} md={4} key={donor._id}>
+                <Card 
+                  elevation={2} 
+                  sx={{
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    transition: "transform 0.3s, box-shadow 0.3s",
+                    "&:hover": {
+                      transform: "translateY(-5px)",
+                      boxShadow: 4
+                    },
+                    borderRadius: 2
+                  }}
+                >
+                  <CardContent sx={{ 
+                    display: "flex", 
+                    flexDirection: "column", 
+                    alignItems: "center",
+                    flexGrow: 1
+                  }}>
+                    <Box
+                      sx={{
+                        position: "relative",
+                        width: 120,
+                        height: 120,
+                        borderRadius: "50%",
+                        overflow: "hidden",
+                        mb: 2,
+                        border: "4px solid",
+                        borderColor: "primary.light"
+                      }}
+                    >
+                      <Image
+                        src={donor.image[0]}
+                        alt={`Photo of donor ${donor.name}`}
+                        fill
+                        style={{ objectFit: "cover" }}
+                      />
+                    </Box>
+                    <Typography variant="h6" component="h3" align="center" gutterBottom>
+                      {donor.name}
+                    </Typography>
+                    <Typography variant="body1" color="text.secondary" align="center">
+                      📞 {donor.Phone}
+                    </Typography>
+                    <Box
+                      sx={{
+                        bgcolor: "error.main",
+                        color: "white",
+                        fontWeight: "bold",
+                        px: 2,
+                        py: 0.5,
+                        borderRadius: 1,
+                        mt: 1,
+                        display: "inline-block"
+                      }}
+                    >
+                      {donor.BloodGroup}
+                    </Box>
+                  </CardContent>
+                  <CardActions sx={{ p: 0 }}>
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      size="large"
+                      startIcon={<PhoneIcon />}
+                      onClick={() => handleCall(donor.Phone)}
+                      sx={{
+                        py: 1.5,
+                        borderRadius: "0 0 8px 8px",
+                        "&:hover": {
+                          bgcolor: "primary.dark"
+                        },
+                      }}
+                    >
+                      Contact Now
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            ))
+          ) : (
+            <Grid item xs={12}>
+              <Typography variant="body1" color="text.secondary" align="center">
+                No donors found with the selected criteria.
+              </Typography>
+            </Grid>
+          )}
+        </Grid>
+
+ 
+        <Box
+          display="flex"
+          justifyContent="center"
+          sx={{ mt: 2, mb: 8 }}
+        >
+          <Pagination
+            count={data?.totalPages ?? 1}
+            page={data?.currentPage ?? 1}
+            onChange={(_, value) => setPage(value)}
+            color="primary"
+            variant="outlined"
+            shape="rounded"
+            size={isMobile ? "small" : "medium"}
+          />
+        </Box>
+      </Container>
+    </Box>
   );
 };
 

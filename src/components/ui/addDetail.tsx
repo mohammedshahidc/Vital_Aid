@@ -11,6 +11,7 @@ import {
 import axiosInstance from "@/utils/axios";
 import { useAppSelector } from "@/lib/store/hooks";
 import toast from "react-hot-toast";
+import { useFetchreport } from "@/lib/Query/hooks/useReport";
 
 interface AddReportModalProps {
   open: boolean;
@@ -34,7 +35,7 @@ interface ReportData {
 const AddReportModal: React.FC<AddReportModalProps> = ({ open, onClose }) => {
   const { user } = useAppSelector((state) => state.auth);
   const [Loading, setLoading] = useState(false);
-
+  const {refetch}=useFetchreport(user?.id??"")
   const [reportData, setReportData] = useState<ReportData>({
     userid: user?.id ?? null,
     name: "",
@@ -81,6 +82,7 @@ const AddReportModal: React.FC<AddReportModalProps> = ({ open, onClose }) => {
       });
 
       toast.success("Your report is ready! Check it.");
+      refetch()
     } catch (error) {
       console.error("Error submitting report:", error);
       toast.error("Failed to generate report. Try again.");

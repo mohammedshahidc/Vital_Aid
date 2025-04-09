@@ -37,7 +37,7 @@ const Events: React.FC = () => {
   const sortedEvents = [...upcomingEvents, ...expiredEvents];
 
   return (
-    <div className="max-w-6xl mx-auto p-5">
+    <div className="max-w-6xl mx-auto p-5 h-full min-h-screen">
       <h1 className="text-3xl font-semibold text-center  text-red-950 mb-6">
         Upcoming  Events
       </h1>
