@@ -12,7 +12,6 @@ import {
 } from "@/lib/store/features/userSlice";
 import LoginModal from "../ui/loginModal";
 import Image from "next/image";
-import { toast } from "react-hot-toast";
 import { signIn, useSession } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
 import axiosErrorManager from "@/utils/axiosErrormanager";
@@ -75,7 +74,7 @@ const Login: React.FC = () => {
         : await dispatch(loginDoctor({ email, password }));
 
     if (error) {
-      toast.error(error);
+      console.error(error);
     }
 
     if (result.meta.requestStatus == "fulfilled") {
@@ -91,7 +90,7 @@ const Login: React.FC = () => {
     }
   };
   if (error) {
-    toast.error(error);
+    console.error(error);
   }
 
   const handleClick = async () => {
@@ -114,7 +113,7 @@ const Login: React.FC = () => {
           router.push("/user");
         }
       } else {
-        toast.error("Login failed, please try again.");
+        console.error("Login failed, please try again.");
       }
     } catch (error) {
       axiosErrorManager(error);
