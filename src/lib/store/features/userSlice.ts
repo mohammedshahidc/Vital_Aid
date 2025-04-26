@@ -76,6 +76,8 @@ export const loginUser = createAsyncThunk<
     });
 
     const { data } = response;
+    console.log('agsdy',data);
+    
     toast.success("welcome to Vital Aid");
     return {
       name: data.user.name,
