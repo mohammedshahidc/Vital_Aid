@@ -9,7 +9,7 @@ import Aireport from './aireport'
 
 function Homepage() {
   return (
-    <div className=' overflow-hidden'>
+    <div className='bg-white overflow-hidden'>
       <Hero />
       <HealthcareLayout/>
       <Specialities />

@@ -6,8 +6,8 @@ import React from "react";
 
 export default function Landinav() {
   return (
-    <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-900 shadow-md">
-      <div className="max-w-screen-xl mx-auto flex items-center justify-between py-3 px-4 sm:px-6 lg:px-8">
+    <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 shadow-md">
+      <div className="bg-white max-w-screen-xl mx-auto flex items-center justify-between py-3 px-4 sm:px-6 lg:px-8">
         
         <div className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">
           <Image src={"/VitalAid.png"} width={100} height={100} alt="lo"/>

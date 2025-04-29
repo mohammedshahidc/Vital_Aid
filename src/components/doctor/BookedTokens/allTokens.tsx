@@ -46,6 +46,7 @@ const AllTokens = () => {
   const tokens: Token[] = data?.data || [];
 
   return (
+    <div className='bg-white min-h-screen'>
     <Box
       sx={{
         maxWidth: 800,
@@ -198,6 +199,7 @@ const AllTokens = () => {
         <Typography textAlign="center">No appointments found for this date.</Typography>
       )}
     </Box>
+    </div>
   );
 };
 

@@ -50,6 +50,7 @@ const DoctorProfile: React.FC<Props> = ({ doctor }) => {
         setEdit(!edit)
     }
     return (
+        <div className="bg-white min-h-screen">
         <Card sx={{ display: "flex", flexDirection: "column", alignItems: "center", padding: 3, boxShadow: 3, borderRadius: 3, width: "100%", maxWidth: "900px" }}>
 
 
@@ -135,6 +136,8 @@ const DoctorProfile: React.FC<Props> = ({ doctor }) => {
                 {doctor?.description || "No description available."}
             </Typography>
         </Card>
+
+        </div>
     );
 };
 

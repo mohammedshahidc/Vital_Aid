@@ -82,7 +82,7 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 z-50 bg-white border-b border-gray-200 dark:bg-gray-900 w-full shadow-md">
-      <div className="container mx-auto flex items-center justify-between py-4 px-6">
+      <div className="bg-white container mx-auto flex items-center justify-between py-4 px-6">
         <div className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">
           <Image src={"/VitalAid.png"} width={100} height={100} alt="lo" />
         </div>
@@ -101,7 +101,7 @@ export default function Navbar() {
           </Button>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="text-gray-600 dark:text-gray-300 focus:outline-none"
+            className="text-gray-600  focus:outline-none"
           >
             {menuOpen ? <HiX size={24} /> : <HiMenu size={24} />}
           </button>
@@ -110,7 +110,7 @@ export default function Navbar() {
         <div className="hidden lg:flex lg:items-center lg:space-x-8">
           <Link
             href="/user"
-            className="text-gray-700 font-serif font-semibold dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+            className="text-gray-700 font-serif font-semibold hover:text-gray-900 "
           >
             Home
           </Link>
@@ -118,7 +118,7 @@ export default function Navbar() {
           <div>
             <button
               onClick={handleMenuOpen}
-              className="text-gray-700 font-serif font-semibold dark:text-gray-300 hover:text-gray-900"
+              className="text-gray-700 font-serif font-semibold  hover:text-gray-900"
             >
               Services
             </button>
@@ -163,7 +163,7 @@ export default function Navbar() {
 
           <Link
             href="/user/about-us"
-            className="block text-gray-700 font-serif font-semibold dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition py-2 lg:py-0"
+            className="block text-gray-700 font-serif font-semibold  hover:text-gray-900  transition py-2 lg:py-0"
           >
             About Us
           </Link>
@@ -179,14 +179,14 @@ export default function Navbar() {
           </Button>
           <button
             onClick={() => router.push("/user/message")}
-            className="text-gray-600 dark:text-gray-300 hover:text-gray-900"
+            className="text-gray-600  hover:text-gray-900"
             title="chat with doctors"
           >
             <IoChatbubblesOutline size={20} />
           </button>
           <button
             onClick={() => logOut()}
-            className="text-gray-600 dark:text-gray-300 hover:text-gray-900"
+            className="text-gray-600  hover:text-gray-900"
             title="logout"
           >
             <AiOutlineLogout size={20} />
@@ -195,11 +195,11 @@ export default function Navbar() {
       </div>
 
       {menuOpen && (
-        <div className="lg:hidden bg-white dark:bg-gray-900 py-4 px-6 absolute top-full right-0 w-64 shadow-lg rounded-bl-lg">
+        <div className="lg:hidden bg-white  py-4 px-6 absolute top-full right-0 w-64 shadow-lg rounded-bl-lg">
           <div className="flex flex-col space-y-4">
             <Link
               href="/user"
-              className="text-gray-700 font-serif font-semibold dark:text-gray-300 hover:text-gray-900"
+              className="text-gray-700 font-serif font-semibold  hover:text-gray-900"
               onClick={() => setMenuOpen(false)}
             >
               Home
@@ -207,7 +207,7 @@ export default function Navbar() {
 
             <Link
               href="/about-us"
-              className="text-gray-700 font-serif font-semibold dark:text-gray-300 hover:text-gray-900"
+              className="text-gray-700 font-serif font-semibold  hover:text-gray-900"
               onClick={() => setMenuOpen(false)}
             >
               About Us
@@ -215,7 +215,7 @@ export default function Navbar() {
 
             <Link
               href="/user/message"
-              className="flex items-center gap-2 text-gray-700 font-serif font-semibold dark:text-gray-300 hover:text-gray-900"
+              className="flex items-center gap-2 text-gray-700 font-serif font-semibold  hover:text-gray-900"
               onClick={() => setMenuOpen(false)}
             >
               <IoChatbubblesOutline size={20} />
@@ -224,7 +224,7 @@ export default function Navbar() {
 
             <Link
               href="/user/doctors/allbooking"
-              className="text-gray-700 font-serif font-semibold dark:text-gray-300 hover:text-gray-900"
+              className="text-gray-700 font-serif font-semibold  hover:text-gray-900"
               onClick={() => setMenuOpen(false)}
             >
               My Appointments

@@ -48,7 +48,7 @@ const Event = () => {
         <div onClick={()=>Router.push("/login")}
           className="absolute bottom-4 right-4 bg-white p-4 rounded-md shadow-md hover:cursor-pointer"
         >
-          <p className="text-sm font-bold border-2 p-3 rounded-md border-lime-700">
+          <p className="text-black text-sm font-bold border-2 p-3 rounded-md border-lime-700">
             Learn More!
           </p>
         </div>

@@ -13,7 +13,7 @@ const Aireport = () => {
   }, []);
 
   return (
-    <div className="flex flex-col md:flex-row w-full max-w-6xl mx-auto py-8 md:py-16 px-4 md:px-6 gap-8">
+    <div className="bg-white flex flex-col md:flex-row w-full max-w-6xl mx-auto py-8 md:py-16 px-4 md:px-6 gap-8">
       <div
         className="w-full md:w-1/2 flex flex-col justify-center space-y-6 pt-6 md:pt-12"
         data-aos="flip-right"

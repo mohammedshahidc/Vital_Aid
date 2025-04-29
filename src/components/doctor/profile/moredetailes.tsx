@@ -50,6 +50,7 @@ const MoreDetailes: React.FC<MoreDetailsProps> = () => {
   };
 
   return (
+    <div className="bg-white min-h-screen">
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Card
         sx={{
@@ -101,6 +102,7 @@ const MoreDetailes: React.FC<MoreDetailsProps> = () => {
         </form>
       </Card>
     </LocalizationProvider>
+    </div>
   );
 };
 

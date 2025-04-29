@@ -7,10 +7,10 @@ import React from 'react'
 
 const DoctorReview = () => {
     const { data: DoctorReviews } = useDoctorReviewforDoctors()
-    console.log("data:", DoctorReviews);
+    
 
     return (
-
+        <div className='bg-white min-h-screen'>
         <Box
             sx={{
                 height: "screen",
@@ -75,7 +75,7 @@ const DoctorReview = () => {
                 </Typography>
             )}
         </Box>
-
+        </div>
     )
 }
 

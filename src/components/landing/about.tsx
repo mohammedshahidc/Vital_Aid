@@ -42,7 +42,7 @@ function About() {
             },
           ].map((item, index) => (
             <div key={index} className="flex flex-col items-center text-center">
-              <div className="flex items-center mb-2">{item.icon}</div>
+              <div className="text-gray-700 flex items-center mb-2">{item.icon}</div>
               <CountUp
                 start={0}
                 end={item.value}

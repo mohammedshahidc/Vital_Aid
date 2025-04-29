@@ -3,7 +3,7 @@ import Hero from './hero'
 
 function Home() {
   return (
-    <div className=' overflow-x-hidden'>
+    <div className='bg-white overflow-x-hidden'>
         <Hero/>
     </div>
   )

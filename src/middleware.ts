@@ -40,19 +40,21 @@ export function middleware(req: NextRequest) {
   }
 
   if (
-    userType === "user" &&
+    userType === "User" &&
     (pathName === "/login" || pathName === "/register" || pathName === "/")
   ) {
     url.pathname = "/user";
     return NextResponse.redirect(url);
   }
 
-  if (userType === "user") {
+  if (userType === "User") {
     if (isAdminRoute(pathName) || isDoctorProtectedRoute(pathName)) {
+    
       
-      url.pathname = "/";
+      url.pathname = "/user";
       return NextResponse.redirect(url);
     }
+    console.log("pathname",pathName);
   }
 
 

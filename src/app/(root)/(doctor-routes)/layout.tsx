@@ -71,7 +71,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const showSidebar = pathname !== "/doctor/message";
 
   return (
-    <div className="flex">
+    <div className="flex bg-white">
   
       {showSidebar && <Sidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />}
 
@@ -83,7 +83,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <Navbar toggleSidebar={toggleSidebar} />
 
         
-        <main className="mt-16 p-4">{children}</main>
+        <main className="bg-white mt-16 p-4">{children}</main>
       </div>
     </div>
   );

@@ -52,7 +52,7 @@ console.log(totaldonation);
 
   return (
     <>
-      <div className="flex w-full flex-row p-8 dark:bg-gray-800  h-full ">
+      <div className=" bg-white flex w-full flex-row p-8  h-full ">
         <main className="mt-3 w-full ">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-8">
             <div className="bg-green-100 dark:bg-green-800 shadow-lg rounded-lg p-6 flex flex-col items-center relative">
