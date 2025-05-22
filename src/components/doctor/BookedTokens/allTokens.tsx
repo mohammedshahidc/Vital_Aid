@@ -64,7 +64,6 @@ const AllTokens = () => {
           : 'Appointments by Date'}
       </Typography>
 
-      {/* Date Picker */}
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
           <DatePicker
@@ -115,8 +114,6 @@ const AllTokens = () => {
               }
             }}
           >
-
-            {/* Profile Image */}
             {appointment.patientId?.profileImage?.originalProfile && (
               <Box
                 sx={{
@@ -136,10 +133,8 @@ const AllTokens = () => {
                 />
               </Box>
             )}
-
-            {/* Appointment Details (Centered Vertically) */}
             <Box sx={{ display: "flex", width: "100%" }}>
-              {/* Status Dropdown - Positioned Top-Right */}
+              
              {appointment.status!=="Completed"&& <select
                 id="status"
                 value={appointment.status}

@@ -20,13 +20,13 @@ export default function Sidebar({ sidebarOpen, toggleSidebar }: SidebarProps) {
 
   useEffect(() => {
     if (pathname === "/doctor/message") {
-      toggleSidebar(); // Hide sidebar when entering message page
+      toggleSidebar();
     }
   }, [pathname,toggleSidebar]);
 
   return (
     <>
-      {/* Sidebar Toggle Button (Small Screens) */}
+     
       {isSmallScreen && showSidebar && (
         <IconButton
           onClick={toggleSidebar}

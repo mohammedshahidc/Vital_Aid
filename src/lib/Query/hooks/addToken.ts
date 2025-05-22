@@ -31,6 +31,11 @@ export interface TokenType {
     isVerified:true
 }
 
+const user = typeof window !== "undefined"
+    ? JSON.parse(localStorage.getItem("userState") || "null")
+    : null;
+console.log(user);
+
 const fetchtokens = async (id: string) => {
     const response = await axiosInstance.get(`/users/getalltokens/${id}`);
     return response.data;
@@ -45,14 +50,14 @@ export const useAlltoken = (id: string) => {
 };
 
 export const addToken = async (datas: object) => {
-    console.log("datas", datas);
+    
     try {
         await axiosInstance.post("/users/createtoken", datas);
-        toast.success("appointment created successfully");
+        toast.success(`check your email${user?.user?.email}`);
     } catch (error) {
         axiosErrorManager(error);
         console.log("error:", error);
-        toast.error("this token already booked");
+       
     }
 };
 
@@ -76,6 +81,8 @@ const fetchtokenseachdoctors = async (date: string) => {
 };
 
 export const useAlltokenofeachdoctors = (date: string) => {
+    console.log(date);
+    
     return useQuery({
         queryKey: ["alltoken", date],
         queryFn: () => fetchtokenseachdoctors(date),

@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useEffect } from "react";
 import {
@@ -61,24 +60,22 @@ const AddToken = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const today = dayjs();
   const daysInMonth = today.daysInMonth();
-  const [selectedDate, setSelectedDate] = useState<string | null>(today.format("DD-MM-YYYY"));
+  const [selectedDate, setSelectedDate] = useState<string | null>(
+    today.format("DD-MM-YYYY")
+  );
   const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
   const [selectedSlot, setSelectedSlot] = useState<number | null>(null);
-  const[open,setOpen]=useState<boolean>(false)
-console.log("bb",today.format("DD-MM-YYYY"));
+  const [open, setOpen] = useState<boolean>(false);
+  console.log("bb", today.format("DD-MM-YYYY"));
 
-
-  const doctor: DoctorData = data?.data?.[0]
-  console.log('data',doctor);
+  const doctor: DoctorData = data?.data?.[0];
   const totalslots = totalToken?.data?.tokenPerDay;
   const AllToken: Token[] = allToken?.data;
-
   const slots = Array.from({ length: totalslots }, (_, i) => i + 1);
 
   const handleDateClick = (day: number) => {
     const formattedDate = today.date(day).format("DD-MM-YYYY");
 
-   
     if (today.date(day).isBefore(today, "day")) {
       return;
     }
@@ -91,31 +88,29 @@ console.log("bb",today.format("DD-MM-YYYY"));
       refetch();
     };
 
-    socket.on("tokenUpdated", handleTokenUpdate)
-    socket.on("otpVerified", handleTokenUpdate)
+    socket.on("tokenUpdated", handleTokenUpdate);
+    socket.on("otpVerified", handleTokenUpdate);
     return () => {
-      socket.off("tokenUpdated", handleTokenUpdate)
-      socket.off("otpVerified", handleTokenUpdate)
+      socket.off("tokenUpdated", handleTokenUpdate);
+      socket.off("otpVerified", handleTokenUpdate);
     };
   }, [refetch]);
 
-  const handleSubmit = async(datas: object,) => {
+  const handleSubmit = async (datas: object) => {
     try {
-     await addToken(datas);
-     setOpen(true)
-    socket.emit("bookToken", datas);
-    refetch()
+      await addToken(datas);
+      setOpen(true);
+      socket.emit("bookToken", datas);
+      refetch();
     } catch (error) {
       console.log(error);
-      
     }
   };
-  const handleClose=()=>{
-    setOpen(false)
-  }
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
-    <div className="w-screen mt-32 overflow-hidden">
-     
+    <div className="w-screen mt-32 mb-32 overflow-hidden">
       <Box
         p={2}
         sx={{
@@ -127,16 +122,18 @@ console.log("bb",today.format("DD-MM-YYYY"));
           minHeight: isMobile ? 600 : "auto",
         }}
       >
-        
         <Box
           display="flex"
           gap={1}
-          overflow="hidden"
+          overflow="auto"
           p={1}
           sx={{
             scrollbarWidth: "thin",
             "&::-webkit-scrollbar": { height: "6px" },
-            "&::-webkit-scrollbar-thumb": { backgroundColor: "darkgray", borderRadius: "10px" },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "darkgray",
+              borderRadius: "10px",
+            },
             "&::-webkit-scrollbar-track": { backgroundColor: "pink" },
           }}
         >
@@ -162,12 +159,18 @@ console.log("bb",today.format("DD-MM-YYYY"));
                     : selectedDate === formattedDate
                     ? "green"
                     : "#A5B79B",
-                  color: isPastDate ? "lightgray" : selectedDate === formattedDate ? "white" : "black",
+                  color: isPastDate
+                    ? "lightgray"
+                    : selectedDate === formattedDate
+                    ? "white"
+                    : "black",
                   transition: "0.3s",
                   opacity: isPastDate ? 0.5 : 1,
                 }}
               >
-                <Typography fontWeight="bold" fontSize={14}>{day}</Typography>
+                <Typography fontWeight="bold" fontSize={14}>
+                  {day}
+                </Typography>
                 <Typography fontSize={10}>{today.format("MMM")}</Typography>
               </Box>
             );
@@ -192,9 +195,15 @@ console.log("bb",today.format("DD-MM-YYYY"));
             }}
           />
           <Box>
-            <Typography variant="h6" fontWeight="bold">{doctor?.doctor?.name}</Typography>
-            <Typography variant="body2" color="gray">{doctor?.specialization[0]}</Typography>
-            <Typography variant="body2" color="gray">{doctor?.hospital}</Typography>
+            <Typography variant="h6" fontWeight="bold">
+              {doctor?.doctor?.name}
+            </Typography>
+            <Typography variant="body2" color="gray">
+              {doctor?.specialization[0]}
+            </Typography>
+            <Typography variant="body2" color="gray">
+              {doctor?.hospital}
+            </Typography>
             <Typography
               variant="body2"
               color="blue"
@@ -206,7 +215,9 @@ console.log("bb",today.format("DD-MM-YYYY"));
         </Box>
 
         <Box mt={2}>
-          <Typography fontWeight="bold" color="green">Available Tokens</Typography>
+          <Typography fontWeight="bold" color="green">
+            Available Tokens
+          </Typography>
           <Box
             display="grid"
             gridTemplateColumns={isMobile ? "repeat(4, 1fr)" : "repeat(8, 1fr)"}
@@ -215,7 +226,8 @@ console.log("bb",today.format("DD-MM-YYYY"));
           >
             {slots.map((slot) => {
               const isBooked = AllToken?.some(
-                (token) => token.date === selectedDate && token.tokenNumber === slot
+                (token) =>
+                  token.date === selectedDate && token.tokenNumber === slot
               );
 
               return (
@@ -225,8 +237,16 @@ console.log("bb",today.format("DD-MM-YYYY"));
                   variant={selectedSlot === slot ? "contained" : "outlined"}
                   disabled={isBooked}
                   sx={{
-                    backgroundColor: isBooked ? "red" : selectedSlot === slot ? "green" : "#D4E6B5",
-                    color: isBooked ? "white" : selectedSlot === slot ? "white" : "black",
+                    backgroundColor: isBooked
+                      ? "red"
+                      : selectedSlot === slot
+                      ? "green"
+                      : "#D4E6B5",
+                    color: isBooked
+                      ? "white"
+                      : selectedSlot === slot
+                      ? "white"
+                      : "black",
                     borderRadius: 2,
                     textTransform: "none",
                     fontSize: isMobile ? "8px" : "10px",
@@ -250,13 +270,19 @@ console.log("bb",today.format("DD-MM-YYYY"));
             variant="contained"
             color="success"
             disabled={!selectedSlot}
-            onClick={() => handleSubmit({ date: selectedDate, tokenNumber: selectedSlot, doctorId: doctor?.doctor?._id })}
+            onClick={() =>
+              handleSubmit({
+                date: selectedDate,
+                tokenNumber: selectedSlot,
+                doctorId: doctor?.doctor?._id,
+              })
+            }
           >
             Confirm
           </Button>
         </Box>
       </Box>
-      <OTPVerification open={open} onClose={handleClose} id={id as string}/>
+      <OTPVerification open={open} onClose={handleClose} id={id as string} />
     </div>
   );
 };

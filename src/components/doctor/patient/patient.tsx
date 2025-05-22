@@ -112,9 +112,7 @@ function Patient() {
 
       {userInfo && userDetails ? (
         <div className="bg-gray-100 w-full p-4 rounded-lg shadow-md">
-          {/* Display Profile Image */}
           
-          {/* User Information in Two Columns */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
             {userDetails.profileImage?.originalProfile ? (

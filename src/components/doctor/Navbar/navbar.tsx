@@ -9,6 +9,7 @@ import { useMediaQuery } from "@mui/material";
 import { AiOutlineLogout } from "react-icons/ai";
 import axiosInstance from "@/utils/axios";
 import axiosErrorManager from "@/utils/axiosErrormanager";
+import Image from "next/image";
 
 interface NavbarProps {
   toggleSidebar: () => void;
@@ -32,7 +33,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
     <nav className=" border-b bg-white border-gray-200  w-full shadow-md fixed top-0 left-0 right-0 z-50">
       <div className="container mx-auto flex items-center justify-between py-4 px-6">
         <div className="flex items-center space-x-4">
-          {/* Show sidebar toggle button ONLY on mobile screens */}
+          
           {isSmallScreen && (
             <button
               onClick={toggleSidebar}
@@ -42,7 +43,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
             </button>
           )}
           <div className="text-xl font-bold text-gray-900 ">
-            Vital Aid
+            <Image src={"/VitalAid.png"} width={65} height={50} alt="lo" />
           </div>
         </div>
 
