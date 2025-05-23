@@ -144,7 +144,7 @@ const DrMessage = () => {
   return (
     <div className="flex h-screen bg-gray-50">
   
-      <div className="w-1/4 bg-white border-r border-gray-200 shadow-sm overflow-hidden flex flex-col">
+      <div className="w-1/4 bg-white  border-gray-200 shadow-sm overflow-hidden flex flex-col">
         <div className="p-4 border-b border-gray-200">
           <h2 className="text-xl font-semibold text-blue-600 mb-4">
             My Patients

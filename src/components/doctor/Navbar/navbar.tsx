@@ -43,7 +43,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
             </button>
           )}
           <div className="text-xl font-bold text-gray-900 ">
-            <Image src={"/VitalAid.png"} width={65} height={50} alt="lo" />
+            <Image src={"/VitalAid.png"} width={81} height={70} alt="lo" />
           </div>
         </div>
 

@@ -8,6 +8,11 @@ import React from 'react'
 const DoctorReview = () => {
     const { data: DoctorReviews } = useDoctorReviewforDoctors()
     
+    console.log(DoctorReviews?.length || 0);
+    
+
+    
+    
 
     return (
         <div className='bg-white min-h-screen'>

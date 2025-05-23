@@ -77,6 +77,8 @@ const fetchtokenseachdoctors = async (date: string) => {
     const response = await axiosInstance.get(
         `/doctors/tokensofeachdoctors?date=${date}`
     );
+    console.log("resssssssss",response);
+    
     return response.data;
 };
 

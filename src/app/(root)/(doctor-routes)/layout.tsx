@@ -1,45 +1,4 @@
-// 'use client'
-// import React, { ReactNode, useState } from "react";
-// import Navbar from "../../../components/doctor/Navbar/navbar";
-// import Sidebar from "@/components/doctor/sidbar/sidbar";
-// import { usePathname } from "next/navigation";
-// import { useMediaQuery } from "@mui/material";
 
-
-// interface LayoutProps {
-//     children: ReactNode
-// }
-
-// const Layout: React.FC<LayoutProps> = ({ children }) => {
-//     const isSmallScreen = useMediaQuery("(max-width: 768px)");
-//     const pathname = usePathname();
-//     const [sidebarOpen, setSidebarOpen] = useState(!isSmallScreen);
-
-//     const toggleSidebar = () => {
-//         if (isSmallScreen) {
-//             setSidebarOpen((prev) => !prev);
-//         }
-//     };
-
-//     // Hide sidebar on /doctor/message page
-//     const showSidebar = pathname !== "/doctor/message";
-//     return (
-//         <>
-//             <div className="flex">
-//                 {/* Sidebar: Only show if not on message page */}
-//                 {showSidebar && <Sidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />}
-
-//                 {/* Main Content */}
-//                 <div className="flex-1">
-//                     <Navbar toggleSidebar={toggleSidebar} />
-                    
-//                     <main className="mt-16 p-4 ">{children}</main>
-//                 </div>
-//             </div>
-//         </>
-//     )
-// }
-// export default Layout
 
 "use client";
 import React, { ReactNode, useState, useEffect } from "react";
@@ -83,7 +42,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <Navbar toggleSidebar={toggleSidebar} />
 
         
-        <main className="bg-white mt-16 p-4">{children}</main>
+        <main className="bg-white mt-12 p-4">{children}</main>
       </div>
     </div>
   );
