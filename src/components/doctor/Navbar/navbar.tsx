@@ -23,7 +23,8 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
   const logOut = async () => {
     try {
         await axiosInstance.delete('/auth/logout')
-        router.push('/')
+        localStorage.clear()
+        router.push('/login')
     } catch (error) {
         console.error("Logout failed", error)
         axiosErrorManager(error)
